@@ -575,10 +575,8 @@ function abrirFicha(p){
         etiqueta = 'Colecci\u00f3n completa';
       } else if(urls.length === 1){
         etiqueta = '';
-      } else if(i === 0){
-        etiqueta = 'Digitalizaci\u00f3n manual';
       } else {
-        etiqueta = 'Digitalizaci\u00f3n 2K';
+        etiqueta = 'V\u00eddeo ' + (i + 1);
       }
       return {url: u, vid: vid, etiqueta: etiqueta};
     }).filter(function(x){ return x.vid; });
