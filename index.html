@@ -195,12 +195,12 @@ header>*:not(.slider-bg){position:relative;z-index:1}
 
 <header>
   <div class="slider-bg" aria-hidden="true">
-    <div class="slider-slide" style="background-image:url('https://img.youtube.com/vi/DMgCqoGtgKQ/maxresdefault.jpg')"></div>
-    <div class="slider-slide" style="background-image:url('https://img.youtube.com/vi/RcIa_b-gJNQ/maxresdefault.jpg')"></div>
-    <div class="slider-slide" style="background-image:url('https://img.youtube.com/vi/OyVnIT6p3hk/maxresdefault.jpg')"></div>
-    <div class="slider-slide" style="background-image:url('https://img.youtube.com/vi/8JD7RkltzBs/maxresdefault.jpg')"></div>
-    <div class="slider-slide" style="background-image:url('https://img.youtube.com/vi/BhW_gJc4le8/maxresdefault.jpg')"></div>
-    <div class="slider-slide" style="background-image:url('https://img.youtube.com/vi/E9UMR73p5aA/maxresdefault.jpg')"></div>
+    <div class="slider-slide" style="background-image:url('https://img.youtube.com/vi/DMgCqoGtgKQ/hqdefault.jpg')"></div>
+    <div class="slider-slide" style="background-image:url('https://img.youtube.com/vi/RcIa_b-gJNQ/hqdefault.jpg')"></div>
+    <div class="slider-slide" style="background-image:url('https://img.youtube.com/vi/OyVnIT6p3hk/hqdefault.jpg')"></div>
+    <div class="slider-slide" style="background-image:url('https://img.youtube.com/vi/8JD7RkltzBs/hqdefault.jpg')"></div>
+    <div class="slider-slide" style="background-image:url('https://img.youtube.com/vi/BhW_gJc4le8/hqdefault.jpg')"></div>
+    <div class="slider-slide" style="background-image:url('https://img.youtube.com/vi/E9UMR73p5aA/hqdefault.jpg')"></div>
   </div>
   <div>
     <div class="header-titulo">Las Latas de La Peque&#241;a Filmoteca</div>
@@ -1200,20 +1200,6 @@ function abrirFichaDesdeId(id) {
     abrirFicha(p);
   }
 }
-
-// ── SLIDER KEN BURNS ──────────────────────────────────────────
-(function(){
-  var slides = document.querySelectorAll('.slider-slide');
-  if(!slides.length) return;
-  var dur = 8000; // ms por slide
-  var cur = 0;
-  slides[0].classList.add('activa');
-  setInterval(function(){
-    slides[cur].classList.remove('activa');
-    cur = (cur + 1) % slides.length;
-    slides[cur].classList.add('activa');
-  }, dur);
-})();
 
 </script>
 <script>
@@ -5138,6 +5124,20 @@ function abrirFichaDesdeId(id) {
   }
 }
 
+
+// ── SLIDER KEN BURNS ──────────────────────────────────────────
+(function(){
+  var slides = document.querySelectorAll('.slider-slide');
+  if(!slides.length) return;
+  var dur = 8000;
+  var cur = 0;
+  slides[0].classList.add('activa');
+  setInterval(function(){
+    slides[cur].classList.remove('activa');
+    cur = (cur + 1) % slides.length;
+    slides[cur].classList.add('activa');
+  }, dur);
+})();
 </script>
 </body>
 </html>
