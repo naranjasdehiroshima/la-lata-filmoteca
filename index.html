@@ -196,6 +196,18 @@ header>*:not(.slider-bg){position:relative;z-index:1}
 .coleccion-bloque:hover .coleccion-bg{opacity:0.22}
 .coleccion-header,.latas-fila{position:relative;z-index:1}
 
+
+/* ── NUBE DE ETIQUETAS ── */
+.nube-section{padding:1rem 1.5rem 0.5rem;border-bottom:1px solid var(--borde)}
+.nube-titulo{font-size:0.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gris-medio);margin-bottom:0.6rem}
+.nube-tags{display:flex;flex-wrap:wrap;gap:0.4rem}
+.nube-tag{cursor:pointer;padding:0.25rem 0.6rem;border-radius:20px;font-size:0.78rem;border:1px solid var(--borde);background:transparent;color:var(--texto);transition:all .2s;white-space:nowrap}
+.nube-tag:hover{background:var(--naranja);color:#fff;border-color:var(--naranja)}
+.nube-tag.activo{background:var(--naranja);color:#fff;border-color:var(--naranja)}
+.nube-tag.grande{font-size:0.92rem;font-weight:600}
+.nube-tag.mediano{font-size:0.82rem}
+.nube-tag.pequeno{font-size:0.72rem;opacity:0.8}
+
 </style>
 </head>
 <body>
@@ -283,7 +295,50 @@ header>*:not(.slider-bg){position:relative;z-index:1}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script></script>
 <script>
-var DATOS = [];
+var DATOS=[];
+var filtroTema='';
+
+var filtroTema = '';
+
+function construirNube(){
+  var nube = document.getElementById('nube-tags');
+  if(!nube) return;
+  nube.innerHTML = '';
+  
+  // Contar frecuencia de temas
+  var conteo = {};
+  DATOS.forEach(function(p){
+    (p.temas_lista || []).forEach(function(t){
+      var tk = t.toLowerCase().trim();
+      if(tk) conteo[tk] = (conteo[tk]||0) + 1;
+    });
+  });
+  
+  // Ordenar por frecuencia y tomar top 40
+  var sorted = Object.keys(conteo).sort(function(a,b){ return conteo[b]-conteo[a]; }).slice(0,40);
+  var maxN = conteo[sorted[0]] || 1;
+  
+  sorted.forEach(function(tema){
+    var n = conteo[tema];
+    var tag = document.createElement('span');
+    tag.className = 'nube-tag' + (n >= maxN*0.5 ? ' grande' : n >= maxN*0.2 ? ' mediano' : ' pequeno');
+    tag.textContent = tema + ' (' + n + ')';
+    tag.dataset.tema = tema;
+    if(filtroTema === tema) tag.classList.add('activo');
+    tag.addEventListener('click', function(){
+      if(filtroTema === tema){
+        filtroTema = '';
+        tag.classList.remove('activo');
+      } else {
+        document.querySelectorAll('.nube-tag').forEach(function(t){ t.classList.remove('activo'); });
+        filtroTema = tema;
+        tag.classList.add('activo');
+      }
+      render();
+    });
+    nube.appendChild(tag);
+  });
+}
 
 function actualizarStats(){
   var total = DATOS.length;
@@ -820,12 +875,12 @@ function abrirFichaDesdeId(id) {
   }
 }
 
-function init(){ poblarColecciones(); actualizarStats(); render(); }
+function init(){ poblarColecciones(); construirNube(); actualizarStats(); render(); }
 
 fetch('datos.json')
-  .then(function(r){ return r.json(); })
-  .then(function(d){ DATOS = d; init(); })
-  .catch(function(e){ console.error('Error:', e); });
+  .then(function(r){return r.json();})
+  .then(function(d){DATOS=d;init();})
+  .catch(function(e){console.error('Error:',e);});
 </script>
 </body>
 </html>
