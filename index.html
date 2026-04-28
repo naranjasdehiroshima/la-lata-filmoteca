@@ -285,6 +285,18 @@ header>*:not(.slider-bg){position:relative;z-index:1}
 <script>
 var DATOS = [];
 
+function actualizarStats(){
+  var total = DATOS.length;
+  var conYT = DATOS.filter(function(p){ return p.youtube; }).length;
+  var cols = {};
+  DATOS.forEach(function(p){ cols[p.coleccion]=1; });
+  var totalCols = Object.keys(cols).length;
+  var statEls = document.querySelectorAll('.header-stat-num');
+  if(statEls[0]) statEls[0].textContent = total;
+  if(statEls[1]) statEls[1].textContent = totalCols;
+  if(statEls[2]) statEls[2].textContent = conYT;
+}
+
 const FMT_NOMBRES = {'8mm':'8mm / Super 8','16mm':'16mm','pathe':'Pathé Baby 9.5mm','35mm':'35mm','nitrato':'Nitrato','video':'Video análogo','otro':'Otro'};
 const FMT_GRAD = {
   '8mm':'radial-gradient(circle at 35% 35%,#E8C870,#C8A84B 50%,#8B6B1A)',
@@ -296,17 +308,21 @@ const FMT_GRAD = {
   'otro':'radial-gradient(circle at 35% 35%,#9A8A7A,#7A6A5A 50%,#5A4A3A)'
 };
 
-// Poblar select de colecciones
-const coleccionesMap = {};
-DATOS.forEach(function(p){ if(!coleccionesMap[p.coleccion]) coleccionesMap[p.coleccion]=p.nombre_col; });
-var selCol = document.getElementById('filtro-col');
-Object.keys(coleccionesMap).sort().forEach(function(cod){
-  var opt = document.createElement('option');
-  opt.value = cod;
-  var nombre = coleccionesMap[cod] || '';
-  opt.textContent = cod + (nombre ? ' · ' + nombre.substring(0,22) : '');
-  selCol.appendChild(opt);
-});
+// Poblar select de colecciones — llamado desde init() tras cargar datos
+function poblarColecciones(){
+  var selCol = document.getElementById('filtro-col');
+  // Limpiar opciones previas excepto la primera
+  while(selCol.options.length > 1) selCol.remove(1);
+  var coleccionesMap = {};
+  DATOS.forEach(function(p){ if(!coleccionesMap[p.coleccion]) coleccionesMap[p.coleccion]=p.nombre_col; });
+  Object.keys(coleccionesMap).sort().forEach(function(cod){
+    var opt = document.createElement('option');
+    opt.value = cod;
+    var nombre = coleccionesMap[cod] || '';
+    opt.textContent = cod + (nombre ? ' · ' + nombre.substring(0,22) : '');
+    selCol.appendChild(opt);
+  });
+}
 
 var filtroFmt = 'todos', filtroCol = '', filtroDig = '', filtroBusq = '';
 
@@ -804,10 +820,12 @@ function abrirFichaDesdeId(id) {
   }
 }
 
+function init(){ poblarColecciones(); actualizarStats(); render(); }
+
 fetch('datos.json')
   .then(function(r){ return r.json(); })
-  .then(function(d){ DATOS = d; render(); })
-  .catch(function(e){ console.error('Error cargando datos:', e); });
+  .then(function(d){ DATOS = d; init(); })
+  .catch(function(e){ console.error('Error:', e); });
 </script>
 </body>
 </html>
