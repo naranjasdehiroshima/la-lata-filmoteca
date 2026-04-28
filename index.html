@@ -514,7 +514,7 @@ function abrirFicha(p){
     html += '</div>';
   }
 
-  html += '<div class="ficha-grid">';
+  var campos = [
     ['Colección', p.nombre_col||p.coleccion],
     ['Dirección', p.direccion],
     ['País de producción', p.pais],
@@ -646,7 +646,7 @@ document.getElementById('busqueda').addEventListener('input', function(e){
   debounce = setTimeout(function(){ filtroBusq=e.target.value; render(); }, 250);
 });
 
-// render() se llama desde fetch en el HTML
+render();
 
 function cargarIframe(el){
   var vid = el.getAttribute('data-vid');
@@ -804,14 +804,10 @@ function abrirFichaDesdeId(id) {
   }
 }
 
-// Iniciar: cargar datos.json y renderizar
 fetch('datos.json')
   .then(function(r){ return r.json(); })
-  .then(function(d){
-    DATOS = d;
-    render();
-  })
-  .catch(function(e){ console.error('Error:', e); });
+  .then(function(d){ DATOS = d; render(); })
+  .catch(function(e){ console.error('Error cargando datos:', e); });
 </script>
 </body>
 </html>
