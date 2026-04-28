@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Las Latas de La Pequeña Filmoteca · Naranjas de Hiroshima</title>
+<title>La Pequeña Filmoteca · Naranjas de Hiroshima</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Bebas+Neue&display=swap" rel="stylesheet">
@@ -171,8 +171,7 @@ input[type=text]::placeholder{color:var(--gris-medio)}
 .ficha-galeria-item:hover img{opacity:0.85}
 .ficha-galeria-item span{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.06em;color:var(--gris-medio);text-align:center}
 
-/* ── HEADER SLIDER KEN BURNS ── */
-header{position:relative;overflow:hidden;min-height:200px}
+
 .slider-bg{position:absolute;inset:0;z-index:0}
 .slider-slide{position:absolute;inset:0;opacity:0;transition:opacity 1.2s ease;background-size:cover;background-position:center center}
 .slider-slide.activa{opacity:1}
@@ -190,7 +189,7 @@ header{position:relative;overflow:hidden;min-height:200px}
 header>*:not(.slider-bg){position:relative;z-index:1}
 
 
-/* ── FONDO THUMBNAIL EN BLOQUE COLECCIÓN ── */
+
 .coleccion-bloque{position:relative;overflow:hidden}
 .coleccion-bg{position:absolute;inset:0;z-index:0;background-size:cover;background-position:center;opacity:0.13;filter:blur(2px) saturate(0.7);transition:opacity .4s}
 .coleccion-bloque:hover .coleccion-bg{opacity:0.22}
@@ -208,14 +207,28 @@ header>*:not(.slider-bg){position:relative;z-index:1}
 .nube-tag.mediano{font-size:0.82rem}
 .nube-tag.pequeno{font-size:0.72rem;opacity:0.8}
 
+
+/* ── HEADER FOTO FIJA ── */
+header{
+  position:relative;
+  overflow:hidden;
+  min-height:200px;
+  background:url('header.jpg') center 30% / cover no-repeat;
+}
+header::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to right, rgba(10,5,0,0.82) 40%, rgba(10,5,0,0.45) 100%);
+}
+header > *{position:relative;z-index:1;}
+
 </style>
 </head>
 <body>
 
 <header>
-  <div class="slider-bg" aria-hidden="true">
-    <div class="slider-slide" style="background-image:url('https://img.youtube.com/vi/DMgCqoGtgKQ/hqdefault.jpg')"></div>
-    <div class="slider-slide" style="background-image:url('https://img.youtube.com/vi/RcIa_b-gJNQ/hqdefault.jpg')"></div>
+  <div class="slider-slide" style="background-image:url('https://img.youtube.com/vi/RcIa_b-gJNQ/hqdefault.jpg')"></div>
     <div class="slider-slide" style="background-image:url('https://img.youtube.com/vi/OyVnIT6p3hk/hqdefault.jpg')"></div>
     <div class="slider-slide" style="background-image:url('https://img.youtube.com/vi/8JD7RkltzBs/hqdefault.jpg')"></div>
     <div class="slider-slide" style="background-image:url('https://img.youtube.com/vi/BhW_gJc4le8/hqdefault.jpg')"></div>
