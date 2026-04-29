@@ -223,6 +223,73 @@ header::after{
 }
 header > *{position:relative;z-index:1;}
 
+
+/* ── BANNER FORMATO ── */
+#banner-formato{
+  display:none;
+  background:#0a0500;
+  border-bottom:2px solid var(--naranja);
+  overflow:hidden;
+  max-height:0;
+  transition:max-height 0.4s ease, opacity 0.3s ease;
+  opacity:0;
+}
+#banner-formato.visible{
+  display:flex;
+  max-height:220px;
+  opacity:1;
+}
+.banner-img{
+  width:38%;
+  min-height:180px;
+  background-size:cover;
+  background-position:center;
+  flex-shrink:0;
+  position:relative;
+}
+.banner-img::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to right, transparent 60%, #0a0500 100%);
+}
+.banner-texto{
+  flex:1;
+  padding:1.5rem 2rem;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:0.6rem;
+}
+.banner-titulo{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(1.4rem,3vw,2.2rem);
+  color:var(--naranja);
+  letter-spacing:0.05em;
+  line-height:1;
+}
+.banner-anyo{
+  font-family:'DM Mono',monospace;
+  font-size:0.68rem;
+  color:rgba(255,255,255,0.5);
+  text-transform:uppercase;
+  letter-spacing:0.1em;
+}
+.banner-ficha{
+  display:flex;
+  flex-wrap:wrap;
+  gap:0.3rem 1.5rem;
+  font-size:0.75rem;
+  color:rgba(255,255,255,0.7);
+}
+.banner-ficha span{color:#fff;font-weight:600;}
+.banner-desc{
+  font-size:0.8rem;
+  color:rgba(255,255,255,0.75);
+  line-height:1.5;
+  max-width:600px;
+}
+
 </style>
 </head>
 <body>
@@ -888,6 +955,35 @@ function abrirFichaDesdeId(id) {
 }
 
 function init(){ poblarColecciones(); construirNube(); actualizarStats(); render(); }
+
+var FORMATOS_BANNER = {"8mm": {"titulo": "8mm / Super 8", "anyo": "1932–actualidad", "img": "https://naranjasdehiroshima.github.io/la-lata-filmoteca/img/formatos/8mm.jpg", "ficha": [("Inventor", "Kodak"), ("Uso", "Doméstico / Amateur"), ("Ancho", "8 mm"), ("Perforación", "Lateral")], "desc": "El formato doméstico por excelencia del siglo XX. Introducido por Kodak en 1932, el 8mm se convirtió en la herramienta de memoria familiar de millones de hogares. Su versión mejorada, el Super 8, llegó en 1965 con cartuchos más fáciles de cargar y una imagen más estable. La mayoría de las películas familiares, bodas, viajes y fiestas del archivo están registradas en este formato."}, "16mm": {"titulo": "16mm", "anyo": "1923–actualidad", "img": "https://naranjasdehiroshima.github.io/la-lata-filmoteca/img/formatos/16mm.jpg", "ficha": [("Inventor", "Kodak"), ("Uso", "Semi-profesional / Documental"), ("Ancho", "16 mm"), ("Perforación", "Lateral")], "desc": "Creado por Kodak en 1923 como alternativa económica al 35mm profesional, el 16mm fue adoptado rápidamente por documentalistas, cineastas independientes y televisiones. Su mayor versatilidad técnica respecto al 8mm lo convierte en el formato preferido para producciones con intención cinematográfica. En el archivo conviven rollos domésticos y producciones semi-profesionales en este paso."}, "pathe": {"titulo": "Pathé Baby 9.5mm", "anyo": "1922–1975", "img": "https://naranjasdehiroshima.github.io/la-lata-filmoteca/img/formatos/pathe.jpg", "ficha": [("Inventor", "Pathé"), ("Uso", "Doméstico"), ("Ancho", "9.5 mm"), ("Perforación", "Central")], "desc": "El más antiguo y singular del archivo. Lanzado por Pathé en 1922, el 9.5mm se distingue por su perforación central en lugar de los laterales habituales. Fue el primer formato verdaderamente doméstico de la historia del cine. Las piezas en 9.5mm del archivo datan de los años 1920 y son testimonio de una época en que el cine llegaba por primera vez a los hogares."}, "35mm": {"titulo": "35mm", "anyo": "1889–actualidad", "img": "https://naranjasdehiroshima.github.io/la-lata-filmoteca/img/formatos/35mm.jpg", "ficha": [("Inventor", "Edison / Dickson"), ("Uso", "Cine profesional / Fotografía"), ("Ancho", "35 mm"), ("Perforación", "Lateral")], "desc": "El estándar del cine profesional desde 1889 y el soporte de la fotografía fija durante todo el siglo XX. En La Pequeña Filmoteca las piezas en 35mm son principalmente fotografías y diapositivas — imágenes fijas que documentan el mismo mundo que las películas en movimiento del archivo, y que comparten soporte físico con el cine más antiguo de la historia. Incluye también materiales de nitrato de la época clásica del cine mexicano."}, "nitrato": {"titulo": "Nitrato de celulosa", "anyo": "1889–1951", "img": "https://naranjasdehiroshima.github.io/la-lata-filmoteca/img/formatos/nitrato.jpg", "ficha": [("Material", "Nitrato de celulosa"), ("Uso", "Cine profesional"), ("Riesgo", "Altamente inflamable"), ("Conservación", "Condiciones especiales")], "desc": "Más que un formato, el nitrato es un material — el celuloide de nitrato de celulosa, base de todas las películas hasta principios de los años 50. Altamente inflamable y químicamente inestable, su conservación requiere condiciones especiales. Las piezas en nitrato del archivo son las más antiguas y delicadas, y representan una ventana directa a la primera mitad del siglo XX."}, "video": {"titulo": "Video análogo", "anyo": "1956–2000s", "img": "https://naranjasdehiroshima.github.io/la-lata-filmoteca/img/formatos/video.jpg", "ficha": [("Formatos", "VHS · Betamax · U-matic"), ("Uso", "Doméstico / Broadcast"), ("Soporte", "Cinta magnética"), ("Riesgo", "Degradación progresiva")], "desc": "VHS, Betamax, U-matic: los formatos magnéticos que democratizaron la imagen en movimiento en los años 70 y 80. Aunque técnicamente muy distintos al celuloide, el video análogo es ya patrimonio en riesgo — las cintas se degradan y los reproductores desaparecen. El archivo recoge piezas en estos formatos como testimonio de una transición tecnológica irrepetible."}};
+
+function mostrarBannerFormato(fmt){
+  var banner = document.getElementById('banner-formato');
+  if(!banner) return;
+  if(fmt === 'todos' || !FORMATOS_BANNER[fmt]){
+    banner.classList.remove('visible');
+    setTimeout(function(){ banner.style.display='none'; }, 400);
+    return;
+  }
+  var info = FORMATOS_BANNER[fmt];
+  var fichaHtml = info.ficha.map(function(f){
+    return '<span>'+f[0]+':</span> '+f[1];
+  }).join(' &nbsp;·&nbsp; ');
+  
+  banner.innerHTML = '<div class="banner-img" style="background-image:url(\''+info.img+'\')"></div>'
+    + '<div class="banner-texto">'
+    + '<div class="banner-titulo">'+info.titulo+'</div>'
+    + '<div class="banner-anyo">'+info.anyo+'</div>'
+    + '<div class="banner-ficha">'+fichaHtml+'</div>'
+    + '<div class="banner-desc">'+info.desc+'</div>'
+    + '</div>';
+  
+  banner.style.display = 'flex';
+  requestAnimationFrame(function(){
+    banner.classList.add('visible');
+  });
+}
 
 fetch('datos.json')
   .then(function(r){return r.json();})
