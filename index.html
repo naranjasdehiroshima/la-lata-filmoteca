@@ -332,6 +332,7 @@ header > *{position:relative;z-index:1;}
   <div class="vista-btns"><button id="btn-vista-latas" class="btn-vista activo" onclick="toggleVista('latas')">&#9632; Latas</button><button id="btn-vista-mapa" class="btn-vista" onclick="toggleVista('mapa')">&#127760; Mapa</button></div><span id="contador"></span>
 </div>
 
+<div id="banner-formato"></div>
 <div class="filmoteca-wrap" id="filmoteca">
   <div class="sin-resultados" id="sin-resultados">No se encontraron piezas.</div>
 </div>
@@ -785,6 +786,7 @@ document.querySelectorAll('.btn-formato').forEach(function(btn){
     document.querySelectorAll('.btn-formato').forEach(function(b){b.classList.remove('activo');});
     btn.classList.add('activo');
     filtroFmt = btn.dataset.fmt;
+    mostrarBannerFormato(btn.dataset.fmt);
     render();
   });
 });
