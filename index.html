@@ -292,6 +292,20 @@ header > *{position:relative;z-index:1;}
   max-width:600px;
 }
 
+
+.banner-link{
+  display:inline-block;
+  margin-top:0.6rem;
+  font-family:'DM Mono',monospace;
+  font-size:0.72rem;
+  color:var(--naranja);
+  text-decoration:none;
+  letter-spacing:0.05em;
+  border-bottom:1px solid rgba(255,120,0,0.4);
+  transition:border-color 0.2s;
+}
+.banner-link:hover{border-bottom-color:var(--naranja);}
+
 </style>
 </head>
 <body>
@@ -981,6 +995,7 @@ function mostrarBannerFormato(fmt){
     + '<div class="banner-anyo">'+info.anyo+'</div>'
     + '<div class="banner-ficha">'+fichaHtml+'</div>'
     + '<div class="banner-desc">'+info.desc+'</div>'
+    + (info.url ? '<a href="'+info.url+'" target="_blank" rel="noopener" class="banner-link">'+info.url+'</a>' : '')
     + '</div>';
   
   banner.style.display = 'flex';
