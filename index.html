@@ -965,8 +965,9 @@ var FORMATOS_BANNER = {"todos":{"titulo":"La Pequeña Filmoteca de Naranjas de H
 function mostrarBannerFormato(fmt){
   var banner = document.getElementById('banner-formato');
   if(!banner) return;
-  if(fmt === 'todos' || !FORMATOS_BANNER[fmt]){
+  if(!FORMATOS_BANNER[fmt]){
     banner.classList.remove('visible');
+    banner.style.display = 'none';
     return;
   }
   var info = FORMATOS_BANNER[fmt];
