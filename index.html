@@ -242,19 +242,16 @@ header > *{position:relative;z-index:1;}
   display:none;
 }
 .banner-img{
-  width:38%;
+  width:30%;
   min-height:180px;
-  background-size:cover;
-  background-position:center;
+  background-size:contain;
+  background-position:center center;
+  background-repeat:no-repeat;
+  background-color:#0a0500;
   flex-shrink:0;
   position:relative;
 }
-.banner-img::after{
-  content:'';
-  position:absolute;
-  inset:0;
-  background:linear-gradient(to right, transparent 60%, #0a0500 100%);
-}
+.banner-img::after{content:'';}
 .banner-texto{
   flex:1;
   padding:1.5rem 2rem;
