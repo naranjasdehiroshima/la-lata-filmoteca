@@ -11,7 +11,8 @@
 </script>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>La Pequeña Filmoteca · Naranjas de Hiroshima</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -678,7 +679,7 @@ function abrirFicha(p){
     // Una sola imagen — mostrar grande
     var img = imgs[0];
     html += '<div class="ficha-imagen-wrap">'
-      + '<img src="'+esc(img.src)+'" alt="'+esc(p.titulo)+'" class="ficha-imagen" loading="lazy">'
+      + '<a href="'+esc(img.src)+'" target="_blank" rel="noopener"><img src="'+esc(img.src)+'" alt="'+esc(p.titulo)+'" class="ficha-imagen" loading="lazy" style="cursor:zoom-in;"></a>'
       + '<span class="ficha-imagen-label">'+esc(img.label)+'</span>'
       + (img.href ? '<a href="'+esc(img.href)+'" target="_blank" rel="noopener" class="boveda-link">'+(img.href.includes('blogspot')?'Ver en B\u00f3veda Abierta \u2197':'Ver en YouTube \u2197')+'</a>' : '')
       + '</div>';
