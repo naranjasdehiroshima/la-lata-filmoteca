@@ -15609,19 +15609,19 @@
     "codigo": "C.PRETO013",
     "coleccion": "C.PRETO",
     "nombre_col": "Películas Ficción Reto",
-    "titulo": "[Título con Mohicano — pendiente identificación]",
-    "direccion": "",
-    "pais": "",
-    "fecha": "c.1930s",
+    "titulo": "The Last of the Mohicans (El último de los mohicanos)",
+    "direccion": "Ford Beebe, B. Reeves Eason",
+    "pais": "Estados Unidos",
+    "fecha": "1932",
     "genero": "Ficción",
-    "temas": "",
+    "temas": "Western, Aventura, Serial",
     "paso": "16mm",
     "color": "Blanco y Negro",
     "audio": "Si (revisar)",
     "duracion": "",
     "condiciones": "Revisar",
     "procedencia": "Centro Reto Pórtales",
-    "obs": "Título contiene la palabra Mohicano. Posiblemente adaptación de El último de los mohicanos. Años 30s. Pendiente identificación completa.",
+    "obs": "Serial de Mascot Pictures en 12 capítulos. Pendiente identificar número de capítulo. IMDB: https://www.imdb.com/es/title/tt0023119/",
     "sinopsis": "",
     "formato": "16mm",
     "digitalizada": false,
@@ -15633,7 +15633,11 @@
     "rollos": "1",
     "lat": 19.33816898459932,
     "lng": -99.13449320373866,
-    "temas_lista": []
+    "temas_lista": [
+      "Western",
+      "Aventura",
+      "Serial"
+    ]
   },
   {
     "id": "A.NDH.0496",
