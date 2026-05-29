@@ -1073,101 +1073,63 @@ function toggleVista(vista) {
 var tvPlaylist = [];
 var tvIndice = 0;
 var tvAleatorio = true;
-var tvYTPlayer = null;
 var tvYTReady = false;
+var tvTimer = null;
 
 function iniciarTV() {
   tvPlaylist = DATOS.filter(function(d) {
-    return d.youtube && d.youtube.match(/[a-zA-Z0-9_-]{11}/) && !d.youtube.includes('princeton') && !d.youtube.includes('kaltura');
-  });
-  tvPlaylist = tvPlaylist.map(function(d) {
+    return d.youtube && d.youtube.match(/[a-zA-Z0-9_-]{11}/)
+      && !d.youtube.includes('princeton') && !d.youtube.includes('kaltura');
+  }).map(function(d) {
     var match = d.youtube.match(/(?:youtu\.be\/|v=|embed\/)([a-zA-Z0-9_-]{11})/);
     return { d: d, ytid: match ? match[1] : null };
   }).filter(function(p) { return p.ytid; });
 
   if (tvAleatorio) tvMezclar();
   tvIndice = 0;
+  tvCargar(0);
 
-  // Si la API de YT ya está disponible (cargada anteriormente), usar directamente
-  if (typeof YT !== 'undefined' && YT.Player) {
-    tvYTReady = true;
-    tvIniciarPlayer();
-  } else if (!tvYTReady) {
-    // Cargar script solo si no está ya en el DOM
-    if (!document.querySelector('script[src*="youtube.com/iframe_api"]')) {
-      var tag = document.createElement('script');
-      tag.src = 'https://www.youtube.com/iframe_api';
-      document.head.appendChild(tag);
-    }
-    // Esperar con polling por si el callback ya fue llamado
-    var intentos = 0;
-    var check = setInterval(function() {
-      intentos++;
-      if (typeof YT !== 'undefined' && YT.Player) {
-        clearInterval(check);
-        tvYTReady = true;
-        tvIniciarPlayer();
+  // Escuchar mensajes de fin de video desde el iframe
+  window.addEventListener('message', function(e) {
+    if (!e.data) return;
+    try {
+      var data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
+      // YouTube envía info cuando el video termina (estado 0)
+      if (data.event === 'onStateChange' && data.info === 0) {
+        tvSiguiente();
       }
-      if (intentos > 50) clearInterval(check); // timeout 5s
-    }, 100);
-  } else {
-    tvIniciarPlayer();
-  }
+    } catch(err) {}
+  });
 }
 
-window.onYouTubeIframeAPIReady = function() {
-  tvYTReady = true;
-  if (vistaActual === 'tv' && tvPlaylist.length > 0) tvIniciarPlayer();
-};
+function tvCargar(idx) {
+  if (!tvPlaylist.length) return;
+  tvIndice = ((idx % tvPlaylist.length) + tvPlaylist.length) % tvPlaylist.length;
+  var item = tvPlaylist[tvIndice];
+  var d = item.d;
 
-function tvIniciarPlayer() {
-  if (tvYTPlayer && tvYTPlayer.loadVideoById) {
-    tvYTPlayer.loadVideoById(tvPlaylist[tvIndice].ytid);
-    tvActualizarInfo();
-    return;
-  }
-
-  // Asegurarse de que existe el div destino
+  // Asegurar que existe el div del player
   var col = document.getElementById('tv-player-col');
   var dest = document.getElementById('tv-yt-div');
   if (!dest) {
     dest = document.createElement('div');
     dest.id = 'tv-yt-div';
     dest.style.cssText = 'position:absolute;inset:0;width:100%;height:100%';
-    // Insertar antes del overlay
     var overlay = document.getElementById('tv-overlay');
-    if (overlay) {
-      col.insertBefore(dest, overlay);
-    } else {
-      col.appendChild(dest);
-    }
+    overlay ? col.insertBefore(dest, overlay) : col.appendChild(dest);
   }
 
-  tvYTPlayer = new YT.Player('tv-yt-div', {
-    width: '100%',
-    height: '100%',
-    videoId: tvPlaylist[tvIndice].ytid,
-    playerVars: { autoplay: 1, rel: 0, modestbranding: 1, iv_load_policy: 3 },
-    events: {
-      onReady: function(e) { e.target.playVideo(); },
-      onStateChange: function(e) {
-        if (e.data === 0) tvSiguiente();
-      },
-      onError: function() {
-        setTimeout(tvSiguiente, 1500);
-      }
-    }
-  });
-  tvActualizarInfo();
-}
+  // Usar iframe directo — el más fiable
+  dest.innerHTML = '<iframe src="https://www.youtube.com/embed/' + item.ytid
+    + '?autoplay=1&rel=0&modestbranding=1&enablejsapi=1&origin='
+    + encodeURIComponent(window.location.origin)
+    + '" frameborder="0" allowfullscreen allow="autoplay; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" style="position:absolute;inset:0;width:100%;height:100%"></iframe>';
 
-function tvCargar(idx) {
-  if (!tvPlaylist.length) return;
-  tvIndice = ((idx % tvPlaylist.length) + tvPlaylist.length) % tvPlaylist.length;
-  if (tvYTPlayer && tvYTPlayer.loadVideoById) {
-    tvYTPlayer.loadVideoById(tvPlaylist[tvIndice].ytid);
-  }
   tvActualizarInfo();
+
+  // Timer de seguridad: si en 12 minutos no pasó solo, avanzar
+  if (tvTimer) clearTimeout(tvTimer);
+  tvTimer = setTimeout(function() { tvSiguiente(); }, 12 * 60 * 1000);
 }
 
 function tvActualizarInfo() {
