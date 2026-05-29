@@ -1080,11 +1080,9 @@ var tvYTPlayer = null;
 var tvYTReady = false;
 
 function iniciarTV() {
-  // Construir playlist con todas las piezas que tienen yt_id
   tvPlaylist = DATOS.filter(function(d) {
     return d.youtube && d.youtube.match(/[a-zA-Z0-9_-]{11}/) && !d.youtube.includes('princeton') && !d.youtube.includes('kaltura');
   });
-  // Extraer yt_id limpio
   tvPlaylist = tvPlaylist.map(function(d) {
     var match = d.youtube.match(/(?:youtu\.be\/|v=|embed\/)([a-zA-Z0-9_-]{11})/);
     return { d: d, ytid: match ? match[1] : null };
@@ -1093,41 +1091,70 @@ function iniciarTV() {
   if (tvAleatorio) tvMezclar();
   tvIndice = 0;
 
-  // Cargar API de YouTube si no está cargada
   if (!tvYTReady) {
     var tag = document.createElement('script');
     tag.src = 'https://www.youtube.com/iframe_api';
     document.head.appendChild(tag);
   } else {
-    tvCargar(tvIndice);
+    tvIniciarPlayer();
   }
 }
 
 window.onYouTubeIframeAPIReady = function() {
   tvYTReady = true;
-  if (vistaActual === 'tv' && tvPlaylist.length > 0) tvCargar(tvIndice);
+  if (vistaActual === 'tv' && tvPlaylist.length > 0) tvIniciarPlayer();
 };
 
-function tvMezclar() {
-  for (var i = tvPlaylist.length - 1; i > 0; i--) {
-    var j = Math.floor(Math.random() * (i + 1));
-    var tmp = tvPlaylist[i]; tvPlaylist[i] = tvPlaylist[j]; tvPlaylist[j] = tmp;
+function tvIniciarPlayer() {
+  if (tvYTPlayer) {
+    tvYTPlayer.loadVideoById(tvPlaylist[tvIndice].ytid);
+    tvActualizarInfo();
+    return;
   }
+  // Reemplazar iframe con div para YT API
+  var col = document.getElementById('tv-player-col');
+  var div = document.createElement('div');
+  div.id = 'tv-yt-div';
+  var iframe = document.getElementById('tv-iframe');
+  if (iframe) iframe.parentNode.replaceChild(div, iframe);
+
+  tvYTPlayer = new YT.Player('tv-yt-div', {
+    width: '100%',
+    height: '100%',
+    videoId: tvPlaylist[tvIndice].ytid,
+    playerVars: {
+      autoplay: 1,
+      rel: 0,
+      modestbranding: 1,
+      iv_load_policy: 3
+    },
+    events: {
+      onReady: function(e) { e.target.playVideo(); },
+      onStateChange: function(e) {
+        // YT.PlayerState.ENDED = 0
+        if (e.data === 0) tvSiguiente();
+      },
+      onError: function() {
+        // Si el video da error (privado, eliminado), saltar al siguiente
+        setTimeout(tvSiguiente, 1500);
+      }
+    }
+  });
+  tvActualizarInfo();
 }
 
 function tvCargar(idx) {
   if (!tvPlaylist.length) return;
   tvIndice = ((idx % tvPlaylist.length) + tvPlaylist.length) % tvPlaylist.length;
+  if (tvYTPlayer && tvYTPlayer.loadVideoById) {
+    tvYTPlayer.loadVideoById(tvPlaylist[tvIndice].ytid);
+  }
+  tvActualizarInfo();
+}
+
+function tvActualizarInfo() {
   var item = tvPlaylist[tvIndice];
   var d = item.d;
-
-  // Actualizar iframe
-  var iframe = document.getElementById('tv-iframe');
-  iframe.src = 'https://www.youtube.com/embed/' + item.ytid
-    + '?autoplay=1&enablejsapi=1&origin=' + encodeURIComponent(window.location.origin)
-    + '&rel=0&modestbranding=1';
-
-  // Actualizar info
   document.getElementById('tv-info-code').textContent = (d.codigo || d.id || '');
   document.getElementById('tv-info-titulo').textContent = d.titulo || 'Sin título';
   document.getElementById('tv-info-meta').innerHTML =
@@ -1137,8 +1164,6 @@ function tvCargar(idx) {
     '<span>País</span> ' + (d.pais || '—');
   document.getElementById('tv-progreso').textContent =
     (tvIndice + 1) + ' / ' + tvPlaylist.length + ' videos';
-
-  // Actualizar cola — próximos 8
   var cola = document.getElementById('tv-cola-lista');
   var html = '';
   for (var i = 1; i <= 8; i++) {
