@@ -1020,6 +1020,8 @@ function abrirColPanel(cod) {
   body.innerHTML = '<div id="col-panel-loading">Cargando investigación...</div>';
   panel.classList.add('abierto');
   document.body.style.overflow = 'hidden';
+  // Actualizar URL con hash compartible
+  history.pushState(null, '', '#coleccion/' + encodeURIComponent(cod.trim()));
 
   // Construir nombre de archivo: quitar espacios y puntos especiales
   var archivo = cod.trim().replace(/\s+/g,'_');
@@ -1044,10 +1046,24 @@ function abrirColPanel(cod) {
 function cerrarColPanel() {
   document.getElementById('col-panel').classList.remove('abierto');
   document.body.style.overflow = '';
+  // Limpiar hash de la URL
+  history.pushState(null, '', window.location.pathname);
 }
 
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') cerrarColPanel();
+});
+
+// Al cargar la página, comprobar si hay un hash de colección
+window.addEventListener('load', function() {
+  var hash = window.location.hash;
+  if (hash && hash.startsWith('#coleccion/')) {
+    var cod = decodeURIComponent(hash.replace('#coleccion/', ''));
+    if (ARTICULOS_DISPONIBLES.indexOf(cod) !== -1) {
+      toggleVista('colecciones');
+      setTimeout(function() { abrirColPanel(cod); }, 300);
+    }
+  }
 });
 
 function fmtColor(fmt) {
