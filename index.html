@@ -1087,7 +1087,8 @@ function iniciarTV() {
 
   if (tvAleatorio) tvMezclar();
   tvIndice = 0;
-  tvCargar(0);
+  // Pequeño delay para que tv-wrap esté visible antes de crear el iframe
+  setTimeout(function() { tvCargar(0); }, 100);
 
   // Escuchar mensajes de fin de video desde el iframe
   window.addEventListener('message', function(e) {
