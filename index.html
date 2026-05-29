@@ -168,6 +168,24 @@ input[type=text]::placeholder{color:var(--gris-medio)}
 .btn-vista.activo{background:var(--naranja);color:var(--blanco)}
 #mapa-wrap{display:none;height:calc(100vh - 140px);min-height:500px}
 #colecciones-wrap{display:none;padding:2rem 3rem;min-height:60vh}
+#tv-wrap{display:none;background:#000;min-height:calc(100vh - 140px);flex-direction:row}
+#tv-player-col{flex:1;display:flex;align-items:center;justify-content:center;position:relative;min-height:400px}
+#tv-player-col iframe{width:100%;height:100%;position:absolute;inset:0}
+#tv-info-col{width:320px;flex-shrink:0;background:#111;padding:1.5rem;display:flex;flex-direction:column;gap:1rem;overflow-y:auto}
+#tv-info-code{font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--naranja);letter-spacing:0.15em;text-transform:uppercase}
+#tv-info-titulo{font-family:'DM Mono',monospace;font-size:0.9rem;color:#fff;line-height:1.4;margin:0}
+#tv-info-meta{font-family:'DM Mono',monospace;font-size:0.7rem;color:#888;line-height:1.8}
+#tv-info-meta span{color:#ccc}
+.tv-btns{display:flex;gap:0.5rem;margin-top:auto;flex-wrap:wrap}
+.tv-btn{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.4rem 0.8rem;border:1px solid #333;background:none;color:#888;cursor:pointer;border-radius:2px;transition:all 0.15s}
+.tv-btn:hover{border-color:var(--naranja);color:var(--naranja)}
+.tv-btn.activo{background:var(--naranja);color:#fff;border-color:var(--naranja)}
+#tv-progreso{font-family:'DM Mono',monospace;font-size:0.65rem;color:#555;text-align:center;padding:0.5rem 0;border-top:1px solid #222}
+#tv-cola{margin-top:1rem;border-top:1px solid #222;padding-top:1rem}
+#tv-cola-titulo{font-family:'DM Mono',monospace;font-size:0.6rem;color:#555;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.6rem}
+.tv-cola-item{font-family:'DM Mono',monospace;font-size:0.65rem;color:#666;padding:0.3rem 0;border-bottom:1px solid #1a1a1a;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tv-cola-item:hover{color:var(--naranja)}
+.tv-cola-item.tv-actual{color:var(--naranja)}
 .col-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.2rem;margin-top:1.5rem}
 .col-card{background:var(--negro);border:1px solid #2a2a2a;border-radius:3px;padding:1.2rem 1.4rem;cursor:pointer;transition:border-color 0.15s;position:relative}
 .col-card:hover{border-color:var(--naranja)}
@@ -388,7 +406,7 @@ header > *{position:relative;z-index:1;}
   </select>
   <div class="ctrl-sep"></div>
   <input type="text" id="busqueda" placeholder="Buscar t&#237;tulo, c&#243;digo...">
-  <div class="vista-btns"><button id="btn-vista-latas" class="btn-vista activo" onclick="toggleVista('latas')">&#9632; Latas</button><button id="btn-vista-mapa" class="btn-vista" onclick="toggleVista('mapa')">&#127760; Mapa</button><button id="btn-vista-colecciones" class="btn-vista" onclick="toggleVista('colecciones')">&#9782; Colecciones</button></div><span id="contador"></span>
+  <div class="vista-btns"><button id="btn-vista-latas" class="btn-vista activo" onclick="toggleVista('latas')">&#9632; Latas</button><button id="btn-vista-mapa" class="btn-vista" onclick="toggleVista('mapa')">&#127760; Mapa</button><button id="btn-vista-colecciones" class="btn-vista" onclick="toggleVista('colecciones')">&#9782; Colecciones</button><button id="btn-vista-tv" class="btn-vista" onclick="toggleVista('tv')">&#128250; TV</button></div><span id="contador"></span>
 </div>
 
 <div id="banner-formato"></div>
@@ -398,6 +416,28 @@ header > *{position:relative;z-index:1;}
 
 <div id="mapa-wrap"><div id="mapa-leaflet"></div></div>
 <div id="colecciones-wrap"></div>
+<div id="tv-wrap">
+  <div id="tv-player-col">
+    <iframe id="tv-iframe" frameborder="0" allowfullscreen
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+    </iframe>
+  </div>
+  <div id="tv-info-col">
+    <div id="tv-info-code"></div>
+    <p id="tv-info-titulo"></p>
+    <div id="tv-info-meta"></div>
+    <div class="tv-btns">
+      <button class="tv-btn" onclick="tvAnterior()">← Anterior</button>
+      <button class="tv-btn" onclick="tvSiguiente()">Siguiente →</button>
+      <button class="tv-btn" id="tv-btn-aleatorio" onclick="tvToggleAleatorio()">⇄ Aleatorio</button>
+    </div>
+    <div id="tv-progreso"></div>
+    <div id="tv-cola">
+      <div class="tv-cola-titulo">A continuación</div>
+      <div id="tv-cola-lista"></div>
+    </div>
+  </div>
+</div>
 <div id="col-panel">
   <div id="col-panel-header">
     <span id="col-panel-code"></span>
@@ -938,17 +978,21 @@ function toggleVista(vista) {
   var btnLatas = document.getElementById('btn-vista-latas');
   var btnMapa  = document.getElementById('btn-vista-mapa');
   var btnCols  = document.getElementById('btn-vista-colecciones');
+  var btnTV    = document.getElementById('btn-vista-tv');
   var wrapLatas = document.getElementById('filmoteca');
   var wrapMapa  = document.getElementById('mapa-wrap');
   var wrapCols  = document.getElementById('colecciones-wrap');
+  var wrapTV    = document.getElementById('tv-wrap');
   var leyenda   = document.querySelector('.leyenda');
 
   btnLatas.classList.remove('activo');
   btnMapa.classList.remove('activo');
   btnCols.classList.remove('activo');
+  btnTV.classList.remove('activo');
   wrapLatas.style.display = 'none';
   wrapMapa.style.display  = 'none';
   wrapCols.style.display  = 'none';
+  wrapTV.style.display    = 'none';
   leyenda.style.display   = 'none';
 
   if (vista === 'mapa') {
@@ -960,6 +1004,10 @@ function toggleVista(vista) {
     btnCols.classList.add('activo');
     wrapCols.style.display = 'block';
     if (!wrapCols.dataset.cargado) renderColecciones();
+  } else if (vista === 'tv') {
+    btnTV.classList.add('activo');
+    wrapTV.style.display = 'flex';
+    if (!tvPlaylist.length) iniciarTV();
   } else {
     btnLatas.classList.add('activo');
     wrapLatas.style.display = 'block';
@@ -967,7 +1015,102 @@ function toggleVista(vista) {
   }
 }
 
-// ─── COLECCIONES ────────────────────────────────────────────────────────────
+// ─── TV ─────────────────────────────────────────────────────────────────────
+
+var tvPlaylist = [];
+var tvIndice = 0;
+var tvAleatorio = true;
+var tvYTPlayer = null;
+var tvYTReady = false;
+
+function iniciarTV() {
+  // Construir playlist con todas las piezas que tienen yt_id
+  tvPlaylist = DATOS.filter(function(d) {
+    return d.youtube && d.youtube.match(/[a-zA-Z0-9_-]{11}/) && !d.youtube.includes('princeton') && !d.youtube.includes('kaltura');
+  });
+  // Extraer yt_id limpio
+  tvPlaylist = tvPlaylist.map(function(d) {
+    var match = d.youtube.match(/(?:youtu\.be\/|v=|embed\/)([a-zA-Z0-9_-]{11})/);
+    return { d: d, ytid: match ? match[1] : null };
+  }).filter(function(p) { return p.ytid; });
+
+  if (tvAleatorio) tvMezclar();
+  tvIndice = 0;
+
+  // Cargar API de YouTube si no está cargada
+  if (!tvYTReady) {
+    var tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(tag);
+  } else {
+    tvCargar(tvIndice);
+  }
+}
+
+window.onYouTubeIframeAPIReady = function() {
+  tvYTReady = true;
+  if (vistaActual === 'tv' && tvPlaylist.length > 0) tvCargar(tvIndice);
+};
+
+function tvMezclar() {
+  for (var i = tvPlaylist.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = tvPlaylist[i]; tvPlaylist[i] = tvPlaylist[j]; tvPlaylist[j] = tmp;
+  }
+}
+
+function tvCargar(idx) {
+  if (!tvPlaylist.length) return;
+  tvIndice = ((idx % tvPlaylist.length) + tvPlaylist.length) % tvPlaylist.length;
+  var item = tvPlaylist[tvIndice];
+  var d = item.d;
+
+  // Actualizar iframe
+  var iframe = document.getElementById('tv-iframe');
+  iframe.src = 'https://www.youtube.com/embed/' + item.ytid
+    + '?autoplay=1&enablejsapi=1&origin=' + encodeURIComponent(window.location.origin)
+    + '&rel=0&modestbranding=1';
+
+  // Actualizar info
+  document.getElementById('tv-info-code').textContent = (d.codigo || d.id || '');
+  document.getElementById('tv-info-titulo').textContent = d.titulo || 'Sin título';
+  document.getElementById('tv-info-meta').innerHTML =
+    '<span>Colección</span> ' + (d.nombre_col || d.coleccion || '—') + '<br>' +
+    '<span>Formato</span> ' + (d.paso || '—') + '<br>' +
+    '<span>Fecha</span> ' + (d.fecha || '—') + '<br>' +
+    '<span>País</span> ' + (d.pais || '—');
+  document.getElementById('tv-progreso').textContent =
+    (tvIndice + 1) + ' / ' + tvPlaylist.length + ' videos';
+
+  // Actualizar cola — próximos 8
+  var cola = document.getElementById('tv-cola-lista');
+  var html = '';
+  for (var i = 1; i <= 8; i++) {
+    var ni = (tvIndice + i) % tvPlaylist.length;
+    var nd = tvPlaylist[ni].d;
+    html += '<div class="tv-cola-item" onclick="tvCargar(' + ni + ')">'
+      + (nd.codigo || nd.id || '') + ' — ' + (nd.titulo || 'Sin título') + '</div>';
+  }
+  cola.innerHTML = html;
+}
+
+function tvSiguiente() { tvCargar(tvIndice + 1); }
+function tvAnterior() { tvCargar(tvIndice - 1); }
+
+function tvToggleAleatorio() {
+  tvAleatorio = !tvAleatorio;
+  var btn = document.getElementById('tv-btn-aleatorio');
+  if (tvAleatorio) {
+    tvMezclar();
+    btn.classList.add('activo');
+  } else {
+    // Reordenar por índice original
+    tvPlaylist.sort(function(a,b){ return DATOS.indexOf(a.d) - DATOS.indexOf(b.d); });
+    btn.classList.remove('activo');
+  }
+  tvIndice = 0;
+  tvCargar(0);
+}
 
 // Todas las colecciones abren panel — si existe el HTML lo muestra, si no muestra "en preparación"
 var ARTICULOS_DISPONIBLES = []; // ya no se usa para filtrar, se mantiene por compatibilidad
