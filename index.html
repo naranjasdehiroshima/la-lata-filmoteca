@@ -968,7 +968,7 @@ function toggleVista(vista) {
 // ─── COLECCIONES ────────────────────────────────────────────────────────────
 
 // Colecciones que tienen artículo en /colecciones/
-var ARTICULOS_DISPONIBLES = ['C.MGF','C.VHS','C.CCGLE','C.CHHM','C.PBR','C.PRETO','C.TOR16','C.SM','C.TA','C.GCHK','C.ADM','C.CEFC','C.PSC'];
+var ARTICULOS_DISPONIBLES = ['C. MPB','C.MGF','C.VHS','C.CCGLE','C.CHHM','C.PBR','C.PRETO','C.TOR16','C.SM','C.TA','C.GCHK','C.ADM','C.CEFC','C.PSC'];
 
 function renderColecciones() {
   var wrap = document.getElementById('colecciones-wrap');
@@ -1022,11 +1022,11 @@ function abrirColPanel(cod) {
   document.body.style.overflow = 'hidden';
 
   // Construir nombre de archivo: quitar espacios y puntos especiales
-  var archivo = cod.trim().replace(/\s+/g,'').replace(/\./g,'.');
+  var archivo = cod.trim().replace(/\s+/g,'_');
   // Casos especiales
   if (cod.trim() === 'C. MPB') archivo = 'C.MPB';
   if (cod.trim() === 'C. CPI') archivo = 'C.CPI';
-  if (cod.trim() === 'C.TA') archivo = 'C.TA_C.S8A'; // artículo conjunto
+  if (cod.trim() === 'C.TA') archivo = 'C.TA_C.S8A';
 
   fetch('colecciones/' + archivo + '.html')
     .then(function(r) {
