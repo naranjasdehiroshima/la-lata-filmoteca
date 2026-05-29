@@ -1088,10 +1088,28 @@ function iniciarTV() {
   if (tvAleatorio) tvMezclar();
   tvIndice = 0;
 
-  if (!tvYTReady) {
-    var tag = document.createElement('script');
-    tag.src = 'https://www.youtube.com/iframe_api';
-    document.head.appendChild(tag);
+  // Si la API de YT ya está disponible (cargada anteriormente), usar directamente
+  if (typeof YT !== 'undefined' && YT.Player) {
+    tvYTReady = true;
+    tvIniciarPlayer();
+  } else if (!tvYTReady) {
+    // Cargar script solo si no está ya en el DOM
+    if (!document.querySelector('script[src*="youtube.com/iframe_api"]')) {
+      var tag = document.createElement('script');
+      tag.src = 'https://www.youtube.com/iframe_api';
+      document.head.appendChild(tag);
+    }
+    // Esperar con polling por si el callback ya fue llamado
+    var intentos = 0;
+    var check = setInterval(function() {
+      intentos++;
+      if (typeof YT !== 'undefined' && YT.Player) {
+        clearInterval(check);
+        tvYTReady = true;
+        tvIniciarPlayer();
+      }
+      if (intentos > 50) clearInterval(check); // timeout 5s
+    }, 100);
   } else {
     tvIniciarPlayer();
   }
