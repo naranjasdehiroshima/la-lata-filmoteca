@@ -167,6 +167,32 @@ input[type=text]::placeholder{color:var(--gris-medio)}
 .btn-vista:hover{background:var(--crema-oscura);color:var(--negro)}
 .btn-vista.activo{background:var(--naranja);color:var(--blanco)}
 #mapa-wrap{display:none;height:calc(100vh - 140px);min-height:500px}
+#colecciones-wrap{display:none;padding:2rem 3rem;min-height:60vh}
+.col-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.2rem;margin-top:1.5rem}
+.col-card{background:var(--negro);border:1px solid #2a2a2a;border-radius:3px;padding:1.2rem 1.4rem;cursor:pointer;transition:border-color 0.15s;position:relative}
+.col-card:hover{border-color:var(--naranja)}
+.col-card-code{font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--naranja);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.4rem}
+.col-card-nombre{font-family:'DM Mono',monospace;font-size:0.85rem;color:var(--blanco);line-height:1.3;margin-bottom:0.6rem}
+.col-card-meta{font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--gris-medio);letter-spacing:0.05em}
+.col-card-arrow{position:absolute;top:1rem;right:1rem;color:var(--gris-medio);font-size:0.8rem}
+.col-card.sin-articulo{opacity:0.5;cursor:default}
+.col-card.sin-articulo:hover{border-color:#2a2a2a}
+#col-panel{display:none;position:fixed;top:0;right:0;width:min(720px,100vw);height:100vh;background:var(--blanco);z-index:1000;box-shadow:-8px 0 32px rgba(0,0,0,0.3);overflow-y:auto;flex-direction:column}
+#col-panel.abierto{display:flex}
+#col-panel-header{background:var(--negro);padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:1}
+#col-panel-code{font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--naranja);letter-spacing:0.15em}
+#col-panel-cerrar{background:none;border:none;color:var(--blanco);font-size:1.2rem;cursor:pointer;padding:0.2rem 0.5rem;font-family:'DM Mono',monospace}
+#col-panel-body{padding:2rem 2.5rem;flex:1;font-family:Georgia,serif;font-size:0.95rem;line-height:1.7;color:#1a1a1a}
+#col-panel-body h2{font-family:'DM Mono',monospace;font-size:1rem;color:var(--naranja);text-transform:uppercase;letter-spacing:0.1em;margin:1.8rem 0 0.8rem;border-bottom:1px solid #eee;padding-bottom:0.4rem}
+#col-panel-body h3{font-family:'DM Mono',monospace;font-size:0.85rem;color:#444;text-transform:uppercase;letter-spacing:0.08em;margin:1.4rem 0 0.6rem}
+#col-panel-body table{width:100%;border-collapse:collapse;font-size:0.82rem;margin:1rem 0}
+#col-panel-body th{background:#1a1a1a;color:#fff;padding:5px 8px;text-align:left;font-family:'DM Mono',monospace;font-size:0.7rem}
+#col-panel-body td{padding:4px 8px;border:1px solid #ddd;font-family:'DM Mono',monospace;font-size:0.72rem}
+#col-panel-body tr:nth-child(even) td{background:#f9f9f9}
+#col-panel-body a{color:var(--naranja)}
+#col-panel-loading{padding:3rem;text-align:center;font-family:'DM Mono',monospace;font-size:0.8rem;color:var(--gris-medio)}
+#col-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:999}
+#col-overlay.abierto{display:block}
 #mapa-leaflet{height:100%;width:100%}
 .leaflet-popup-content-wrapper{border-radius:3px;box-shadow:0 4px 16px rgba(0,0,0,0.25)}
 .leaflet-popup-content{margin:12px 14px}
@@ -359,7 +385,7 @@ header > *{position:relative;z-index:1;}
   </select>
   <div class="ctrl-sep"></div>
   <input type="text" id="busqueda" placeholder="Buscar t&#237;tulo, c&#243;digo...">
-  <div class="vista-btns"><button id="btn-vista-latas" class="btn-vista activo" onclick="toggleVista('latas')">&#9632; Latas</button><button id="btn-vista-mapa" class="btn-vista" onclick="toggleVista('mapa')">&#127760; Mapa</button></div><span id="contador"></span>
+  <div class="vista-btns"><button id="btn-vista-latas" class="btn-vista activo" onclick="toggleVista('latas')">&#9632; Latas</button><button id="btn-vista-mapa" class="btn-vista" onclick="toggleVista('mapa')">&#127760; Mapa</button><button id="btn-vista-colecciones" class="btn-vista" onclick="toggleVista('colecciones')">&#9782; Colecciones</button></div><span id="contador"></span>
 </div>
 
 <div id="banner-formato"></div>
@@ -368,6 +394,15 @@ header > *{position:relative;z-index:1;}
 </div>
 
 <div id="mapa-wrap"><div id="mapa-leaflet"></div></div>
+<div id="colecciones-wrap"></div>
+<div id="col-overlay" onclick="cerrarColPanel()"></div>
+<div id="col-panel">
+  <div id="col-panel-header">
+    <span id="col-panel-code"></span>
+    <button id="col-panel-cerrar" onclick="cerrarColPanel()">✕ cerrar</button>
+  </div>
+  <div id="col-panel-body"><div id="col-panel-loading">Cargando...</div></div>
+</div>
 <div class="leyenda">
   <span class="leyenda-titulo">Formatos</span>
   <div class="leyenda-items">
@@ -894,32 +929,122 @@ function seleccionarVideo(btn){
 // ─── MAPA ──────────────────────────────────────────────────────────────────
 var mapaIniciado = false;
 var mapaObj = null;
-var vistaActual = 'latas'; // 'latas' o 'mapa'
+var vistaActual = 'latas'; // 'latas', 'mapa' o 'colecciones'
 
 function toggleVista(vista) {
   vistaActual = vista;
   var btnLatas = document.getElementById('btn-vista-latas');
   var btnMapa  = document.getElementById('btn-vista-mapa');
+  var btnCols  = document.getElementById('btn-vista-colecciones');
   var wrapLatas = document.getElementById('filmoteca');
   var wrapMapa  = document.getElementById('mapa-wrap');
+  var wrapCols  = document.getElementById('colecciones-wrap');
   var leyenda   = document.querySelector('.leyenda');
-  var controles = document.querySelector('.controles');
+
+  btnLatas.classList.remove('activo');
+  btnMapa.classList.remove('activo');
+  btnCols.classList.remove('activo');
+  wrapLatas.style.display = 'none';
+  wrapMapa.style.display  = 'none';
+  wrapCols.style.display  = 'none';
+  leyenda.style.display   = 'none';
 
   if (vista === 'mapa') {
-    btnLatas.classList.remove('activo');
     btnMapa.classList.add('activo');
-    wrapLatas.style.display = 'none';
-    wrapMapa.style.display  = 'block';
-    leyenda.style.display   = 'none';
+    wrapMapa.style.display = 'block';
     if (!mapaIniciado) iniciarMapa();
     else if (mapaObj) setTimeout(function(){ mapaObj.invalidateSize(); }, 100);
+  } else if (vista === 'colecciones') {
+    btnCols.classList.add('activo');
+    wrapCols.style.display = 'block';
+    if (!wrapCols.dataset.cargado) renderColecciones();
   } else {
-    btnMapa.classList.remove('activo');
     btnLatas.classList.add('activo');
     wrapLatas.style.display = 'block';
-    wrapMapa.style.display  = 'none';
     leyenda.style.display   = '';
   }
+}
+
+// ─── COLECCIONES ────────────────────────────────────────────────────────────
+
+// Colecciones que tienen artículo en /colecciones/
+var ARTICULOS_DISPONIBLES = ['C.MGF','C.VHS','C.CCGLE','C.CHHM','C.PBR','C.PRETO','C.TOR16','C.SM','C.TA','C.GCHK','C.ADM','C.CEFC','C.PSC'];
+
+function renderColecciones() {
+  var wrap = document.getElementById('colecciones-wrap');
+  wrap.dataset.cargado = '1';
+
+  // Agrupar piezas por colección
+  var cols = {};
+  DATOS.forEach(function(d) {
+    var c = d.coleccion || 'SIN COLECCIÓN';
+    var n = d.nombre_col || '';
+    if (!cols[c]) cols[c] = { nombre: n, total: 0, digitalizadas: 0, formatos: {} };
+    cols[c].total++;
+    if (d.digitalizada) cols[c].digitalizadas++;
+    if (d.paso) cols[c].formatos[d.paso] = (cols[c].formatos[d.paso]||0)+1;
+  });
+
+  var sorted = Object.entries(cols).sort(function(a,b){ return b[1].total - a[1].total; });
+
+  var html = '<h2 style="font-family:\'DM Mono\',monospace;font-size:0.8rem;color:var(--naranja);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.5rem">Colecciones del Archivo</h2>';
+  html += '<p style="font-family:\'DM Mono\',monospace;font-size:0.7rem;color:var(--gris-medio);margin-bottom:1.5rem">' + sorted.length + ' colecciones · ' + DATOS.length + ' piezas</p>';
+  html += '<div class="col-grid">';
+
+  sorted.forEach(function(entry) {
+    var cod = entry[0];
+    var c = entry[1];
+    var tieneArticulo = ARTICULOS_DISPONIBLES.indexOf(cod.trim()) !== -1;
+    var formatos = Object.keys(c.formatos).join(' · ');
+    html += '<div class="col-card' + (tieneArticulo ? '' : ' sin-articulo') + '" ' +
+      (tieneArticulo ? 'onclick="abrirColPanel(\'' + esc(cod) + '\')"' : '') + '>' +
+      '<div class="col-card-code">' + esc(cod) + '</div>' +
+      '<div class="col-card-nombre">' + esc(c.nombre || cod) + '</div>' +
+      '<div class="col-card-meta">' + c.total + ' piezas' + (formatos ? ' · ' + esc(formatos) : '') + '</div>' +
+      (tieneArticulo ? '<div class="col-card-arrow">→</div>' : '<div class="col-card-arrow" style="font-size:0.6rem">sin artículo</div>') +
+      '</div>';
+  });
+
+  html += '</div>';
+  wrap.innerHTML = html;
+}
+
+function abrirColPanel(cod) {
+  var panel = document.getElementById('col-panel');
+  var overlay = document.getElementById('col-overlay');
+  var body = document.getElementById('col-panel-body');
+  var code = document.getElementById('col-panel-code');
+
+  code.textContent = cod;
+  body.innerHTML = '<div id="col-panel-loading">Cargando investigación...</div>';
+  panel.classList.add('abierto');
+  overlay.classList.add('abierto');
+  document.body.style.overflow = 'hidden';
+
+  // Construir nombre de archivo: quitar espacios y puntos especiales
+  var archivo = cod.trim().replace(/\s+/g,'').replace(/\./g,'.');
+  // Casos especiales
+  if (cod.trim() === 'C. MPB') archivo = 'C.MPB';
+  if (cod.trim() === 'C. CPI') archivo = 'C.CPI';
+  if (cod.trim() === 'C.TA') archivo = 'C.TA_C.S8A'; // artículo conjunto
+
+  fetch('colecciones/' + archivo + '.html')
+    .then(function(r) {
+      if (!r.ok) throw new Error('No encontrado');
+      return r.text();
+    })
+    .then(function(html) {
+      body.innerHTML = html;
+    })
+    .catch(function() {
+      body.innerHTML = '<p style="font-family:\'DM Mono\',monospace;color:var(--gris-medio);font-size:0.8rem">Artículo no disponible todavía.</p>';
+    });
+}
+
+function cerrarColPanel() {
+  document.getElementById('col-panel').classList.remove('abierto');
+  document.getElementById('col-overlay').classList.remove('abierto');
+  document.body.style.overflow = '';
 }
 
 function fmtColor(fmt) {
