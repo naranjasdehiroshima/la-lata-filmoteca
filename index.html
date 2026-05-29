@@ -969,14 +969,13 @@ function toggleVista(vista) {
 
 // ─── COLECCIONES ────────────────────────────────────────────────────────────
 
-// Colecciones que tienen artículo en /colecciones/
-var ARTICULOS_DISPONIBLES = ['C. MPB','C.MGF','C.VHS','C.CCGLE','C.CHHM','C.PBR','C.PRETO','C.TOR16','C.SM','C.TA','C.GCHK','C.ADM','C.CEFC','C.PSC'];
+// Todas las colecciones abren panel — si existe el HTML lo muestra, si no muestra "en preparación"
+var ARTICULOS_DISPONIBLES = []; // ya no se usa para filtrar, se mantiene por compatibilidad
 
 function renderColecciones() {
   var wrap = document.getElementById('colecciones-wrap');
   wrap.dataset.cargado = '1';
 
-  // Agrupar piezas por colección
   var cols = {};
   DATOS.forEach(function(d) {
     var c = d.coleccion || 'SIN COLECCIÓN';
@@ -996,14 +995,12 @@ function renderColecciones() {
   sorted.forEach(function(entry) {
     var cod = entry[0];
     var c = entry[1];
-    var tieneArticulo = ARTICULOS_DISPONIBLES.indexOf(cod.trim()) !== -1;
     var formatos = Object.keys(c.formatos).join(' · ');
-    html += '<div class="col-card' + (tieneArticulo ? '' : ' sin-articulo') + '" ' +
-      (tieneArticulo ? 'onclick="abrirColPanel(\'' + esc(cod) + '\')"' : '') + '>' +
+    html += '<div class="col-card" onclick="abrirColPanel(\'' + esc(cod) + '\')">' +
       '<div class="col-card-code">' + esc(cod) + '</div>' +
       '<div class="col-card-nombre">' + esc(c.nombre || cod) + '</div>' +
       '<div class="col-card-meta">' + c.total + ' piezas' + (formatos ? ' · ' + esc(formatos) : '') + '</div>' +
-      (tieneArticulo ? '<div class="col-card-arrow">→</div>' : '<div class="col-card-arrow" style="font-size:0.6rem">sin artículo</div>') +
+      '<div class="col-card-arrow">→</div>' +
       '</div>';
   });
 
@@ -1039,7 +1036,24 @@ function abrirColPanel(cod) {
       body.innerHTML = html;
     })
     .catch(function() {
-      body.innerHTML = '<p style="font-family:\'DM Mono\',monospace;color:var(--gris-medio);font-size:0.8rem">Artículo no disponible todavía.</p>';
+      // No existe artículo — mostrar datos básicos de la colección
+      var col = null;
+      var piezas = DATOS.filter(function(d){ return d.coleccion === cod; });
+      var formatos = {};
+      var procedencias = {};
+      piezas.forEach(function(d){
+        if(d.paso) formatos[d.paso]=(formatos[d.paso]||0)+1;
+        if(d.procedencia) procedencias[d.procedencia]=(procedencias[d.procedencia]||0)+1;
+      });
+      var digitalizadas = piezas.filter(function(d){ return d.digitalizada; }).length;
+      body.innerHTML = '<div style="font-family:\'DM Mono\',monospace;padding:1rem 0">'
+        + '<p style="font-size:0.7rem;color:var(--naranja);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1.5rem">Artículo en preparación</p>'
+        + '<p style="font-size:0.85rem;color:#333;margin-bottom:0.4rem"><b>Piezas:</b> ' + piezas.length + '</p>'
+        + '<p style="font-size:0.85rem;color:#333;margin-bottom:0.4rem"><b>Digitalizadas:</b> ' + digitalizadas + ' de ' + piezas.length + '</p>'
+        + '<p style="font-size:0.85rem;color:#333;margin-bottom:0.4rem"><b>Formatos:</b> ' + Object.keys(formatos).join(', ') + '</p>'
+        + '<p style="font-size:0.85rem;color:#333;margin-bottom:2rem"><b>Procedencia:</b> ' + Object.keys(procedencias).join(', ') + '</p>'
+        + '<p style="font-size:0.7rem;color:#999">El artículo completo de esta colección está en preparación.</p>'
+        + '</div>';
     });
 }
 
@@ -1059,10 +1073,8 @@ window.addEventListener('load', function() {
   var hash = window.location.hash;
   if (hash && hash.startsWith('#coleccion/')) {
     var cod = decodeURIComponent(hash.replace('#coleccion/', ''));
-    if (ARTICULOS_DISPONIBLES.indexOf(cod) !== -1) {
-      toggleVista('colecciones');
-      setTimeout(function() { abrirColPanel(cod); }, 300);
-    }
+    toggleVista('colecciones');
+    setTimeout(function() { abrirColPanel(cod); }, 300);
   }
 });
 
