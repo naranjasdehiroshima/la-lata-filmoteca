@@ -1072,7 +1072,7 @@ function toggleVista(vista) {
 
 var tvPlaylist = [];
 var tvIndice = 0;
-var tvAleatorio = true;
+var tvAleatorio = true; // siempre aleatorio por defecto
 var tvYTReady = false;
 var tvTimer = null;
 
@@ -1087,8 +1087,12 @@ function iniciarTV() {
 
   if (tvAleatorio) tvMezclar();
   tvIndice = 0;
-  // Pequeño delay para que tv-wrap esté visible antes de crear el iframe
-  setTimeout(function() { tvCargar(0); }, 100);
+  // Esperar a que tv-wrap esté realmente visible en el DOM
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      tvCargar(0);
+    });
+  });
 
   // Escuchar mensajes de fin de video desde el iframe
   window.addEventListener('message', function(e) {
