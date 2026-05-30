@@ -1278,6 +1278,13 @@ function iniciarTV() {
   });
 }
 
+function tvMezclar() {
+  for (var i = tvPlaylist.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = tvPlaylist[i]; tvPlaylist[i] = tvPlaylist[j]; tvPlaylist[j] = tmp;
+  }
+}
+
 function tvCargar(idx) {
   if (!tvPlaylist.length) return;
   tvIndice = ((idx % tvPlaylist.length) + tvPlaylist.length) % tvPlaylist.length;
