@@ -915,18 +915,46 @@ function abrirFicha(p){
         etiqueta = 'V\u00eddeo ' + (i + 1);
       }
       return {url: u, vid: vid, etiqueta: etiqueta};
-    }).filter(function(x){ return x.vid; });
+    }).filter(function(x){ return x.vid || x.url; });
 
     if(pares.length){
+      // Separar YouTube de externos
+      var paresYT = pares.filter(function(x){ return x.vid; });
+      var paresExt = pares.filter(function(x){ return !x.vid && x.url; });
       html += '<div class="ficha-yt"><span class="yt-label">Ver en La Peque\u00f1a Filmoteca</span>';
-
-      // Si hay múltiples, mostrar selectores de versión
-      if(pares.length > 1){
+      // Si hay múltiples YouTube, mostrar selectores
+      if(paresYT.length > 1){
         html += '<div class="yt-versiones">';
-        pares.forEach(function(par, i){
-          html += '<button class="yt-ver-btn'+(i===0?' activo':'')+'" data-vid="'+esc(par.vid)+'" onclick="seleccionarVideo(this)">'+esc(par.etiqueta)+'</button>';
+        paresYT.forEach(function(par, i){
+          html += '<button class="yt-ver-btn'+(i===0?' activo':'')+'\'" data-vid="'+esc(par.vid)+'" onclick="seleccionarVideo(this)">'+esc(par.etiqueta)+'</button>';
         });
         html += '</div>';
+      }
+
+      // Player YouTube si hay
+      if(paresYT.length){
+        var vidPrincipal = paresYT[0].vid;
+        var urlPrincipal = paresYT[0].url;
+        html += '<div class="yt-player-wrap" id="yt-player-wrap">'
+          + '<div class="yt-lite" id="yt-lite" data-vid="'+esc(vidPrincipal)+'" onclick="cargarIframe(this)">'
+          + '<img src="https://img.youtube.com/vi/'+esc(vidPrincipal)+'/hqdefault.jpg" alt="Ver video" class="yt-lite-thumb">'
+          + '<div class="yt-lite-play"><svg viewBox="0 0 68 48" width="68" height="48"><path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="#ff0000"/><path d="M45 24 27 14v20" fill="#fff"/></svg></div>'
+          + '</div>'
+          + '</div>';
+        html += '<a href="'+esc(urlPrincipal)+'" target="_blank" rel="noopener" class="yt-ext-link">'
+          + '<svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor"><path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>'
+          + ' Abrir en YouTube</a>';
+      }
+
+      // Links externos no-YouTube (Princeton, Kaltura, etc.)
+      paresExt.forEach(function(par){
+        var dominio = par.url.replace(/https?:\/\/([^\/]+).*/, '$1');
+        html += '<a href="'+esc(par.url)+'" target="_blank" rel="noopener" class="yt-ext-link" style="display:block;margin-top:0.4rem">'
+          + '<svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor"><path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>'
+          + ' Ver en fuente original ('+dominio+')</a>';
+      });
+
+      html += '</div>';
       }
 
       // Player: thumbnail clicable que carga el iframe al hacer clic
