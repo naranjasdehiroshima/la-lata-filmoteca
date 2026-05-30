@@ -1180,11 +1180,7 @@ function toggleVista(vista) {
       tvMezclar();
       tvIndice = 0;
     }
-    requestAnimationFrame(function() {
-      requestAnimationFrame(function() {
-        if (!document.getElementById('tv-yt-div')) tvCargar(0);
-      });
-    });
+    tvCargar(0);
   } else if (vista === 'fh') {
     document.getElementById('btn-vista-fh').classList.add('activo');
     document.getElementById('filmohack-wrap').style.display = 'block';
