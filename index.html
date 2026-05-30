@@ -1127,9 +1127,8 @@ function tvCargar(idx) {
   // Crear iframe con createElement — más robusto que innerHTML
   dest.innerHTML = '';
   var iframe = document.createElement('iframe');
-  iframe.src = 'https://www.youtube.com/embed/' + item.ytid
-    + '?autoplay=1&rel=0&modestbranding=1&enablejsapi=1&origin='
-    + encodeURIComponent(window.location.origin);
+  var params = ['autoplay=1','rel=0','modestbranding=1'];
+  iframe.src = 'https://www.youtube-nocookie.com/embed/' + item.ytid + '?' + params.join('&');
   iframe.frameBorder = '0';
   iframe.allowFullscreen = true;
   iframe.allow = 'autoplay; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
