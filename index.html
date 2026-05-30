@@ -1085,39 +1085,6 @@ function fhGetArte(paso) {
   var DIM3 = 'color:#004d14';
   return '<span style="'+DIM3+'">'+frames[fi]+'</span>';
   // legacy code below — never reached
-  if(false) {
-  var p = (paso||'').toLowerCase();
-  var DIM = 'color:#004d14', MID = 'color:#00cc33';
-  var d = function(t){return '<span style="'+DIM+'">'+t+'</span>';};
-  var m = function(t){return '<span style="'+MID+'">'+t+'</span>';};
-  var perf='█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░';
-  var perf16='▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░';
-
-  if(p.includes('diap')) {
-    var ojos=['( o   o )','( ·   · )','( -   - )','( O   O )','(>     <)','( @   @ )'];
-    var nari=['  \\\\  ▄  /','    ─▄─  ','   ( ▄ ) ','    \\\\▄/ '];
-    var boca=['  ─────  ','  ~~~~~  ','  =====  ','  ─ ─ ─  '];
-    var cont=[['·─────·','/       \\\\'],['▓▓▓▓▓▓▓','▓       ▓'],['_______','(       )']];
-    var oj=ojos[Math.floor(Math.random()*ojos.length)];
-    var na=nari[Math.floor(Math.random()*nari.length)];
-    var bo=boca[Math.floor(Math.random()*boca.length)];
-    var co=cont[Math.floor(Math.random()*cont.length)];
-    return d('  ░░░░░ ┌─────────────────┐ ░░░░░')+'\n'+
-      d('  ░░░░░ │  ')+m(co[0])+d('  │ ░░░░░')+'\n'+
-      d('  ─────┤ │ ')+m(oj)+d(' │ ├─────')+'\n'+
-      d('  ░░░░░ │')+d(na)+d('│ ░░░░░')+'\n'+
-      d('  ─────┤ │')+m(bo)+d('│ ├─────')+'\n'+
-      d('  ░░░░░ │  ')+m(co[1])+d('  │ ░░░░░')+'\n'+
-      d('  ░░░░░ └─────────────────┘ ░░░░░')+'\n'+
-      d('  <span style="color:#005c17">35mm DIAPOSITIVA — KODACHROME</span>');
-  }
-  if(p.includes('35')) return '<div style="overflow:hidden;width:44ch"><div class="lab-scroll-l" style="'+DIM+'">'+perf+perf+'</div></div>\n'+d('  │  ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐  │')+'\n'+d('  │  │  │ │  │ │  │ │  │ │  │ │  │  │')+'\n'+d('  │  └──┘ └──┘ └──┘ └──┘ └──┘ └──┘  │')+'\n'+'<div style="overflow:hidden;width:44ch"><div class="lab-scroll-r" style="'+DIM+'">'+perf+perf+'</div></div>\n'+d('  <span style="color:#005c17">        35mm — FORMATO TEATRAL</span>');
-  if(p.includes('16')) return '<div style="overflow:hidden;width:44ch"><div class="lab-scroll-l" style="'+DIM+'">'+perf16+perf16+'</div></div>\n'+d('  ░ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ░')+'\n'+d('  ░ │ │ │ │ │ │ │ │ │ │ │ │ │ │ ░')+'\n'+d('  ░ └─┘ └─┘ └─┘ └─┘ └─┘ └─┘ └─┘ ░')+'\n'+'<div style="overflow:hidden;width:44ch"><div class="lab-scroll-r" style="'+DIM+'">'+perf16+perf16+'</div></div>\n'+d('  <span style="color:#005c17">     16mm — DOCUMENTAL · TV · ARCHIVO</span>');
-  if(p.includes('super')) return '<div style="overflow:hidden;width:44ch"><div class="lab-scroll-l" style="'+DIM+'">'+perf16+perf16+'</div></div>\n'+d('  ░  · ┌─┐  · ┌─┐  · ┌─┐  · ┌─┐  · ░')+'\n'+d('  ░    │ │    │ │    │ │    │ │      ░')+'\n'+d('  ░  · └─┘  · └─┘  · └─┘  · └─┘  · ░')+'\n'+'<div style="overflow:hidden;width:44ch"><div class="lab-scroll-r" style="'+DIM+'">'+perf16+perf16+'</div></div>\n'+d('  <span style="color:#005c17">  Super8 — PERFORACIÓN REDUCIDA 1965</span>');
-  if(p.includes('9.5')||p.includes('path')) return d('  ──────────────────────────────────────')+'\n'+d('  │ · ┌──┐ · ┌──┐ · ┌──┐ · ┌──┐ · │')+'\n'+d('  │   │  │   │  │   │  │   │  │   │')+'\n'+d('  │ · └──┘ · └──┘ · └──┘ · └──┘ · │')+'\n'+d('  ──────────────────────────────────────')+'\n'+d('  ···· <span class="lab-blink">○</span> ·· <span class="lab-blink" style="animation-delay:0.3s">○</span> ·· <span class="lab-blink" style="animation-delay:0.6s">○</span> ····')+'\n'+d('  <span style="color:#005c17">9.5mm PATHÉ — PERFORACIÓN CENTRAL 1922</span>');
-  if(p.includes('vhs')||p.includes('video')||p.includes('magn')){var pos=Math.floor(Date.now()/200)%20;var bar='─'.repeat(pos)+'▶'+'─'.repeat(19-pos);return d('  ┌────────────────────────────────┐')+'\n'+d('  │  ▓▓▓▓ VIDEO HOME SYSTEM ▓▓▓▓  │')+'\n'+d('  │   <span style="'+MID+'">'+bar+'</span>    │')+'\n'+d('  │   <span class="lab-blink">◐</span>────────────────────<span class="lab-blink" style="animation-delay:0.4s">◑</span>   │')+'\n'+d('  └────────────────────────────────┘')+'\n'+d('  <span style="color:#005c17">     VHS — VÍDEO ANALÓGICO 1976→</span>');}
-  return '<div style="overflow:hidden;width:40ch"><div class="lab-scroll-l" style="'+DIM+'">'+perf+perf+'</div></div>\n'+d('  ░ ┌┐ ┌┐ ┌┐ ┌┐ ┌┐ ┌┐ ┌┐ ┌┐ ┌┐ ┌┐ ░')+'\n'+d('  ░ ││ ││ ││ ││ ││ ││ ││ ││ ││ ││ ░')+'\n'+d('  ░ └┘ └┘ └┘ └┘ └┘ └┘ └┘ └┘ └┘ └┘ ░')+'\n'+'<div style="overflow:hidden;width:40ch"><div class="lab-scroll-r" style="'+DIM+'">'+perf+perf+'</div></div>\n'+d('  <span style="color:#005c17">    8mm — CINE DOMÉSTICO 1932→</span>');
-}
 
 function fhUpdateArte() {
   var el = document.getElementById('fh-arte');
