@@ -1060,7 +1060,17 @@ function toggleVista(vista) {
   } else if (vista === 'tv') {
     btnTV.classList.add('activo');
     wrapTV.style.display = 'flex';
-    if (!tvPlaylist.length) iniciarTV();
+    if (!tvPlaylist.length) {
+      iniciarTV();
+    } else {
+      tvMezclar();
+      tvIndice = 0;
+    }
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        if (!document.getElementById('tv-yt-div')) tvCargar(0);
+      });
+    });
   } else {
     btnLatas.classList.add('activo');
     wrapLatas.style.display = 'block';
@@ -1087,12 +1097,7 @@ function iniciarTV() {
 
   if (tvAleatorio) tvMezclar();
   tvIndice = 0;
-  // Esperar a que tv-wrap esté realmente visible en el DOM
-  requestAnimationFrame(function() {
-    requestAnimationFrame(function() {
-      tvCargar(0);
-    });
-  });
+  // tvCargar se llama desde toggleVista cuando el DOM ya es visible
 
   // Escuchar mensajes de fin de video desde el iframe
   window.addEventListener('message', function(e) {
