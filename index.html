@@ -169,6 +169,18 @@ input[type=text]::placeholder{color:var(--gris-medio)}
 #mapa-wrap{display:none;height:calc(100vh - 140px);min-height:500px}
 #colecciones-wrap{display:none;padding:2rem 3rem;min-height:60vh}
 #tv-wrap{display:none;background:#000;height:calc(100vh - 140px);min-height:500px;flex-direction:row}
+#filmohack-wrap{display:none;background:#000;height:calc(100vh - 140px);min-height:500px;padding:1.5rem;position:relative;overflow:hidden;font-family:'DM Mono',monospace;font-size:12px;line-height:1.5;color:#00ff41}
+#filmohack-wrap::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(0,255,65,0.025) 0px,rgba(0,255,65,0.025) 1px,transparent 1px,transparent 4px);pointer-events:none;z-index:1}
+#fh-screen{position:relative;z-index:2;height:100%;overflow:hidden}
+#fh-arte{min-height:80px;margin:0.3rem 0 0.5rem 0}
+@keyframes lab-scroll-l{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@keyframes lab-scroll-r{0%{transform:translateX(-50%)}100%{transform:translateX(0)}}
+@keyframes lab-flash{0%,90%,100%{opacity:0}92%{opacity:1}95%{opacity:0.5}}
+@keyframes lab-blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.lab-scroll-l{display:inline-block;animation:lab-scroll-l 4s linear infinite}
+.lab-scroll-r{display:inline-block;animation:lab-scroll-r 4s linear infinite}
+.lab-flash{animation:lab-flash 3s ease-in-out infinite}
+.lab-blink{animation:lab-blink 0.8s step-end infinite}
 #tv-player-col{flex:1;display:flex;align-items:stretch;justify-content:center;position:relative;height:100%;background:#000;overflow:hidden}
 #tv-player-col iframe,#tv-yt-div{width:100%;height:100%;position:absolute;inset:0}
 /* Overlay vintage encima del iframe — no bloquea clicks */
@@ -459,7 +471,7 @@ header > *{position:relative;z-index:1;}
   </select>
   <div class="ctrl-sep"></div>
   <input type="text" id="busqueda" placeholder="Buscar t&#237;tulo, c&#243;digo...">
-  <div class="vista-btns"><button id="btn-vista-latas" class="btn-vista activo" onclick="toggleVista('latas')">&#9632; Latas</button><button id="btn-vista-colecciones" class="btn-vista" onclick="toggleVista('colecciones')">&#9782; Colecciones</button><button id="btn-vista-mapa" class="btn-vista" onclick="toggleVista('mapa')">&#127760; Mapa</button><button id="btn-vista-tv" class="btn-vista" onclick="toggleVista('tv')">&#128250; TV</button></div><span id="contador"></span>
+  <div class="vista-btns"><button id="btn-vista-latas" class="btn-vista activo" onclick="toggleVista('latas')">&#9632; Latas</button><button id="btn-vista-colecciones" class="btn-vista" onclick="toggleVista('colecciones')">&#9782; Colecciones</button><button id="btn-vista-mapa" class="btn-vista" onclick="toggleVista('mapa')">&#127760; Mapa</button><button id="btn-vista-tv" class="btn-vista" onclick="toggleVista('tv')">&#128250; TV</button><button id="btn-vista-fh" class="btn-vista" onclick="toggleVista('fh')">&#9641; FilmoHack</button></div><span id="contador"></span>
 </div>
 
 <div id="banner-formato"></div>
@@ -491,7 +503,13 @@ header > *{position:relative;z-index:1;}
     </div>
   </div>
 </div>
-<div id="col-panel">
+<div id="filmohack-wrap">
+  <div id="fh-screen">
+    <div id="fh-header"></div>
+    <div id="fh-arte"></div>
+    <div id="fh-datos"></div>
+  </div>
+</div>
   <div id="col-panel-header">
     <span id="col-panel-code"></span>
     <button id="col-panel-cerrar" onclick="cerrarColPanel()">✕ cerrar</button>
@@ -1021,6 +1039,98 @@ function seleccionarVideo(btn){
 
 
 
+// ─── FILMOHACK ───────────────────────────────────────────────────────────────
+
+var fhIniciado = false;
+var fhTimer = null;
+var fhArteTimer = null;
+var fhPieza = null;
+
+function fhGetArte(paso) {
+  var p = (paso||'').toLowerCase();
+  var DIM = 'color:#004d14', MID = 'color:#00cc33';
+  var d = function(t){return '<span style="'+DIM+'">'+t+'</span>';};
+  var m = function(t){return '<span style="'+MID+'">'+t+'</span>';};
+  var perf='█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░';
+  var perf16='▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░';
+
+  if(p.includes('diap')) {
+    var ojos=['( o   o )','( ·   · )','( -   - )','( O   O )','(>     <)','( @   @ )'];
+    var nari=['  \\\\  ▄  /','    ─▄─  ','   ( ▄ ) ','    \\\\▄/ '];
+    var boca=['  ─────  ','  ~~~~~  ','  =====  ','  ─ ─ ─  '];
+    var cont=[['·─────·','/       \\\\'],['▓▓▓▓▓▓▓','▓       ▓'],['_______','(       )']];
+    var oj=ojos[Math.floor(Math.random()*ojos.length)];
+    var na=nari[Math.floor(Math.random()*nari.length)];
+    var bo=boca[Math.floor(Math.random()*boca.length)];
+    var co=cont[Math.floor(Math.random()*cont.length)];
+    return d('  ░░░░░ ┌─────────────────┐ ░░░░░')+'\n'+
+      d('  ░░░░░ │  ')+m(co[0])+d('  │ ░░░░░')+'\n'+
+      d('  ─────┤ │ ')+m(oj)+d(' │ ├─────')+'\n'+
+      d('  ░░░░░ │')+d(na)+d('│ ░░░░░')+'\n'+
+      d('  ─────┤ │')+m(bo)+d('│ ├─────')+'\n'+
+      d('  ░░░░░ │  ')+m(co[1])+d('  │ ░░░░░')+'\n'+
+      d('  ░░░░░ └─────────────────┘ ░░░░░')+'\n'+
+      d('  <span style="color:#005c17">35mm DIAPOSITIVA — KODACHROME</span>');
+  }
+  if(p.includes('35')) return '<div style="overflow:hidden;width:44ch"><div class="lab-scroll-l" style="'+DIM+'">'+perf+perf+'</div></div>\n'+d('  │  ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐  │')+'\n'+d('  │  │  │ │  │ │  │ │  │ │  │ │  │  │')+'\n'+d('  │  └──┘ └──┘ └──┘ └──┘ └──┘ └──┘  │')+'\n'+'<div style="overflow:hidden;width:44ch"><div class="lab-scroll-r" style="'+DIM+'">'+perf+perf+'</div></div>\n'+d('  <span style="color:#005c17">        35mm — FORMATO TEATRAL</span>');
+  if(p.includes('16')) return '<div style="overflow:hidden;width:44ch"><div class="lab-scroll-l" style="'+DIM+'">'+perf16+perf16+'</div></div>\n'+d('  ░ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ░')+'\n'+d('  ░ │ │ │ │ │ │ │ │ │ │ │ │ │ │ ░')+'\n'+d('  ░ └─┘ └─┘ └─┘ └─┘ └─┘ └─┘ └─┘ ░')+'\n'+'<div style="overflow:hidden;width:44ch"><div class="lab-scroll-r" style="'+DIM+'">'+perf16+perf16+'</div></div>\n'+d('  <span style="color:#005c17">     16mm — DOCUMENTAL · TV · ARCHIVO</span>');
+  if(p.includes('super')) return '<div style="overflow:hidden;width:44ch"><div class="lab-scroll-l" style="'+DIM+'">'+perf16+perf16+'</div></div>\n'+d('  ░  · ┌─┐  · ┌─┐  · ┌─┐  · ┌─┐  · ░')+'\n'+d('  ░    │ │    │ │    │ │    │ │      ░')+'\n'+d('  ░  · └─┘  · └─┘  · └─┘  · └─┘  · ░')+'\n'+'<div style="overflow:hidden;width:44ch"><div class="lab-scroll-r" style="'+DIM+'">'+perf16+perf16+'</div></div>\n'+d('  <span style="color:#005c17">  Super8 — PERFORACIÓN REDUCIDA 1965</span>');
+  if(p.includes('9.5')||p.includes('path')) return d('  ──────────────────────────────────────')+'\n'+d('  │ · ┌──┐ · ┌──┐ · ┌──┐ · ┌──┐ · │')+'\n'+d('  │   │  │   │  │   │  │   │  │   │')+'\n'+d('  │ · └──┘ · └──┘ · └──┘ · └──┘ · │')+'\n'+d('  ──────────────────────────────────────')+'\n'+d('  ···· <span class="lab-blink">○</span> ·· <span class="lab-blink" style="animation-delay:0.3s">○</span> ·· <span class="lab-blink" style="animation-delay:0.6s">○</span> ····')+'\n'+d('  <span style="color:#005c17">9.5mm PATHÉ — PERFORACIÓN CENTRAL 1922</span>');
+  if(p.includes('vhs')||p.includes('video')||p.includes('magn')){var pos=Math.floor(Date.now()/200)%20;var bar='─'.repeat(pos)+'▶'+'─'.repeat(19-pos);return d('  ┌────────────────────────────────┐')+'\n'+d('  │  ▓▓▓▓ VIDEO HOME SYSTEM ▓▓▓▓  │')+'\n'+d('  │   <span style="'+MID+'">'+bar+'</span>    │')+'\n'+d('  │   <span class="lab-blink">◐</span>────────────────────<span class="lab-blink" style="animation-delay:0.4s">◑</span>   │')+'\n'+d('  └────────────────────────────────┘')+'\n'+d('  <span style="color:#005c17">     VHS — VÍDEO ANALÓGICO 1976→</span>');}
+  return '<div style="overflow:hidden;width:40ch"><div class="lab-scroll-l" style="'+DIM+'">'+perf+perf+'</div></div>\n'+d('  ░ ┌┐ ┌┐ ┌┐ ┌┐ ┌┐ ┌┐ ┌┐ ┌┐ ┌┐ ┌┐ ░')+'\n'+d('  ░ ││ ││ ││ ││ ││ ││ ││ ││ ││ ││ ░')+'\n'+d('  ░ └┘ └┘ └┘ └┘ └┘ └┘ └┘ └┘ └┘ └┘ ░')+'\n'+'<div style="overflow:hidden;width:40ch"><div class="lab-scroll-r" style="'+DIM+'">'+perf+perf+'</div></div>\n'+d('  <span style="color:#005c17">    8mm — CINE DOMÉSTICO 1932→</span>');
+}
+
+function fhUpdateArte() {
+  var el = document.getElementById('fh-arte');
+  if(el && fhPieza) el.innerHTML = fhGetArte(fhPieza.paso);
+}
+
+function fhFrame() {
+  fhPieza = DATOS[Math.floor(Math.random()*DATOS.length)];
+  var p = fhPieza;
+  var DIM = 'color:#004d14';
+  var d = function(t){return '<span style="'+DIM+'">'+t+'</span>';};
+  var w = function(t){return '<span style="color:#e8ffe0">'+t+'</span>';};
+  var sep = d('─'.repeat(60));
+  var ts = new Date().toISOString().replace('T',' ').substring(0,19);
+
+  document.getElementById('fh-header').innerHTML =
+    sep+'\n'+
+    '<span style="color:#00ff41">  [ FILMOHACK · LA PEQUEÑA FILMOTECA · NdH ]</span>\n'+
+    d('  ESCÁNER AUTÓNOMO — '+ts)+'\n'+
+    sep+'\n';
+
+  fhUpdateArte();
+  if(fhArteTimer) clearInterval(fhArteTimer);
+  fhArteTimer = setInterval(fhUpdateArte, 250);
+
+  var lines=[];
+  lines.push('<span style="color:#ff8800">  ► OBJETO EN ANÁLISIS ◄</span>');
+  lines.push('  '+d('CÓDIGO    : ')+w(p.codigo||'—'));
+  lines.push('  '+d('TÍTULO    : ')+w((p.titulo||'—').substring(0,44)));
+  lines.push('  '+d('FECHA     : ')+w(p.fecha||'—'));
+  lines.push('  '+d('FORMATO   : ')+'<span style="color:#00ff41">'+(p.paso||'—')+'</span>');
+  lines.push('  '+d('COLECCIÓN : ')+w(p.nombre_col||p.coleccion||'—'));
+  lines.push('  '+d('PAÍS      : ')+w(p.pais||'—'));
+  if(p.lat && p.lng) lines.push('  '+d('COORD     : ')+d(parseFloat(p.lat).toFixed(4)+' N  '+Math.abs(parseFloat(p.lng)).toFixed(4)+' O'));
+  lines.push('');
+  if(Math.random()>.4){var r1='',r2='';for(var i=0;i<8;i++){r1+=Math.floor(Math.random()*256).toString(16).padStart(2,'0').toUpperCase()+' ';r2+=Math.floor(Math.random()*256).toString(16).padStart(2,'0').toUpperCase()+' ';}lines.push('  '+d('SCAN EMULSIÓN:'));lines.push('  '+d(r1));lines.push('  '+d(r2));lines.push('');}
+  if(Math.random()>.5){var bs='';for(var j=0;j<8;j++)bs+=Math.random()>.5?'1':'0';lines.push('  '+d('SEÑAL ['+bs+']:'));var nc='░▒·∙ ';for(var k=0;k<2;k++){var ns='';for(var l=0;l<44;l++)ns+=nc[Math.floor(Math.random()*nc.length)];lines.push('  '+d(ns));}lines.push('');}
+  var bf=Math.round((277/503)*20);
+  lines.push('  '+d('ACERVO: ')+'[<span style="color:#00ff41">'+'█'.repeat(bf)+'░'.repeat(20-bf)+'</span>] '+w('277/503'));
+  lines.push('');
+  lines.push(sep);
+  lines.push('  '+d('PRÓXIMO ESCÁNER EN '+(Math.floor(Math.random()*6)+2)+'s'));
+
+  document.getElementById('fh-datos').innerHTML = lines.join('\n');
+}
+
+function fhIniciar() {
+  fhIniciado = true;
+  fhFrame();
+  fhTimer = setInterval(fhFrame, 3500);
+}
+
 // ─── MAPA ──────────────────────────────────────────────────────────────────
 var mapaIniciado = false;
 var mapaObj = null;
@@ -1042,10 +1152,14 @@ function toggleVista(vista) {
   btnMapa.classList.remove('activo');
   btnCols.classList.remove('activo');
   btnTV.classList.remove('activo');
+  var btnFH = document.getElementById('btn-vista-fh');
+  if(btnFH) btnFH.classList.remove('activo');
   wrapLatas.style.display = 'none';
   wrapMapa.style.display  = 'none';
   wrapCols.style.display  = 'none';
   wrapTV.style.display    = 'none';
+  var wrapFH = document.getElementById('filmohack-wrap');
+  if(wrapFH) wrapFH.style.display = 'none';
   leyenda.style.display   = 'none';
 
   if (vista === 'mapa') {
@@ -1071,10 +1185,11 @@ function toggleVista(vista) {
         if (!document.getElementById('tv-yt-div')) tvCargar(0);
       });
     });
+  } else if (vista === 'fh') {
+    document.getElementById('btn-vista-fh').classList.add('activo');
+    document.getElementById('filmohack-wrap').style.display = 'block';
+    if (!fhIniciado) fhIniciar();
   } else {
-    btnLatas.classList.add('activo');
-    wrapLatas.style.display = 'block';
-    leyenda.style.display   = '';
   }
 }
 
