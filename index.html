@@ -472,7 +472,7 @@ header > *{position:relative;z-index:1;}
   </select>
   <div class="ctrl-sep"></div>
   <input type="text" id="busqueda" placeholder="Buscar t&#237;tulo, c&#243;digo...">
-  <div class="vista-btns"><button id="btn-vista-latas" class="btn-vista activo" onclick="toggleVista('latas')">&#9632; Latas</button><button id="btn-vista-colecciones" class="btn-vista" onclick="toggleVista('colecciones')">&#9782; Colecciones</button><button id="btn-vista-mapa" class="btn-vista" onclick="toggleVista('mapa')">&#127760; Mapa</button><button id="btn-vista-tv" class="btn-vista" onclick="toggleVista('tv')">&#128250; TV</button><button id="btn-vista-fh" class="btn-vista" onclick="toggleVista('fh')">&#9641; FilmoHack</button><a href="https://naranjasdehiroshima.github.io/retroboy/" target="_blank" class="btn-vista" style="text-decoration:none">&#127918; RetroBoy</a></div><span id="contador"></span>
+  <div class="vista-btns"><button id="btn-vista-latas" class="btn-vista activo" onclick="toggleVista('latas')">&#9632; Latas</button><button id="btn-vista-colecciones" class="btn-vista" onclick="toggleVista('colecciones')">&#9782; Colecciones</button><button id="btn-vista-mapa" class="btn-vista" onclick="toggleVista('mapa')">&#127760; Mapa</button><button id="btn-vista-tv" class="btn-vista" onclick="toggleVista('tv')">&#128250; TV</button><button id="btn-vista-fh" class="btn-vista" onclick="toggleVista('fh')">&#9641; FilmoHack</button></div><span id="contador"></span>
 </div>
 
 <div id="banner-formato"></div>
@@ -1049,42 +1049,38 @@ var fhArteTimer = null;
 var fhPieza = null;
 
 function fhGetArte(paso) {
-  var p2 = (paso||'').toLowerCase();
-  var frames;
-  if(p2.includes('diap')) {
-    // Retrato generativo para diapositivas
-    var ojos=['( o   o )','( ·   · )','( -   - )','( O   O )','(>     <)'];
-    var nari=['  \\  ▄  /' ,'    ─▄─  ','   ( ▄ ) '];
-    var boca=['  ─────  ','  ~~~~~  ','  =====  '];
-    var cont=[['·─────·','/       \\'],['▓▓▓▓▓▓▓','▓       ▓']];
+  var p = (paso||'').toLowerCase();
+  var DIM = 'color:#004d14', MID = 'color:#00cc33';
+  var d = function(t){return '<span style="'+DIM+'">'+t+'</span>';};
+  var m = function(t){return '<span style="'+MID+'">'+t+'</span>';};
+  var perf='█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░';
+  var perf16='▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░';
+
+  if(p.includes('diap')) {
+    var ojos=['( o   o )','( ·   · )','( -   - )','( O   O )','(>     <)','( @   @ )'];
+    var nari=['  \\\\  ▄  /','    ─▄─  ','   ( ▄ ) ','    \\\\▄/ '];
+    var boca=['  ─────  ','  ~~~~~  ','  =====  ','  ─ ─ ─  '];
+    var cont=[['·─────·','/       \\\\'],['▓▓▓▓▓▓▓','▓       ▓'],['_______','(       )']];
     var oj=ojos[Math.floor(Math.random()*ojos.length)];
     var na=nari[Math.floor(Math.random()*nari.length)];
     var bo=boca[Math.floor(Math.random()*boca.length)];
     var co=cont[Math.floor(Math.random()*cont.length)];
-    var DIM2='color:#004d14';
-    return '<span style="'+DIM2+'">  ░░░ ┌─────────────────┐ ░░░\n'+
-      '  ░░░ │  '+co[0]+'  │ ░░░\n'+
-      '  ─── │ '+oj+' │ ───\n'+
-      '  ░░░ │'+na+'│ ░░░\n'+
-      '  ─── │'+bo+'│ ───\n'+
-      '  ░░░ │  '+co[1]+'  │ ░░░\n'+
-      '  ░░░ └─────────────────┘ ░░░\n'+
-      '  35mm DIAPOSITIVA — KODACHROME</span>';
+    return d('  ░░░░░ ┌─────────────────┐ ░░░░░')+'\n'+
+      d('  ░░░░░ │  ')+m(co[0])+d('  │ ░░░░░')+'\n'+
+      d('  ─────┤ │ ')+m(oj)+d(' │ ├─────')+'\n'+
+      d('  ░░░░░ │')+d(na)+d('│ ░░░░░')+'\n'+
+      d('  ─────┤ │')+m(bo)+d('│ ├─────')+'\n'+
+      d('  ░░░░░ │  ')+m(co[1])+d('  │ ░░░░░')+'\n'+
+      d('  ░░░░░ └─────────────────┘ ░░░░░')+'\n'+
+      d('  <span style="color:#005c17">35mm DIAPOSITIVA — KODACHROME</span>');
   }
-  // Seleccionar animación del formato
-  var key = 'default';
-  if(p2.includes('16')) key='16mm';
-  else if(p2.includes('super')) key='Super8';
-  else if(p2.includes('9.5')||p2.includes('path')) key='Pathé 9.5mm';
-  else if(p2.includes('35')) key='35mm';
-  else if(p2.includes('vhs')||p2.includes('video')||p2.includes('magn')) key='VHS';
-  else if(p2.includes('nitrat')) key='Nitrato';
-  else if(p2 === '8mm' || p2.includes('8mm')) key='8mm';
-  frames = FH_ANIM[key] || FH_ANIM['default'];
-  var fi = Math.floor(Date.now()/150) % frames.length;
-  var DIM3 = 'color:#004d14';
-  return '<span style="'+DIM3+'">'+frames[fi]+'</span>';
-  // legacy code below — never reached
+  if(p.includes('35')) return '<div style="overflow:hidden;width:44ch"><div class="lab-scroll-l" style="'+DIM+'">'+perf+perf+'</div></div>\n'+d('  │  ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐  │')+'\n'+d('  │  │  │ │  │ │  │ │  │ │  │ │  │  │')+'\n'+d('  │  └──┘ └──┘ └──┘ └──┘ └──┘ └──┘  │')+'\n'+'<div style="overflow:hidden;width:44ch"><div class="lab-scroll-r" style="'+DIM+'">'+perf+perf+'</div></div>\n'+d('  <span style="color:#005c17">        35mm — FORMATO TEATRAL</span>');
+  if(p.includes('16')) return '<div style="overflow:hidden;width:44ch"><div class="lab-scroll-l" style="'+DIM+'">'+perf16+perf16+'</div></div>\n'+d('  ░ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ░')+'\n'+d('  ░ │ │ │ │ │ │ │ │ │ │ │ │ │ │ ░')+'\n'+d('  ░ └─┘ └─┘ └─┘ └─┘ └─┘ └─┘ └─┘ ░')+'\n'+'<div style="overflow:hidden;width:44ch"><div class="lab-scroll-r" style="'+DIM+'">'+perf16+perf16+'</div></div>\n'+d('  <span style="color:#005c17">     16mm — DOCUMENTAL · TV · ARCHIVO</span>');
+  if(p.includes('super')) return '<div style="overflow:hidden;width:44ch"><div class="lab-scroll-l" style="'+DIM+'">'+perf16+perf16+'</div></div>\n'+d('  ░  · ┌─┐  · ┌─┐  · ┌─┐  · ┌─┐  · ░')+'\n'+d('  ░    │ │    │ │    │ │    │ │      ░')+'\n'+d('  ░  · └─┘  · └─┘  · └─┘  · └─┘  · ░')+'\n'+'<div style="overflow:hidden;width:44ch"><div class="lab-scroll-r" style="'+DIM+'">'+perf16+perf16+'</div></div>\n'+d('  <span style="color:#005c17">  Super8 — PERFORACIÓN REDUCIDA 1965</span>');
+  if(p.includes('9.5')||p.includes('path')) return d('  ──────────────────────────────────────')+'\n'+d('  │ · ┌──┐ · ┌──┐ · ┌──┐ · ┌──┐ · │')+'\n'+d('  │   │  │   │  │   │  │   │  │   │')+'\n'+d('  │ · └──┘ · └──┘ · └──┘ · └──┘ · │')+'\n'+d('  ──────────────────────────────────────')+'\n'+d('  ···· <span class="lab-blink">○</span> ·· <span class="lab-blink" style="animation-delay:0.3s">○</span> ·· <span class="lab-blink" style="animation-delay:0.6s">○</span> ····')+'\n'+d('  <span style="color:#005c17">9.5mm PATHÉ — PERFORACIÓN CENTRAL 1922</span>');
+  if(p.includes('vhs')||p.includes('video')||p.includes('magn')){var pos=Math.floor(Date.now()/200)%20;var bar='─'.repeat(pos)+'▶'+'─'.repeat(19-pos);return d('  ┌────────────────────────────────┐')+'\n'+d('  │  ▓▓▓▓ VIDEO HOME SYSTEM ▓▓▓▓  │')+'\n'+d('  │   <span style="'+MID+'">'+bar+'</span>    │')+'\n'+d('  │   <span class="lab-blink">◐</span>────────────────────<span class="lab-blink" style="animation-delay:0.4s">◑</span>   │')+'\n'+d('  └────────────────────────────────┘')+'\n'+d('  <span style="color:#005c17">     VHS — VÍDEO ANALÓGICO 1976→</span>');}
+  return '<div style="overflow:hidden;width:40ch"><div class="lab-scroll-l" style="'+DIM+'">'+perf+perf+'</div></div>\n'+d('  ░ ┌┐ ┌┐ ┌┐ ┌┐ ┌┐ ┌┐ ┌┐ ┌┐ ┌┐ ┌┐ ░')+'\n'+d('  ░ ││ ││ ││ ││ ││ ││ ││ ││ ││ ││ ░')+'\n'+d('  ░ └┘ └┘ └┘ └┘ └┘ └┘ └┘ └┘ └┘ └┘ ░')+'\n'+'<div style="overflow:hidden;width:40ch"><div class="lab-scroll-r" style="'+DIM+'">'+perf+perf+'</div></div>\n'+d('  <span style="color:#005c17">    8mm — CINE DOMÉSTICO 1932→</span>');
+}
 
 function fhUpdateArte() {
   var el = document.getElementById('fh-arte');
@@ -1102,18 +1098,15 @@ function fhFrame() {
   var sep = d('─'.repeat(60));
   var ts = new Date().toISOString().replace('T',' ').substring(0,19);
 
-  // Header con código de pieza en ASCII grande
-  var codigoAscii = p.codigo ? p.codigo : '';
   document.getElementById('fh-header').innerHTML =
-    d(sep)+'\n'+
-    d('  [ FILMOHACK · LA PEQUEÑA FILMOTECA · NdH ]')+'\n'+
+    sep+'\n'+
+    '<span style="color:#00ff41">  [ FILMOHACK · LA PEQUEÑA FILMOTECA · NdH ]</span>\n'+
     d('  ESCÁNER AUTÓNOMO — '+ts)+'\n'+
-    d(sep);
+    sep+'\n';
 
-  // Animación según formato
   fhUpdateArte();
   if(fhArteTimer) clearInterval(fhArteTimer);
-  fhArteTimer = setInterval(fhUpdateArte, 150);
+  fhArteTimer = setInterval(fhUpdateArte, 250);
 
   var lines=[];
   lines.push('<span style="color:#ff8800">  ► OBJETO EN ANÁLISIS ◄</span>');
@@ -1201,284 +1194,8 @@ function fhIniciar() {
   fhIniciado = true;
   document.getElementById('fh-header').style.whiteSpace = 'pre';
   document.getElementById('fh-datos').style.whiteSpace = 'pre';
-  fhBoot();
-}
-
-// ─── TEXTOS ASCII GRANDES ────────────────────────────────
-var FH_TITLES = {
-  FILMOHACK: `______ _____ _     ___  ________ _   _   ___  _____  _   __
-|  ___|_   _| |    |  \\/  |  _  | | | | / _ \\/  __ \\| | / /
-| |_    | | | |    | .  . | | | | |_| |/ /_\\ \\ /  \\/| |/ / 
-|  _|   | | | |    | |\\/| | | | |  _  ||  _  | |    |    \\ 
-| |    _| |_| |____| |  | \\ \\_/ / | | || | | | \\__/\\| |\\  \\
-\\_|    \\___/\\_____/\\_|  |_/\\___/\\_| |_/\\_| |_/\\____/\\_| \\_/
-                                                           
-                                                           
-`,
-  NDH: ` _   _     _ _   _ 
-| \\ | |   | | | | |
-|  \\| | __| | |_| |
-| . \` |/ _\` |  _  |
-| |\\  | (_| | | | |
-\\_| \\_/\\__,_\\_| |_/
-                   
-                   
-`,
-  N503: ` _____  ___ ____  
-| ____|/ _ \\___ \\ 
-| |__ | | | |__) |
-|___ \\| | | |__ < 
- ___) | |_| |__) |
-|____/ \\___/____/ 
-                  
-                  
-`,
-  N277: ` ___ ______ ______ 
-|__ \\____  |____  |
-   ) |  / /    / / 
-  / /  / /    / /  
- / /_ / /    / /   
-|____/_/    /_/    
-                   
-                   
-`,
-  N39:  ` ____   ___  
-|___ \\ / _ \\ 
-  __) | (_) |
- |__ < \\__, |
- ___) |  / / 
-|____/  /_/  
-             
-             
-`,
-};
-
-// ─── ANIMACIONES ASCII POR FORMATO ──────────────────────
-var FH_ANIM = {
-  '16mm': [
-`  ___________________________________________
- |X| |X| |X| |X| |X| |X| |X| |X| |X| |X| |
- |  [--]  [--]  [--]  [--]  [--]  [--]  [--|
- |  [  ]  [  ]  [  ]  [  ]  [  ]  [  ]  [  |
- |  [--]  [--]  [--]  [--]  [--]  [--]  [--|
- |X| |X| |X| |X| |X| |X| |X| |X| |X| |X| |
-  -------------------------------------------`,
-`  ___________________________________________
- | |X| |X| |X| |X| |X| |X| |X| |X| |X| |X|
- |--]  [--]  [--]  [--]  [--]  [--]  [--]  |
- |  ]  [  ]  [  ]  [  ]  [  ]  [  ]  [  ]  |
- |--]  [--]  [--]  [--]  [--]  [--]  [--]  |
- | |X| |X| |X| |X| |X| |X| |X| |X| |X| |X|
-  -------------------------------------------`,
-`  ___________________________________________
- |X| |X| |X| |X| |X| |X| |X| |X| |X| |X| |
- |  [--]  [--]  [--]  [--]  [--]  [--]  [--|
- |  [ /]  [ /]  [ /]  [ /]  [ /]  [ /]  [ /|
- |  [--]  [--]  [--]  [--]  [--]  [--]  [--|
- |X| |X| |X| |X| |X| |X| |X| |X| |X| |X| |
-  -------------------------------------------`,
-`  ___________________________________________
- | |X| |X| |X| |X| |X| |X| |X| |X| |X| |X|
- |--]  [--]  [--]  [--]  [--]  [--]  [--]  |
- | \]  [\]  [\]  [\]  [\]  [\]  [\]  [  |
- |--]  [--]  [--]  [--]  [--]  [--]  [--]  |
- | |X| |X| |X| |X| |X| |X| |X| |X| |X| |X|
-  -------------------------------------------`,
-  ],
-  '8mm': [
-`  ________________________________
- |o| |o| |o| |o| |o| |o| |o| |o| |
- |  [-]  [-]  [-]  [-]  [-]  [-]  |
- |  [ ]  [ ]  [ ]  [ ]  [ ]  [ ]  |
- |  [-]  [-]  [-]  [-]  [-]  [-]  |
- |o| |o| |o| |o| |o| |o| |o| |o| |
-  --------------------------------`,
-`  ________________________________
- | |o| |o| |o| |o| |o| |o| |o| |o|
- |-]  [-]  [-]  [-]  [-]  [-]  [-]|
- |  [ ]  [ ]  [ ]  [ ]  [ ]  [ ]  |
- |-]  [-]  [-]  [-]  [-]  [-]  [-]|
- | |o| |o| |o| |o| |o| |o| |o| |o|
-  --------------------------------`,
-`  ________________________________
- |o| |o| |o| |o| |o| |o| |o| |o| |
- |  [-]  [-]  [-]  [-]  [-]  [-]  |
- |  [/]  [/]  [/]  [/]  [/]  [/]  |
- |  [-]  [-]  [-]  [-]  [-]  [-]  |
- |o| |o| |o| |o| |o| |o| |o| |o| |
-  --------------------------------`,
-`  ________________________________
- | |o| |o| |o| |o| |o| |o| |o| |o|
- |-]  [-]  [-]  [-]  [-]  [-]  [-]|
- | \]  [\]  [\]  [\]  [\]  [\] |
- |-]  [-]  [-]  [-]  [-]  [-]  [-]|
- | |o| |o| |o| |o| |o| |o| |o| |o|
-  --------------------------------`,
-  ],
-  'Super8': [
-`  _________________________________
- |. |.| .|. |.| .|. |.| .|. |.| .|
- |   [-]   [-]   [-]   [-]   [-]  |
- |   [ ]   [ ]   [ ]   [ ]   [ ]  |
- |   [-]   [-]   [-]   [-]   [-]  |
- |. |.| .|. |.| .|. |.| .|. |.| .|
-  ---------------------------------`,
-`  _________________________________
- |.|. |.| .|. |.| .|. |.| .|. |.|
- |-]   [-]   [-]   [-]   [-]   [-]|
- |  ]   [ ]   [ ]   [ ]   [ ]   [ |
- |-]   [-]   [-]   [-]   [-]   [-]|
- |.|. |.| .|. |.| .|. |.| .|. |.|
-  ---------------------------------`,
-  ],
-  'Pathé 9.5mm': [
-`  ________________________________________
- |  · ┌──┐ · ┌──┐ · ┌──┐ · ┌──┐ · ┌──┐  |
- |    |  |   |  |   |  |   |  |   |  |   |
- |  · └──┘ · └──┘ · └──┘ · └──┘ · └──┘  |
-  ········○···········○···········○·······`,
-`  ________________________________________
- | · ┌──┐ · ┌──┐ · ┌──┐ · ┌──┐ · ┌──┐ · |
- |   |  |   |  |   |  |   |  |   |  |    |
- | · └──┘ · └──┘ · └──┘ · └──┘ · └──┘ · |
-  ·······○···········○···········○········`,
-  ],
-  '35mm': [
-`  _________________________________________________
- |XX| |XX| |XX| |XX| |XX| |XX| |XX| |XX| |XX| |XX|
- |   [---]  [---]  [---]  [---]  [---]  [---]   |
- |   [   ]  [   ]  [   ]  [   ]  [   ]  [   ]   |
- |   [---]  [---]  [---]  [---]  [---]  [---]   |
- |XX| |XX| |XX| |XX| |XX| |XX| |XX| |XX| |XX| |XX|
-  -------------------------------------------------`,
-`  _________________________________________________
- | |XX| |XX| |XX| |XX| |XX| |XX| |XX| |XX| |XX| |X|
- |--]  [---]  [---]  [---]  [---]  [---]  [---]  |
- |  ]  [   ]  [   ]  [   ]  [   ]  [   ]  [   ]  |
- |--]  [---]  [---]  [---]  [---]  [---]  [---]  |
- | |XX| |XX| |XX| |XX| |XX| |XX| |XX| |XX| |XX| |X|
-  -------------------------------------------------`,
-  ],
-  'VHS': [
-`  ┌─────────────────────────────────────┐
-  │  ▓▓▓▓▓▓ VIDEO HOME SYSTEM ▓▓▓▓▓▓  │
-  │   ◐━━━━━━━━━━━━━━━━━━━━━━━━━━━━◑   │
-  │       ▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶         │
-  └─────────────────────────────────────┘`,
-`  ┌─────────────────────────────────────┐
-  │  ▓▓▓▓▓▓ VIDEO HOME SYSTEM ▓▓▓▓▓▓  │
-  │   ◑━━━━━━━━━━━━━━━━━━━━━━━━━━━━◐   │
-  │       ▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶        │
-  └─────────────────────────────────────┘`,
-`  ┌─────────────────────────────────────┐
-  │  ▓▓▓▓▓▓ VIDEO HOME SYSTEM ▓▓▓▓▓▓  │
-  │   ◐━━━━━━━━━━━━━━━━━━━━━━━━━━━━◑   │
-  │        ▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶▶       │
-  └─────────────────────────────────────┘`,
-  ],
-  'Nitrato': [
-`        ______
-       / **** \
-      / *_!!_* \
-     | * NITR * |
-     | * ATO  * |
-     |  ______  |
-      \ * !! * /
-       \******/
-        ------`,
-`        ______
-       /*  ** *\
-      /**_!!_** \
-     |** NITR** |
-     |** ATO ** |
-     | *______* |
-      \** !!**/
-       \*****/
-        ------`,
-  ],
-  'default': [
-`        .------.
-       /  .---.  \
-      | ( (   ) ) |
-      |  ) ___ (  |
-      | ( (   ) ) |
-       \  '---'  /
-        '------'`,
-`        .------.
-       /  .---.  \
-      | ( (   ) ) |
-      |  ) ___ (  |
-      | ( (   ) ) |
-       \  '---'  /
-        '------' `,
-  ],
-};
-
-// ─── BOOT SEQUENCE ──────────────────────────────────────
-var fhBootDone = false;
-var fhBootTimer = null;
-
-function fhBoot() {
-  var header = document.getElementById('fh-header');
-  var arte   = document.getElementById('fh-arte');
-  var datos  = document.getElementById('fh-datos');
-
-  var bootLines = [
-    '  INICIANDO SISTEMA...',
-    '  CARGANDO ARCHIVO FÍLMICO...',
-    '  LEYENDO ' + DATOS.length + ' PIEZAS...',
-    '  INDEXANDO COLECCIONES...',
-    '  CALIBRANDO ESCÁNER...',
-    '  LISTO.',
-  ];
-
-  // Fase 1: Mostrar título grande
-  header.innerHTML = '<span style="color:#004d14">' +
-    FH_TITLES.FILMOHACK.split('\n').map(function(l){return '  '+l;}).join('\n') +
-    '</span>';
-  arte.innerHTML = '';
-  datos.innerHTML = '<span style="color:#004d14">  NdH · LA PEQUEÑA FILMOTECA</span>';
-
-  var lineIdx = 0;
-  var bootInterval = setInterval(function() {
-    if (lineIdx < bootLines.length) {
-      datos.innerHTML += '\n<span style="color:#00aa2e">  ' + bootLines[lineIdx] + '</span>';
-      lineIdx++;
-    } else {
-      clearInterval(bootInterval);
-      // Fase 2: mostrar estadísticas
-      setTimeout(function() {
-        fhStats();
-        setTimeout(function() {
-          fhBootDone = true;
-          fhFrame();
-          fhTimer = setInterval(fhFrame, 3500);
-        }, 2500);
-      }, 500);
-    }
-  }, 300);
-}
-
-function fhStats() {
-  var header = document.getElementById('fh-header');
-  var arte   = document.getElementById('fh-arte');
-  var datos  = document.getElementById('fh-datos');
-  var DIM = 'color:#004d14', BRT = 'color:#00ff41', MID = 'color:#00aa2e';
-  var d = function(t){return '<span style="'+DIM+'">'+t+'</span>';};
-  var b = function(t){return '<span style="'+BRT+'">'+t+'</span>';};
-
-  header.innerHTML = d(FH_TITLES.FILMOHACK.split('\n').map(function(l){return '  '+l;}).join('\n'));
-
-  arte.innerHTML =
-    d('  ── ESTADO DEL ACERVO ─────────────────────────────────────────\n') +
-    d('  PIEZAS TOTALES:\n') +
-    b(FH_TITLES.N503.split('\n').map(function(l){return '    '+l;}).join('\n')) + '\n' +
-    d('  DIGITALIZADAS:\n') +
-    b(FH_TITLES.N277.split('\n').map(function(l){return '    '+l;}).join('\n')) + '\n' +
-    d('  COLECCIONES:\n') +
-    b(FH_TITLES.N39.split('\n').map(function(l){return '    '+l;}).join('\n'));
-
-  datos.innerHTML = d('  [████████████████░░░░] 55% digitalizado\n  INICIANDO ESCÁNER ALEATORIO...');
+  fhFrame();
+  fhTimer = setInterval(fhFrame, 3500);
 }
 
 // ─── MAPA ──────────────────────────────────────────────────────────────────
