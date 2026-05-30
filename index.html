@@ -1106,18 +1106,59 @@ function fhFrame() {
 
   var lines=[];
   lines.push('<span style="color:#ff8800">  ► OBJETO EN ANÁLISIS ◄</span>');
-  lines.push('  '+d('CÓDIGO    : ')+w(p.codigo||'—'));
-  lines.push('  '+d('TÍTULO    : ')+w((p.titulo||'—').substring(0,44)));
-  lines.push('  '+d('FECHA     : ')+w(p.fecha||'—'));
-  lines.push('  '+d('FORMATO   : ')+'<span style="color:#00ff41">'+(p.paso||'—')+'</span>');
-  lines.push('  '+d('COLECCIÓN : ')+w(p.nombre_col||p.coleccion||'—'));
-  lines.push('  '+d('PAÍS      : ')+w(p.pais||'—'));
+
+  // Identificación
+  if(p.id)       lines.push('  '+d('A.NDH.ID  : ')+w(p.id));
+  if(p.codigo)   lines.push('  '+d('CÓDIGO    : ')+w(p.codigo));
+  if(p.titulo)   lines.push('  '+d('TÍTULO    : ')+'<span style="color:#7fff9a">'+(p.titulo||'').substring(0,50)+'</span>');
+  if(p.direccion)lines.push('  '+d('DIRECCIÓN : ')+w((p.direccion||'').substring(0,44)));
+  if(p.fecha)    lines.push('  '+d('FECHA     : ')+w(p.fecha));
+  if(p.pais)     lines.push('  '+d('PAÍS      : ')+w(p.pais));
+  lines.push('');
+
+  // Formato técnico
+  lines.push('  '+d('── SOPORTE ─────────────────────────────'));
+  if(p.paso)       lines.push('  '+d('FORMATO   : ')+'<span style="color:#00ff41">'+(p.paso||'—')+'</span>');
+  if(p.formato)    lines.push('  '+d('SOPORTE   : ')+w(p.formato));
+  if(p.color)      lines.push('  '+d('COLOR     : ')+w(p.color));
+  if(p.audio)      lines.push('  '+d('AUDIO     : ')+w(p.audio));
+  if(p.duracion)   lines.push('  '+d('DURACIÓN  : ')+w(p.duracion));
+  if(p.rollos)     lines.push('  '+d('ROLLOS    : ')+w(p.rollos));
+  if(p.condiciones)lines.push('  '+d('CONDICIÓN : ')+'<span style="color:'+(p.condiciones.toLowerCase().includes('hongo')||p.condiciones.toLowerCase().includes('daño')?'#ff3333':'#00aa2e')+'">'+p.condiciones.substring(0,40)+'</span>');
+  lines.push('');
+
+  // Colección y procedencia
+  lines.push('  '+d('── COLECCIÓN ───────────────────────────'));
+  if(p.nombre_col||p.coleccion) lines.push('  '+d('COLECCIÓN : ')+w(p.nombre_col||p.coleccion));
+  if(p.procedencia) lines.push('  '+d('ORIGEN    : ')+w((p.procedencia||'').substring(0,44)));
   if(p.lat && p.lng) lines.push('  '+d('COORD     : ')+d(parseFloat(p.lat).toFixed(4)+' N  '+Math.abs(parseFloat(p.lng)).toFixed(4)+' O'));
   lines.push('');
-  if(Math.random()>.4){var r1='',r2='';for(var i=0;i<8;i++){r1+=Math.floor(Math.random()*256).toString(16).padStart(2,'0').toUpperCase()+' ';r2+=Math.floor(Math.random()*256).toString(16).padStart(2,'0').toUpperCase()+' ';}lines.push('  '+d('SCAN EMULSIÓN:'));lines.push('  '+d(r1));lines.push('  '+d(r2));lines.push('');}
-  if(Math.random()>.5){var bs='';for(var j=0;j<8;j++)bs+=Math.random()>.5?'1':'0';lines.push('  '+d('SEÑAL ['+bs+']:'));var nc='░▒·∙ ';for(var k=0;k<2;k++){var ns='';for(var l=0;l<44;l++)ns+=nc[Math.floor(Math.random()*nc.length)];lines.push('  '+d(ns));}lines.push('');}
+
+  // Contenido
+  if(p.genero||p.temas) {
+    lines.push('  '+d('── CONTENIDO ───────────────────────────'));
+    if(p.genero) lines.push('  '+d('GÉNERO    : ')+w(p.genero));
+    if(p.temas)  lines.push('  '+d('TEMAS     : ')+w((p.temas||'').substring(0,44)));
+  }
+  if(p.sinopsis) {
+    lines.push('  '+d('SINOPSIS  :'));
+    var sin = (p.sinopsis||'').substring(0,120);
+    // Partir en líneas de 44 chars
+    for(var s=0;s<sin.length;s+=44) lines.push('  '+d('  ')+w(sin.substring(s,s+44)));
+  }
+  if(p.obs) lines.push('  '+d('OBS       : ')+d((p.obs||'').substring(0,44)));
+  lines.push('');
+
+  // Estado digital
+  lines.push('  '+d('── DIGITALIZACIÓN ──────────────────────'));
+  lines.push('  '+d('DIGITAL   : ')+(p.digitalizada?'<span style="color:#00ff41">✓ SÍ</span>':'<span style="color:#444">✗ NO</span>'));
+  lines.push('  '+d('REVISADA  : ')+(p.revisada?'<span style="color:#00ff41">✓ SÍ</span>':'<span style="color:#444">✗ NO</span>'));
+  if(p.youtube)  lines.push('  '+d('YOUTUBE   : ')+'<span style="color:#005c17">'+( p.youtube.replace('https://www.youtube.com/watch?v=','yt/')).substring(0,40)+'</span>');
+  lines.push('');
+
+  // Acervo global
   var bf=Math.round((277/503)*20);
-  lines.push('  '+d('ACERVO: ')+'[<span style="color:#00ff41">'+'█'.repeat(bf)+'░'.repeat(20-bf)+'</span>] '+w('277/503'));
+  lines.push('  '+d('ACERVO: ')+'[<span style="color:#00ff41">'+'█'.repeat(bf)+'░'.repeat(20-bf)+'</span>] '+w('277/503 digitalizadas'));
   lines.push('');
   lines.push(sep);
   lines.push('  '+d('PRÓXIMO ESCÁNER EN '+(Math.floor(Math.random()*6)+2)+'s'));
