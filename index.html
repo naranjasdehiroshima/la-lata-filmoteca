@@ -1183,6 +1183,8 @@ function fhFrame() {
 
 function fhIniciar() {
   fhIniciado = true;
+  document.getElementById('fh-header').style.whiteSpace = 'pre';
+  document.getElementById('fh-datos').style.whiteSpace = 'pre';
   fhFrame();
   fhTimer = setInterval(fhFrame, 3500);
 }
