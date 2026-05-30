@@ -1167,13 +1167,21 @@ function fhFrame() {
   // ASCII de portada si existe para esta colección
   var colKey = p.coleccion ? p.coleccion.trim() : '';
   var asciiLines = FH_ASCII[colKey] || FH_ASCII[p.nombre_col] || null;
-  if(asciiLines) {
-    lines.push('');
-    lines.push('  '+d('── IMAGEN ASCII ────────────────────────'));
-    asciiLines.forEach(function(l){
-      lines.push('  '+d(l));
-    });
-  }
+  var CARRETE_ASCII = [
+    '        ╔══════════╗        ',
+    '        ║  ○    ○  ║        ',
+    '        ║   ╔══╗   ║        ',
+    '        ║   ║  ║   ║        ',
+    '        ║   ╚══╝   ║        ',
+    '        ║  ○    ○  ║        ',
+    '        ╚══════════╝        ',
+    '   — sin imagen de portada — ',
+  ];
+  lines.push('');
+  lines.push('  '+d('── IMAGEN ASCII ────────────────────────'));
+  (asciiLines || CARRETE_ASCII).forEach(function(l){
+    lines.push('  '+d(l));
+  });
   lines.push('');
   lines.push(sep);
   lines.push('  '+d('PRÓXIMO ESCÁNER EN '+(Math.floor(Math.random()*6)+2)+'s'));
