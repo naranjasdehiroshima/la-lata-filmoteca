@@ -169,16 +169,29 @@ input[type=text]::placeholder{color:var(--gris-medio)}
 #mapa-wrap{display:none;height:calc(100vh - 140px);min-height:500px}
 #colecciones-wrap{display:none;padding:2rem 3rem;min-height:60vh}
 #tv-wrap{display:none;background:#000;height:calc(100vh - 140px);min-height:500px;flex-direction:row}
-#about-wrap{display:none;background:#0a0a0a;min-height:calc(100vh - 140px);padding:2rem 1.5rem;font-family:'DM Mono',monospace;color:#00ff41}
-#about-screen{max-width:640px;margin:0 auto;line-height:1.8}
-#about-screen h2{font-size:0.7rem;text-transform:uppercase;letter-spacing:3px;color:#004d14;margin:2rem 0 0.8rem;border-bottom:1px solid #004d14;padding-bottom:0.4rem}
-#about-screen a{color:#00ff41;text-decoration:none;border-bottom:1px solid #004d14}
-#about-screen a:hover{border-bottom-color:#00ff41}
-#filmohack-wrap{display:none;background:#000;height:calc(100vh - 140px);min-height:500px;padding:1.5rem;position:relative;overflow:hidden;font-family:'DM Mono',monospace;font-size:12px;line-height:1.5;color:#00ff41}
+#about-wrap{display:none;background:var(--blanco);min-height:calc(100vh - 140px);padding:3rem 1.5rem}
+#about-screen{max-width:680px;margin:0 auto}
+#about-screen .about-codigo{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--naranja);margin-bottom:0.6rem}
+#about-screen h1{font-family:'Georgia',serif;font-size:1.6rem;font-weight:normal;color:var(--negro);line-height:1.3;margin:0 0 0.4rem}
+#about-screen .about-subtitulo{font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--gris-medio);letter-spacing:0.05em;margin-bottom:2.5rem}
+#about-screen .about-separador{border:none;border-top:1px solid var(--gris-claro);margin:2rem 0}
+#about-screen h2{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gris-medio);margin:0 0 1rem;padding:0}
+#about-screen p{font-family:'Georgia',serif;font-size:0.95rem;color:#333;line-height:1.75;margin:0 0 1.2rem}
+#about-screen .about-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1.5rem 0}
+#about-screen .about-stat-item{padding:1rem;background:var(--crema-oscura);border-radius:2px}
+#about-screen .about-stat-num{font-family:'DM Mono',monospace;font-size:1.4rem;color:var(--naranja);line-height:1}
+#about-screen .about-stat-label{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gris-medio);margin-top:0.3rem}
+#about-screen .about-links{display:flex;flex-direction:column;gap:0.6rem;margin-top:0.5rem}
+#about-screen .about-link-row{display:flex;align-items:baseline;gap:1rem}
+#about-screen .about-link-label{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gris-medio);min-width:72px}
+#about-screen .about-link-row a{font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--negro);text-decoration:none;border-bottom:1px solid var(--gris-claro);transition:border-color 0.15s}
+#about-screen .about-link-row a:hover{border-bottom-color:var(--naranja);color:var(--naranja)}
+#about-screen .about-creditos{font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--gris-medio);line-height:1.8}
+#filmohack-wrap{display:none;background:#000;height:calc(100vh - 140px);min-height:500px;padding:1.5rem;position:relative;overflow:hidden;font-family:'DM Mono',monospace;font-size:clamp(8px,1.8vw,12px);line-height:1.5;color:#00ff41}
 #filmohack-wrap::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(0,255,65,0.025) 0px,rgba(0,255,65,0.025) 1px,transparent 1px,transparent 4px);pointer-events:none;z-index:1}
-#fh-screen{position:relative;z-index:2;height:100%;overflow:hidden}
-#fh-arte{min-height:80px;margin:0.3rem 0 0.5rem 0}
-#fh-header,#fh-datos{white-space:pre}
+#fh-screen{position:relative;z-index:2;height:100%;overflow:hidden;max-width:100%}
+#fh-arte{min-height:80px;margin:0.3rem 0 0.5rem 0;overflow:hidden;width:100%}
+#fh-header,#fh-datos{white-space:pre;overflow:hidden;max-width:100%}
 @keyframes lab-scroll-l{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 @keyframes lab-scroll-r{0%{transform:translateX(-50%)}100%{transform:translateX(0)}}
 @keyframes lab-flash{0%,90%,100%{opacity:0}92%{opacity:1}95%{opacity:0.5}}
@@ -1215,40 +1228,32 @@ function renderAbout() {
   var total = DATOS.length;
   var digital = DATOS.filter(function(d){ return d.digitalizada; }).length;
   var cols = [...new Set(DATOS.map(function(d){ return d.coleccion; }).filter(Boolean))].length;
-  var DIM = 'color:#004d14', BRT = 'color:#00ff41';
-  var d = function(t){ return '<span style="'+DIM+'">'+t+'</span>'; };
-  var b = function(t){ return '<span style="'+BRT+'">'+t+'</span>'; };
   document.getElementById('about-screen').innerHTML =
-    d('  \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510') + '<br>' +
-    d('  \u2502') + b('  LA PEQUE\u00d1A FILMOTECA DE NARANJAS DE HIROSHIMA  ') + d('\u2502') + '<br>' +
-    d('  \u2502  Archivo f\u00edlmico independiente \u00b7 Ciudad de M\u00e9xico    \u2502') + '<br>' +
-    d('  \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518') + '<br><br>' +
-    d('  \u2500\u2500 ESTADO DEL ACERVO \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500') + '<br>' +
-    d('  PIEZAS TOTALES    ') + b(total) + '<br>' +
-    d('  DIGITALIZADAS     ') + b(digital) + d('  (' + Math.round(digital/total*100) + '%)') + '<br>' +
-    d('  COLECCIONES       ') + b(cols) + '<br>' +
-    d('  FORMATOS          ') + b('8mm \u00b7 Super8 \u00b7 9.5mm \u00b7 16mm \u00b7 35mm \u00b7 VHS') + '<br><br>' +
-    d('  \u2500\u2500 EL PROYECTO \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500') + '<br><br>' +
-    d('  Un archivo audiovisual independiente dedicado a la') + '<br>' +
-    d('  preservaci\u00f3n y difusi\u00f3n del patrimonio f\u00edlmico en') + '<br>' +
-    d('  formatos f\u00edsicos. M\u00e1s de ') + b(total) + d(' piezas catalogadas \u2014') + '<br>' +
-    d('  pel\u00edculas dom\u00e9sticas, noticieros, cortometrajes y') + '<br>' +
-    d('  registros en soportes que van del Path\u00e9 Baby 9,5mm') + '<br>' +
-    d('  de los a\u00f1os 20 al VHS de los 90.') + '<br><br>' +
-    d('  Sin talleres ni instituciones que ense\u00f1en preservaci\u00f3n') + '<br>' +
-    d('  de cine en formatos f\u00edsicos, la colecci\u00f3n creci\u00f3 pieza') + '<br>' +
-    d('  a pieza \u2014 en mercados, tianguis y colecciones privadas.') + '<br><br>' +
-    d('  \u2500\u2500 CONTACTO Y LINKS \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500') + '<br><br>' +
-    d('  EMAIL     ') + '<a href="mailto:lapequenafilmoteca@gmail.com" style="color:#00ff41;text-decoration:none;border-bottom:1px solid #004d14">lapequenafilmoteca@gmail.com</a>' + '<br>' +
-    d('  BLOG      ') + '<a href="https://lapequenafilmotecadendh.blogspot.com" target="_blank" style="color:#00ff41;text-decoration:none;border-bottom:1px solid #004d14">lapequenafilmotecadendh.blogspot.com</a>' + '<br>' +
-    d('  YOUTUBE   ') + '<a href="https://www.youtube.com/@naranjasdehiroshima" target="_blank" style="color:#00ff41;text-decoration:none;border-bottom:1px solid #004d14">youtube.com/@naranjasdehiroshima</a>' + '<br>' +
-    d('  NdH       ') + '<a href="https://www.naranjasdehiroshima.com" target="_blank" style="color:#00ff41;text-decoration:none;border-bottom:1px solid #004d14">naranjasdehiroshima.com</a>' + '<br>' +
-    d('  RETROBOY  ') + '<a href="https://naranjasdehiroshima.github.io/retroboy/" target="_blank" style="color:#00ff41;text-decoration:none;border-bottom:1px solid #004d14">naranjasdehiroshima.github.io/retroboy</a>' + '<br><br>' +
-    d('  \u2500\u2500 CR\u00c9DITOS \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500') + '<br><br>' +
-    d('  Curadur\u00eda, catalogaci\u00f3n y digitalizaci\u00f3n:') + '<br>' +
-    b('  Luis Iborra Miralles (Kino)') + '<br>' +
-    d('  Ciudad de M\u00e9xico, 2007\u20132026') + '<br><br>' +
-    d('  github.com/naranjasdehiroshima/la-lata-filmoteca');
+    '<div class="about-codigo">La Pequeña Filmoteca de Naranjas de Hiroshima</div>' +
+    '<h1>Un archivo fílmico independiente</h1>' +
+    '<div class="about-subtitulo">Ciudad de México &middot; 2007&ndash;2026</div>' +
+    '<div class="about-stats">' +
+      '<div class="about-stat-item"><div class="about-stat-num">' + total + '</div><div class="about-stat-label">Piezas catalogadas</div></div>' +
+      '<div class="about-stat-item"><div class="about-stat-num">' + digital + '</div><div class="about-stat-label">Digitalizadas (' + Math.round(digital/total*100) + '%)</div></div>' +
+      '<div class="about-stat-item"><div class="about-stat-num">' + cols + '</div><div class="about-stat-label">Colecciones</div></div>' +
+    '</div>' +
+    '<hr class="about-separador">' +
+    '<h2>El proyecto</h2>' +
+    '<p>Un archivo audiovisual independiente dedicado a la preservación y difusión del patrimonio fílmico en formatos físicos. Más de ' + total + ' piezas catalogadas &mdash; películas domésticas, noticieros, cortometrajes y registros sin clasificar &mdash; en soportes que van del Pathé Baby 9,5mm de los años 20 al VHS de los 90.</p>' +
+    '<p>Sin talleres ni instituciones que enseñen preservación de cine en formatos físicos, la colección creció pieza a pieza &mdash; en mercados, tianguis y colecciones privadas &mdash; con una intención sencilla: poder ver, analizar y estudiar cada formato en primera persona.</p>' +
+    '<hr class="about-separador">' +
+    '<h2>Contacto y enlaces</h2>' +
+    '<div class="about-links">' +
+      '<div class="about-link-row"><span class="about-link-label">Email</span><a href="mailto:lapequenafilmoteca@gmail.com">lapequenafilmoteca@gmail.com</a></div>' +
+      '<div class="about-link-row"><span class="about-link-label">Blog</span><a href="https://lapequenafilmotecadendh.blogspot.com" target="_blank">lapequenafilmotecadendh.blogspot.com</a></div>' +
+      '<div class="about-link-row"><span class="about-link-label">YouTube NdH</span><a href="https://www.youtube.com/@naranjasdehiroshima" target="_blank">youtube.com/@naranjasdehiroshima</a></div>' +
+      '<div class="about-link-row"><span class="about-link-label">YouTube LPF</span><a href="https://www.youtube.com/@LaPeque%C3%B1aFilmoteca" target="_blank">youtube.com/@LaPequeñaFilmoteca</a></div>' +
+      '<div class="about-link-row"><span class="about-link-label">NdH</span><a href="https://www.naranjasdehiroshima.com" target="_blank">naranjasdehiroshima.com</a></div>' +
+      '<div class="about-link-row"><span class="about-link-label">RetroBoy</span><a href="https://naranjasdehiroshima.github.io/retroboy/" target="_blank">naranjasdehiroshima.github.io/retroboy</a></div>' +
+    '</div>' +
+    '<hr class="about-separador">' +
+    '<h2>Créditos</h2>' +
+    '<div class="about-creditos">Curaduría, catalogación y digitalización: Luis Iborra Miralles (Kino)<br>Ciudad de México, 2007&ndash;2026<br><br>github.com/naranjasdehiroshima/la-lata-filmoteca</div>';
 }
 
 function toggleVista(vista) {
