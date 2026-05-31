@@ -169,6 +169,11 @@ input[type=text]::placeholder{color:var(--gris-medio)}
 #mapa-wrap{display:none;height:calc(100vh - 140px);min-height:500px}
 #colecciones-wrap{display:none;padding:2rem 3rem;min-height:60vh}
 #tv-wrap{display:none;background:#000;height:calc(100vh - 140px);min-height:500px;flex-direction:row}
+#about-wrap{display:none;background:#0a0a0a;min-height:calc(100vh - 140px);padding:2rem 1.5rem;font-family:'DM Mono',monospace;color:#00ff41}
+#about-screen{max-width:640px;margin:0 auto;line-height:1.8}
+#about-screen h2{font-size:0.7rem;text-transform:uppercase;letter-spacing:3px;color:#004d14;margin:2rem 0 0.8rem;border-bottom:1px solid #004d14;padding-bottom:0.4rem}
+#about-screen a{color:#00ff41;text-decoration:none;border-bottom:1px solid #004d14}
+#about-screen a:hover{border-bottom-color:#00ff41}
 #filmohack-wrap{display:none;background:#000;height:calc(100vh - 140px);min-height:500px;padding:1.5rem;position:relative;overflow:hidden;font-family:'DM Mono',monospace;font-size:12px;line-height:1.5;color:#00ff41}
 #filmohack-wrap::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(0,255,65,0.025) 0px,rgba(0,255,65,0.025) 1px,transparent 1px,transparent 4px);pointer-events:none;z-index:1}
 #fh-screen{position:relative;z-index:2;height:100%;overflow:hidden}
@@ -472,7 +477,7 @@ header > *{position:relative;z-index:1;}
   </select>
   <div class="ctrl-sep"></div>
   <input type="text" id="busqueda" placeholder="Buscar t&#237;tulo, c&#243;digo...">
-  <div class="vista-btns"><button id="btn-vista-latas" class="btn-vista activo" onclick="toggleVista('latas')">&#9632; Latas</button><button id="btn-vista-colecciones" class="btn-vista" onclick="toggleVista('colecciones')">&#9782; Colecciones</button><button id="btn-vista-mapa" class="btn-vista" onclick="toggleVista('mapa')">&#127760; Mapa</button><button id="btn-vista-tv" class="btn-vista" onclick="toggleVista('tv')">&#128250; TV</button><button id="btn-vista-fh" class="btn-vista" onclick="toggleVista('fh')">&#9641; FilmoHack</button><a href="https://naranjasdehiroshima.github.io/retroboy/" target="_blank" class="btn-vista" style="text-decoration:none">&#127918; RetroBoy</a></div><span id="contador"></span>
+  <div class="vista-btns"><button id="btn-vista-latas" class="btn-vista activo" onclick="toggleVista('latas')">&#9632; Latas</button><button id="btn-vista-colecciones" class="btn-vista" onclick="toggleVista('colecciones')">&#9782; Colecciones</button><button id="btn-vista-mapa" class="btn-vista" onclick="toggleVista('mapa')">&#127760; Mapa</button><button id="btn-vista-tv" class="btn-vista" onclick="toggleVista('tv')">&#128250; TV</button><button id="btn-vista-fh" class="btn-vista" onclick="toggleVista('fh')">&#9641; FilmoHack</button><a href="https://naranjasdehiroshima.github.io/retroboy/" target="_blank" class="btn-vista" style="text-decoration:none">&#127918; RetroBoy</a><button id="btn-vista-about" class="btn-vista" onclick="toggleVista('about')">&#9432; Acerca</button></div><span id="contador"></span>
 </div>
 
 <div id="banner-formato"></div>
@@ -510,6 +515,9 @@ header > *{position:relative;z-index:1;}
     <div id="fh-arte"></div>
     <div id="fh-datos" style="white-space:pre;overflow:hidden"></div>
   </div>
+</div>
+<div id="about-wrap" style="display:none">
+  <div id="about-screen"></div>
 </div>
 <div id="col-panel">
   <div id="col-panel-header">
@@ -1203,6 +1211,46 @@ var mapaIniciado = false;
 var mapaObj = null;
 var vistaActual = 'latas'; // 'latas', 'mapa' o 'colecciones'
 
+function renderAbout() {
+  var total = DATOS.length;
+  var digital = DATOS.filter(function(d){ return d.digitalizada; }).length;
+  var cols = [...new Set(DATOS.map(function(d){ return d.coleccion; }).filter(Boolean))].length;
+  var DIM = 'color:#004d14', BRT = 'color:#00ff41';
+  var d = function(t){ return '<span style="'+DIM+'">'+t+'</span>'; };
+  var b = function(t){ return '<span style="'+BRT+'">'+t+'</span>'; };
+  document.getElementById('about-screen').innerHTML =
+    d('  \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510') + '<br>' +
+    d('  \u2502') + b('  LA PEQUE\u00d1A FILMOTECA DE NARANJAS DE HIROSHIMA  ') + d('\u2502') + '<br>' +
+    d('  \u2502  Archivo f\u00edlmico independiente \u00b7 Ciudad de M\u00e9xico    \u2502') + '<br>' +
+    d('  \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518') + '<br><br>' +
+    d('  \u2500\u2500 ESTADO DEL ACERVO \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500') + '<br>' +
+    d('  PIEZAS TOTALES    ') + b(total) + '<br>' +
+    d('  DIGITALIZADAS     ') + b(digital) + d('  (' + Math.round(digital/total*100) + '%)') + '<br>' +
+    d('  COLECCIONES       ') + b(cols) + '<br>' +
+    d('  FORMATOS          ') + b('8mm \u00b7 Super8 \u00b7 9.5mm \u00b7 16mm \u00b7 35mm \u00b7 VHS') + '<br><br>' +
+    d('  \u2500\u2500 EL PROYECTO \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500') + '<br><br>' +
+    d('  Un archivo audiovisual independiente dedicado a la') + '<br>' +
+    d('  preservaci\u00f3n y difusi\u00f3n del patrimonio f\u00edlmico en') + '<br>' +
+    d('  formatos f\u00edsicos. M\u00e1s de ') + b(total) + d(' piezas catalogadas \u2014') + '<br>' +
+    d('  pel\u00edculas dom\u00e9sticas, noticieros, cortometrajes y') + '<br>' +
+    d('  registros en soportes que van del Path\u00e9 Baby 9,5mm') + '<br>' +
+    d('  de los a\u00f1os 20 al VHS de los 90.') + '<br><br>' +
+    d('  Sin talleres ni instituciones que ense\u00f1en preservaci\u00f3n') + '<br>' +
+    d('  de cine en formatos f\u00edsicos, la colecci\u00f3n creci\u00f3 pieza') + '<br>' +
+    d('  a pieza \u2014 en mercados, tianguis y colecciones privadas.') + '<br><br>' +
+    d('  \u2500\u2500 CONTACTO Y LINKS \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500') + '<br><br>' +
+    d('  EMAIL     ') + '<a href="mailto:lapequenafilmoteca@gmail.com" style="color:#00ff41;text-decoration:none;border-bottom:1px solid #004d14">lapequenafilmoteca@gmail.com</a>' + '<br>' +
+    d('  BLOG      ') + '<a href="https://lapequenafilmotecadendh.blogspot.com" target="_blank" style="color:#00ff41;text-decoration:none;border-bottom:1px solid #004d14">lapequenafilmotecadendh.blogspot.com</a>' + '<br>' +
+    d('  YOUTUBE   ') + '<a href="https://www.youtube.com/@naranjasdehiroshima" target="_blank" style="color:#00ff41;text-decoration:none;border-bottom:1px solid #004d14">youtube.com/@naranjasdehiroshima</a>' + '<br>' +
+    d('  NdH       ') + '<a href="https://www.naranjasdehiroshima.com" target="_blank" style="color:#00ff41;text-decoration:none;border-bottom:1px solid #004d14">naranjasdehiroshima.com</a>' + '<br>' +
+    d('  RETROBOY  ') + '<a href="https://naranjasdehiroshima.github.io/retroboy/" target="_blank" style="color:#00ff41;text-decoration:none;border-bottom:1px solid #004d14">naranjasdehiroshima.github.io/retroboy</a>' + '<br><br>' +
+    d('  \u2500\u2500 CR\u00c9DITOS \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500') + '<br><br>' +
+    d('  Curadur\u00eda, catalogaci\u00f3n y digitalizaci\u00f3n:') + '<br>' +
+    b('  Luis Iborra Miralles (Kino)') + '<br>' +
+    d('  Ciudad de M\u00e9xico, 2007\u20132026') + '<br><br>' +
+    d('  github.com/naranjasdehiroshima/la-lata-filmoteca');
+}
+
 function toggleVista(vista) {
   vistaActual = vista;
   var btnLatas = document.getElementById('btn-vista-latas');
@@ -1227,6 +1275,10 @@ function toggleVista(vista) {
   wrapTV.style.display    = 'none';
   var wrapFH = document.getElementById('filmohack-wrap');
   if(wrapFH) wrapFH.style.display = 'none';
+  var wrapAbout = document.getElementById('about-wrap');
+  if(wrapAbout) wrapAbout.style.display = 'none';
+  var btnAbout = document.getElementById('btn-vista-about');
+  if(btnAbout) btnAbout.classList.remove('activo');
   leyenda.style.display   = 'none';
 
   if (vista === 'mapa') {
@@ -1252,6 +1304,10 @@ function toggleVista(vista) {
     document.getElementById('btn-vista-fh').classList.add('activo');
     document.getElementById('filmohack-wrap').style.display = 'block';
     if (!fhIniciado) fhIniciar();
+  } else if (vista === 'about') {
+    document.getElementById('btn-vista-about').classList.add('activo');
+    document.getElementById('about-wrap').style.display = 'block';
+    renderAbout();
   } else {
   }
 }
