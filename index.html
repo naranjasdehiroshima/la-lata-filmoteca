@@ -1375,6 +1375,8 @@ function toggleVista(vista) {
   if(wrapFH) wrapFH.style.display = 'none';
   var wrapAbout = document.getElementById('about-wrap');
   if(wrapAbout) wrapAbout.style.display = 'none';
+  var wrapMiArchivo = document.getElementById('miarchivo-wrap');
+  if(wrapMiArchivo) wrapMiArchivo.style.display = 'none';
   var btnAbout = document.getElementById('btn-vista-about');
   var btnMiArchivo = document.getElementById('btn-vista-miarchivo');
   if(btnMiArchivo) btnMiArchivo.classList.remove('activo');
@@ -1402,16 +1404,20 @@ function toggleVista(vista) {
     tvCargar(0);
   } else if (vista === 'fh') {
     document.getElementById('btn-vista-fh').classList.add('activo');
+    document.getElementById('filmohack-wrap').style.display = 'block';
+    if (!fhIniciado) fhIniciar();
   } else if (vista === 'miarchivo') {
     document.getElementById('miarchivo-wrap').style.display = 'block';
     document.getElementById('btn-vista-miarchivo').classList.add('activo');
     renderMiArchivo();
-    document.getElementById('filmohack-wrap').style.display = 'block';
-    if (!fhIniciado) fhIniciar();
   } else if (vista === 'about') {
     document.getElementById('btn-vista-about').classList.add('activo');
     document.getElementById('about-wrap').style.display = 'block';
     renderAbout();
+  } else if (vista === 'latas') {
+    btnLatas.classList.add('activo');
+    wrapLatas.style.display = 'flex';
+    leyenda.style.display = '';
   } else {
   }
 }
