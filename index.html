@@ -445,10 +445,98 @@ header > *{position:relative;z-index:1;}
   transition:border-color 0.2s;
 }
 .banner-link:hover{border-bottom-color:var(--naranja);}
+/* ── AUTH ──────────────────────────────────────────────────────────── */
+#auth-btn{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.4rem 0.9rem;border:1px solid var(--naranja);background:transparent;color:var(--naranja);cursor:pointer;border-radius:2px;transition:all 0.15s;white-space:nowrap}
+#auth-btn:hover{background:var(--naranja);color:var(--blanco)}
+#auth-btn.logged{border-color:var(--gris-claro);color:var(--gris-medio)}
+#auth-btn.logged:hover{border-color:var(--naranja);color:var(--naranja);background:transparent}
+#auth-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:1000;align-items:center;justify-content:center}
+#auth-modal.open{display:flex}
+#auth-box{background:var(--blanco);padding:2rem;width:320px;border-radius:3px;position:relative;font-family:'DM Mono',monospace}
+#auth-box h2{font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--naranja);margin:0 0 1.5rem}
+#auth-box input{width:100%;box-sizing:border-box;padding:0.5rem 0.7rem;border:1px solid var(--gris-claro);font-family:'DM Mono',monospace;font-size:0.75rem;margin-bottom:0.8rem;border-radius:2px;background:var(--crema-oscura)}
+#auth-box input:focus{outline:none;border-color:var(--naranja)}
+#auth-submit{width:100%;padding:0.6rem;background:var(--naranja);color:var(--blanco);border:none;font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer;border-radius:2px}
+#auth-submit:hover{background:#d06000}
+#auth-toggle{display:block;text-align:center;margin-top:0.8rem;font-size:0.65rem;color:var(--gris-medio);cursor:pointer;border:none;background:none;font-family:'DM Mono',monospace}
+#auth-toggle:hover{color:var(--naranja)}
+#auth-close{position:absolute;top:0.8rem;right:0.8rem;background:none;border:none;cursor:pointer;font-size:1rem;color:var(--gris-medio)}
+#auth-msg{font-size:0.65rem;color:#c00;margin-bottom:0.5rem;min-height:1rem}
+#auth-menu{display:none;position:fixed;z-index:999;background:var(--blanco);border:1px solid var(--gris-claro);border-radius:3px;padding:0.5rem 0;min-width:180px;font-family:'DM Mono',monospace;font-size:0.65rem;box-shadow:0 4px 12px rgba(0,0,0,0.1)}
+#auth-menu.open{display:block}
+.auth-menu-item{display:block;padding:0.5rem 1rem;color:var(--negro);cursor:pointer;letter-spacing:0.05em;border:none;background:none;width:100%;text-align:left;font-family:'DM Mono',monospace;font-size:0.65rem}
+.auth-menu-item:hover{background:var(--crema-oscura);color:var(--naranja)}
+.auth-menu-sep{border:none;border-top:1px solid var(--gris-claro);margin:0.3rem 0}
+#auth-menu-email{padding:0.5rem 1rem 0.3rem;color:var(--gris-medio);font-size:0.6rem;display:block;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#miarchivo-wrap{display:none;padding:2rem 3rem;min-height:60vh;background:var(--blanco)}
+.ma-section{margin-bottom:2.5rem}
+.ma-section-title{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gris-medio);margin:0 0 1rem;padding-bottom:0.5rem;border-bottom:1px solid var(--gris-claro)}
+.ma-empty{font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--gris-claro);padding:1rem 0}
+.ma-grid{display:flex;flex-wrap:wrap;gap:0.5rem}
+.ma-tag{font-family:'DM Mono',monospace;font-size:0.65rem;padding:0.3rem 0.7rem;background:var(--crema-oscura);border:1px solid var(--gris-claro);border-radius:2px;cursor:pointer;display:flex;align-items:center;gap:0.4rem}
+.ma-tag:hover{border-color:var(--naranja);color:var(--naranja)}
+.ma-tag-remove{color:var(--gris-claro);font-size:0.8rem;line-height:1;cursor:pointer}
+.ma-tag-remove:hover{color:#c00}
+.ma-lista-item{background:var(--crema-oscura);border:1px solid var(--gris-claro);border-radius:2px;padding:0.8rem 1rem;margin-bottom:0.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.ma-lista-nombre{font-family:'Georgia',serif;font-size:0.9rem;color:var(--negro);cursor:pointer}
+.ma-lista-nombre:hover{color:var(--naranja)}
+.ma-lista-meta{font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--gris-medio)}
+.ma-lista-actions{display:flex;gap:0.5rem}
+.ma-btn{font-family:'DM Mono',monospace;font-size:0.6rem;padding:0.25rem 0.6rem;border:1px solid var(--gris-claro);background:none;cursor:pointer;border-radius:2px;color:var(--gris-medio)}
+.ma-btn:hover{border-color:var(--naranja);color:var(--naranja)}
+.ma-btn.danger:hover{border-color:#c00;color:#c00}
+.fav-btn{position:absolute;top:4px;right:4px;background:rgba(0,0,0,0.6);border:none;cursor:pointer;color:#888;font-size:0.8rem;width:20px;height:20px;display:flex;align-items:center;justify-content:center;border-radius:2px;opacity:0;transition:opacity 0.15s,color 0.15s;z-index:5;padding:0;line-height:1}
+.lata:hover .fav-btn{opacity:1}
+.fav-btn.activo{opacity:1;color:var(--naranja)}
+.fav-btn.activo:hover{color:#c00}
+#lista-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:1000;align-items:center;justify-content:center}
+#lista-modal.open{display:flex}
+#lista-box{background:var(--blanco);padding:1.5rem;width:300px;border-radius:3px;font-family:'DM Mono',monospace}
+#lista-box h3{font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--naranja);margin:0 0 1rem}
+#lista-nombre-input{width:100%;box-sizing:border-box;padding:0.5rem 0.7rem;border:1px solid var(--gris-claro);font-family:'DM Mono',monospace;font-size:0.75rem;border-radius:2px;margin-bottom:0.8rem}
+#lista-nombre-input:focus{outline:none;border-color:var(--naranja)}
+#lista-crear-btn{width:100%;padding:0.5rem;background:var(--naranja);color:var(--blanco);border:none;font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;border-radius:2px}
+#lista-cancel-btn{display:block;width:100%;text-align:center;margin-top:0.6rem;font-size:0.6rem;color:var(--gris-medio);cursor:pointer;background:none;border:none;font-family:'DM Mono',monospace}
 
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
+<!-- Modal Auth -->
+<div id="auth-modal">
+  <div id="auth-box">
+    <button id="auth-close" onclick="authModalClose()">&#10005;</button>
+    <h2 id="auth-title">Acceder</h2>
+    <div id="auth-msg"></div>
+    <input type="email" id="auth-email" placeholder="correo@ejemplo.com" autocomplete="email">
+    <input type="password" id="auth-pass" placeholder="Contrase&#241;a" autocomplete="current-password">
+    <button id="auth-submit" onclick="authSubmit()">Entrar</button>
+    <button id="auth-toggle" onclick="authToggleMode()">&#191;No tienes cuenta? Reg&#237;strate</button>
+  </div>
+</div>
+
+<!-- Menú usuario -->
+<div id="auth-menu">
+  <span id="auth-menu-email"></span>
+  <hr class="auth-menu-sep">
+  <button class="auth-menu-item" onclick="toggleVista('miarchivo');authMenuClose()">&#9733; Mi Archivo</button>
+  <hr class="auth-menu-sep">
+  <button class="auth-menu-item" onclick="authLogout()">Cerrar sesi&#243;n</button>
+</div>
+
+<!-- Modal nueva lista -->
+<div id="lista-modal">
+  <div id="lista-box">
+    <h3>Nueva lista</h3>
+    <input type="text" id="lista-nombre-input" placeholder="Nombre de la lista..." maxlength="80">
+    <button id="lista-crear-btn" onclick="listaCrear()">Crear lista</button>
+    <button id="lista-cancel-btn" onclick="listaModalClose()">Cancelar</button>
+  </div>
+</div>
+
+<!-- Vista Mi Archivo -->
+<div id="miarchivo-wrap"></div>
+
 <header>
   <div>
     <div class="header-titulo">La Peque&#241;a Filmoteca</div>
@@ -490,7 +578,7 @@ header > *{position:relative;z-index:1;}
   </select>
   <div class="ctrl-sep"></div>
   <input type="text" id="busqueda" placeholder="Buscar t&#237;tulo, c&#243;digo...">
-  <div class="vista-btns"><button id="btn-vista-latas" class="btn-vista activo" onclick="toggleVista('latas')">&#9632; Latas</button><button id="btn-vista-colecciones" class="btn-vista" onclick="toggleVista('colecciones')">&#9782; Colecciones</button><button id="btn-vista-about" class="btn-vista" onclick="toggleVista('about')">&#9432; Proyecto</button><button id="btn-vista-tv" class="btn-vista" onclick="toggleVista('tv')">&#128250; TV</button><button id="btn-vista-mapa" class="btn-vista" onclick="toggleVista('mapa')">&#127760; Mapa</button><button id="btn-vista-fh" class="btn-vista" onclick="toggleVista('fh')">&#9641; FilmoHack</button><a href="https://naranjasdehiroshima.github.io/retroboy/" target="_blank" class="btn-vista" style="text-decoration:none">&#127918; RetroBoy</a></div><span id="contador"></span>
+  <div class="vista-btns"><button id="btn-vista-latas" class="btn-vista activo" onclick="toggleVista('latas')">&#9632; Latas</button><button id="btn-vista-colecciones" class="btn-vista" onclick="toggleVista('colecciones')">&#9782; Colecciones</button><button id="btn-vista-about" class="btn-vista" onclick="toggleVista('about')">&#9432; Proyecto</button><button id="btn-vista-tv" class="btn-vista" onclick="toggleVista('tv')">&#128250; TV</button><button id="btn-vista-mapa" class="btn-vista" onclick="toggleVista('mapa')">&#127760; Mapa</button><button id="btn-vista-fh" class="btn-vista" onclick="toggleVista('fh')">&#9641; FilmoHack</button><a href="https://naranjasdehiroshima.github.io/retroboy/" target="_blank" class="btn-vista" style="text-decoration:none">&#127918; RetroBoy</a><button id="btn-vista-miarchivo" class="btn-vista" onclick="toggleVista('miarchivo')" style="display:none">&#9733; Mi Archivo</button></div><span id="contador"></span><button id="auth-btn" onclick="authBtnClick()">Entrar</button>
 </div>
 
 <div id="banner-formato"></div>
@@ -759,6 +847,7 @@ function render(){
       lata.className = 'lata fmt-'+p.formato+(p.youtube?' digitalizada':'');
       lata.title = p.titulo || p.codigo;
       var imgSrc = p.boveda_img || p.yt_thumb || '';
+      var favActivo = sbFavs[p.id] ? ' activo' : '';
       lata.innerHTML = '<div class="lata-disco">'
         + (imgSrc
             ? '<img src="'+esc(imgSrc)+'" alt="" class="lata-foto" loading="lazy">'
@@ -769,7 +858,8 @@ function render(){
         + '<div class="lata-codigo">'+esc(p.codigo)+'</div>'
         + (p._esRepresentante && p.hermanos && p.hermanos.length > 0
             ? '<div class="lata-rollos-badge">' + (p.hermanos.length+1) + ' rollos</div>'
-            : '');
+            : '')
+        + '<button class="fav-btn'+favActivo+'" data-id="'+esc(String(p.id))+'" title="Favorito" onclick="sbToggleFav('+JSON.stringify(String(p.id))+',event)">&#9733;</button>';
       lata.addEventListener('click', (function(pp){ return function(){ abrirFicha(pp); }; })(p));
       fila.appendChild(lata);
     });
@@ -1116,7 +1206,10 @@ function fhFrame() {
   var DIM = 'color:#004d14';
   var d = function(t){return '<span style="'+DIM+'">'+t+'</span>';};
   var w = function(t){return '<span style="color:#e8ffe0">'+t+'</span>';};
-  var sep = d('─'.repeat(60));
+  var wrap = document.getElementById('filmohack-wrap');
+  var fs = parseFloat(window.getComputedStyle(wrap).fontSize) || 12;
+  var maxCh = Math.max(30, Math.min(Math.floor((wrap.clientWidth - 48) / (fs * 0.601)), 56));
+  var sep = d('─'.repeat(maxCh));
   var ts = new Date().toISOString().replace('T',' ').substring(0,19);
 
   document.getElementById('fh-header').innerHTML =
@@ -1136,7 +1229,7 @@ function fhFrame() {
   if(p.id)       lines.push('  '+d('A.NDH.ID  : ')+w(p.id));
   if(p.codigo)   lines.push('  '+d('CÓDIGO    : ')+w(p.codigo));
   if(p.titulo)   lines.push('  '+d('TÍTULO    : ')+'<span style="color:#7fff9a">'+(p.titulo||'').substring(0,50)+'</span>');
-  if(p.direccion)lines.push('  '+d('DIRECCIÓN : ')+w((p.direccion||'').substring(0,44)));
+  if(p.direccion)lines.push('  '+d('DIRECCIÓN : ')+w((p.direccion||'').substring(0, Math.max(10, maxCh - 14))));
   if(p.fecha)    lines.push('  '+d('FECHA     : ')+w(p.fecha));
   if(p.pais)     lines.push('  '+d('PAÍS      : ')+w(p.pais));
   lines.push('');
@@ -1155,7 +1248,7 @@ function fhFrame() {
   // Colección y procedencia
   lines.push('  '+d('── COLECCIÓN ───────────────────────────'));
   if(p.nombre_col||p.coleccion) lines.push('  '+d('COLECCIÓN : ')+w(p.nombre_col||p.coleccion));
-  if(p.procedencia) lines.push('  '+d('ORIGEN    : ')+w((p.procedencia||'').substring(0,44)));
+  if(p.procedencia) lines.push('  '+d('ORIGEN    : ')+w((p.procedencia||'').substring(0, Math.max(10, maxCh - 14))));
   if(p.lat && p.lng) lines.push('  '+d('COORD     : ')+d(parseFloat(p.lat).toFixed(4)+' N  '+Math.abs(parseFloat(p.lng)).toFixed(4)+' O'));
   lines.push('');
 
@@ -1163,15 +1256,15 @@ function fhFrame() {
   if(p.genero||p.temas) {
     lines.push('  '+d('── CONTENIDO ───────────────────────────'));
     if(p.genero) lines.push('  '+d('GÉNERO    : ')+w(p.genero));
-    if(p.temas)  lines.push('  '+d('TEMAS     : ')+w((p.temas||'').substring(0,44)));
+    if(p.temas)  lines.push('  '+d('TEMAS     : ')+w((p.temas||'').substring(0, Math.max(10, maxCh - 14))));
   }
   if(p.sinopsis) {
     lines.push('  '+d('SINOPSIS  :'));
-    var sin = (p.sinopsis||'').substring(0,120);
+    var sin = (p.sinopsis||'').substring(0, Math.max(40, (maxCh - 14) * 3));
     // Partir en líneas de 44 chars
-    for(var s=0;s<sin.length;s+=44) lines.push('  '+d('  ')+w(sin.substring(s,s+44)));
+    for(var s=0;s<sin.length;s+=Math.max(10, maxCh - 14)) lines.push('  '+d('  ')+w(sin.substring(s,s+44)));
   }
-  if(p.obs) lines.push('  '+d('OBS       : ')+d((p.obs||'').substring(0,44)));
+  if(p.obs) lines.push('  '+d('OBS       : ')+d((p.obs||'').substring(0, Math.max(10, maxCh - 14))));
   lines.push('');
 
   // Estado digital
@@ -1202,7 +1295,7 @@ function fhFrame() {
   lines.push('');
   lines.push('  '+d('── IMAGEN ASCII ────────────────────────'));
   (asciiLines || CARRETE_ASCII).forEach(function(l){
-    lines.push('  '+d(l));
+    lines.push('  '+d(l.substring(0, Math.max(0, maxCh - 2))));
   });
   lines.push('');
   lines.push(sep);
@@ -1283,6 +1376,8 @@ function toggleVista(vista) {
   var wrapAbout = document.getElementById('about-wrap');
   if(wrapAbout) wrapAbout.style.display = 'none';
   var btnAbout = document.getElementById('btn-vista-about');
+  var btnMiArchivo = document.getElementById('btn-vista-miarchivo');
+  if(btnMiArchivo) btnMiArchivo.classList.remove('activo');
   if(btnAbout) btnAbout.classList.remove('activo');
   leyenda.style.display   = 'none';
 
@@ -1307,6 +1402,10 @@ function toggleVista(vista) {
     tvCargar(0);
   } else if (vista === 'fh') {
     document.getElementById('btn-vista-fh').classList.add('activo');
+  } else if (vista === 'miarchivo') {
+    document.getElementById('miarchivo-wrap').style.display = 'block';
+    document.getElementById('btn-vista-miarchivo').classList.add('activo');
+    renderMiArchivo();
     document.getElementById('filmohack-wrap').style.display = 'block';
     if (!fhIniciado) fhIniciar();
   } else if (vista === 'about') {
@@ -1632,7 +1731,7 @@ function abrirFichaDesdeId(id) {
   }
 }
 
-function init(){ poblarColecciones(); construirNube(); actualizarStats(); mostrarBannerFormato("todos"); render(); }
+function init(){ poblarColecciones(); construirNube(); actualizarStats(); mostrarBannerFormato("todos"); render(); sbInit(); }
 
 var FORMATOS_BANNER = {"todos": {"titulo": "La Pequeña Filmoteca de Naranjas de Hiroshima", "anyo": "", "img": "https://naranjasdehiroshima.github.io/la-lata-filmoteca/img/formatos/portada.jpg", "ficha": [], "desc": "Un archivo audiovisual independiente dedicado a la preservación y difusión del patrimonio fílmico en formatos físicos. Más de 470 piezas catalogadas — películas domésticas, noticieros, cortometrajes y registros sin clasificar — en soportes que van del Pathé Baby 9.5mm de los años 20 al VHS de los 90. Un proyecto nacido de la autoformación. Sin talleres ni instituciones que enseñen preservación de cine en formatos físicos, la colección creció pieza a pieza — en mercados, tianguis y colecciones privadas — con una intención sencilla: poder ver, analizar y estudiar cada formato en primera persona. Cada rollo conseguido fue una aventura. Cada familia retratada en celuloide, un descubrimiento.", "url": "https://www.naranjasdehiroshima.com"}, "8mm": {"titulo": "8mm / Super 8", "anyo": "1932–actualidad", "img": "https://naranjasdehiroshima.github.io/la-lata-filmoteca/img/formatos/8mm.jpg", "ficha": [["Inventor", "Kodak"], ["Uso", "Doméstico / Amateur"], ["Ancho", "8 mm"], ["Perforación", "Lateral"]], "desc": "El formato doméstico por excelencia del siglo XX. Introducido por Kodak en 1932, el 8mm se convirtió en la herramienta de memoria familiar de millones de hogares. Su versión mejorada, el Super 8, llegó en 1965 con cartuchos más fáciles de cargar y una imagen más estable. La mayoría de las películas familiares, bodas, viajes y fiestas del archivo están registradas en este formato."}, "16mm": {"titulo": "16mm", "anyo": "1923–actualidad", "img": "https://naranjasdehiroshima.github.io/la-lata-filmoteca/img/formatos/16mm.jpg", "ficha": [["Inventor", "Kodak"], ["Uso", "Semi-profesional / Documental"], ["Ancho", "16 mm"], ["Perforación", "Lateral"]], "desc": "Creado por Kodak en 1923 como alternativa económica al 35mm profesional, el 16mm fue adoptado rápidamente por documentalistas, cineastas independientes y televisiones. Su mayor versatilidad técnica respecto al 8mm lo convierte en el formato preferido para producciones con intención cinematográfica. En el archivo conviven rollos domésticos y producciones semi-profesionales en este paso."}, "pathe": {"titulo": "Pathé Baby 9.5mm", "anyo": "1922–1975", "img": "https://naranjasdehiroshima.github.io/la-lata-filmoteca/img/formatos/pathe.jpg", "ficha": [["Inventor", "Pathé"], ["Uso", "Doméstico"], ["Ancho", "9.5 mm"], ["Perforación", "Central"]], "desc": "El más antiguo y singular del archivo. Lanzado por Pathé en 1922, el 9.5mm se distingue por su perforación central en lugar de los laterales habituales. Fue el primer formato verdaderamente doméstico de la historia del cine. Las piezas en 9.5mm del archivo datan de los años 1920 y son testimonio de una época en que el cine llegaba por primera vez a los hogares."}, "35mm": {"titulo": "35mm", "anyo": "1889–actualidad", "img": "https://naranjasdehiroshima.github.io/la-lata-filmoteca/img/formatos/35mm.jpg", "ficha": [["Inventor", "Edison / Dickson"], ["Uso", "Cine profesional / Fotografía"], ["Ancho", "35 mm"], ["Perforación", "Lateral"]], "desc": "El estándar del cine profesional desde 1889 y el soporte de la fotografía fija durante todo el siglo XX. En La Pequeña Filmoteca las piezas en 35mm son principalmente fotografías y diapositivas — imágenes fijas que documentan el mismo mundo que las películas en movimiento del archivo, y que comparten soporte físico con el cine más antiguo de la historia."}, "nitrato": {"titulo": "Nitrato de celulosa", "anyo": "1889–1951", "img": "https://naranjasdehiroshima.github.io/la-lata-filmoteca/img/formatos/nitrato.jpg", "ficha": [["Material", "Nitrato de celulosa"], ["Uso", "Cine profesional"], ["Riesgo", "Altamente inflamable"], ["Conservación", "Condiciones especiales"]], "desc": "Más que un formato, el nitrato es un material — el celuloide de nitrato de celulosa, base de todas las películas hasta principios de los años 50. Altamente inflamable y químicamente inestable, su conservación requiere condiciones especiales. Las piezas en nitrato del archivo son las más antiguas y delicadas, y representan una ventana directa a la primera mitad del siglo XX."}, "video": {"titulo": "Video análogo", "anyo": "1956–2000s", "img": "https://naranjasdehiroshima.github.io/la-lata-filmoteca/img/formatos/video.jpg", "ficha": [["Formatos", "VHS · Betamax · U-matic"], ["Uso", "Doméstico / Broadcast"], ["Soporte", "Cinta magnética"], ["Riesgo", "Degradación progresiva"]], "desc": "VHS, Betamax, U-matic: los formatos magnéticos que democratizaron la imagen en movimiento en los años 70 y 80. Aunque técnicamente muy distintos al celuloide, el video análogo es ya patrimonio en riesgo — las cintas se degradan y los reproductores desaparecen. El archivo recoge piezas en estos formatos como testimonio de una transición tecnológica irrepetible."}};
 
@@ -1663,6 +1762,336 @@ function mostrarBannerFormato(fmt){
   banner.style.opacity = '1';
   banner.classList.add('visible');
 }
+
+
+// ── SUPABASE ────────────────────────────────────────────────────────────────
+var SUPA_URL = 'https://wpidhgovpsvyxbvqasmf.supabase.co';
+var SUPA_KEY = 'sb_publishable_HqaPm4P-jPJK8Ry6IivDWQ_QJrRRDLJ';
+var sb = null;
+var sbUser = null;
+var sbFavs = {}; // { pieza_id: true }
+var sbColsGuardadas = {}; // { coleccion_id: true }
+
+function sbInit() {
+  try {
+    sb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+    sb.auth.onAuthStateChange(function(event, session) {
+      sbUser = session ? session.user : null;
+      authUIUpdate();
+      if (sbUser) {
+        sbCargarFavs();
+        sbCargarCols();
+      } else {
+        sbFavs = {};
+        sbColsGuardadas = {};
+        actualizarBotonesFav();
+      }
+    });
+  } catch(e) { console.warn('Supabase init error', e); }
+}
+
+// ── AUTH UI ─────────────────────────────────────────────────────────────────
+var authMode = 'login'; // 'login' | 'register'
+
+function authUIUpdate() {
+  var btn = document.getElementById('auth-btn');
+  var btnMA = document.getElementById('btn-vista-miarchivo');
+  if (!btn) return;
+  if (sbUser) {
+    var shortEmail = sbUser.email.split('@')[0];
+    btn.textContent = '\u2713 ' + shortEmail;
+    btn.classList.add('logged');
+    if (btnMA) btnMA.style.display = '';
+  } else {
+    btn.textContent = 'Entrar';
+    btn.classList.remove('logged');
+    if (btnMA) btnMA.style.display = 'none';
+  }
+}
+
+function authBtnClick() {
+  if (sbUser) {
+    authMenuToggle();
+  } else {
+    authModalOpen();
+  }
+}
+
+function authModalOpen() {
+  document.getElementById('auth-modal').classList.add('open');
+  document.getElementById('auth-email').focus();
+}
+
+function authModalClose() {
+  document.getElementById('auth-modal').classList.remove('open');
+  document.getElementById('auth-msg').textContent = '';
+}
+
+function authMenuToggle() {
+  var menu = document.getElementById('auth-menu');
+  var btn = document.getElementById('auth-btn');
+  var rect = btn.getBoundingClientRect();
+  menu.style.top = (rect.bottom + 6) + 'px';
+  menu.style.right = (window.innerWidth - rect.right) + 'px';
+  document.getElementById('auth-menu-email').textContent = sbUser.email;
+  menu.classList.toggle('open');
+}
+
+function authMenuClose() {
+  document.getElementById('auth-menu').classList.remove('open');
+}
+
+function authToggleMode() {
+  authMode = authMode === 'login' ? 'register' : 'login';
+  document.getElementById('auth-title').textContent = authMode === 'login' ? 'Acceder' : 'Registrarse';
+  document.getElementById('auth-submit').textContent = authMode === 'login' ? 'Entrar' : 'Crear cuenta';
+  document.getElementById('auth-toggle').textContent = authMode === 'login' ? '\u00bfNo tienes cuenta? Reg\u00edstrate' : '\u00bfYa tienes cuenta? Entra';
+  document.getElementById('auth-msg').textContent = '';
+}
+
+async function authSubmit() {
+  var email = document.getElementById('auth-email').value.trim();
+  var pass  = document.getElementById('auth-pass').value;
+  var msg   = document.getElementById('auth-msg');
+  if (!email || !pass) { msg.textContent = 'Introduce email y contrase\u00f1a.'; return; }
+  msg.textContent = '...';
+  try {
+    var res;
+    if (authMode === 'login') {
+      res = await sb.auth.signInWithPassword({ email: email, password: pass });
+    } else {
+      res = await sb.auth.signUp({ email: email, password: pass });
+    }
+    if (res.error) {
+      msg.textContent = res.error.message;
+    } else {
+      if (authMode === 'register' && res.data && !res.data.session) {
+        msg.style.color = 'var(--naranja)';
+        msg.textContent = 'Revisa tu email para confirmar la cuenta.';
+      } else {
+        authModalClose();
+      }
+    }
+  } catch(e) { msg.textContent = 'Error de conexi\u00f3n.'; }
+}
+
+async function authLogout() {
+  authMenuClose();
+  await sb.auth.signOut();
+  if (vistaActual === 'miarchivo') toggleVista('latas');
+}
+
+document.addEventListener('click', function(e) {
+  var menu = document.getElementById('auth-menu');
+  if (menu && menu.classList.contains('open')) {
+    if (!menu.contains(e.target) && e.target.id !== 'auth-btn') {
+      authMenuClose();
+    }
+  }
+});
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && document.getElementById('auth-modal').classList.contains('open')) authSubmit();
+  if (e.key === 'Escape') { authModalClose(); authMenuClose(); listaModalClose(); }
+});
+
+// ── FAVORITOS ───────────────────────────────────────────────────────────────
+async function sbCargarFavs() {
+  if (!sb || !sbUser) return;
+  var res = await sb.from('favoritos').select('pieza_id').eq('user_id', sbUser.id);
+  sbFavs = {};
+  if (res.data) res.data.forEach(function(r) { sbFavs[r.pieza_id] = true; });
+  actualizarBotonesFav();
+}
+
+async function sbToggleFav(piezaId, e) {
+  e.stopPropagation();
+  if (!sbUser) { authModalOpen(); return; }
+  if (sbFavs[piezaId]) {
+    await sb.from('favoritos').delete().eq('user_id', sbUser.id).eq('pieza_id', piezaId);
+    delete sbFavs[piezaId];
+  } else {
+    await sb.from('favoritos').insert({ user_id: sbUser.id, pieza_id: piezaId });
+    sbFavs[piezaId] = true;
+  }
+  actualizarBotonesFav();
+}
+
+function actualizarBotonesFav() {
+  document.querySelectorAll('.fav-btn').forEach(function(btn) {
+    var pid = btn.dataset.id;
+    if (sbFavs[pid]) {
+      btn.classList.add('activo');
+      btn.title = 'Quitar de favoritos';
+    } else {
+      btn.classList.remove('activo');
+      btn.title = 'A\u00f1adir a favoritos';
+    }
+  });
+}
+
+// ── COLECCIONES GUARDADAS ───────────────────────────────────────────────────
+async function sbCargarCols() {
+  if (!sb || !sbUser) return;
+  var res = await sb.from('colecciones_guardadas').select('coleccion_id').eq('user_id', sbUser.id);
+  sbColsGuardadas = {};
+  if (res.data) res.data.forEach(function(r) { sbColsGuardadas[r.coleccion_id] = true; });
+}
+
+async function sbToggleCol(colId, e) {
+  e.stopPropagation();
+  if (!sbUser) { authModalOpen(); return; }
+  if (sbColsGuardadas[colId]) {
+    await sb.from('colecciones_guardadas').delete().eq('user_id', sbUser.id).eq('coleccion_id', colId);
+    delete sbColsGuardadas[colId];
+  } else {
+    await sb.from('colecciones_guardadas').insert({ user_id: sbUser.id, coleccion_id: colId });
+    sbColsGuardadas[colId] = true;
+  }
+}
+
+// ── LISTAS ───────────────────────────────────────────────────────────────────
+var sbListas = [];
+var listaPiezaPendiente = null; // pieza_id para añadir a lista recién abierta
+
+function listaModalOpen(piezaId) {
+  if (!sbUser) { authModalOpen(); return; }
+  listaPiezaPendiente = piezaId || null;
+  document.getElementById('lista-modal').classList.add('open');
+  document.getElementById('lista-nombre-input').value = '';
+  setTimeout(function(){ document.getElementById('lista-nombre-input').focus(); }, 50);
+}
+
+function listaModalClose() {
+  document.getElementById('lista-modal').classList.remove('open');
+  listaPiezaPendiente = null;
+}
+
+async function listaCrear() {
+  var nombre = document.getElementById('lista-nombre-input').value.trim();
+  if (!nombre || !sbUser) return;
+  var res = await sb.from('listas').insert({ user_id: sbUser.id, nombre: nombre }).select().single();
+  if (res.data && listaPiezaPendiente) {
+    await sb.from('lista_items').insert({ lista_id: res.data.id, pieza_id: listaPiezaPendiente, orden: 0 });
+  }
+  listaModalClose();
+  sbListas = [];
+}
+
+async function sbCargarListas() {
+  if (!sb || !sbUser) return [];
+  var res = await sb.from('listas').select('*, lista_items(count)').eq('user_id', sbUser.id).order('created_at', { ascending: false });
+  sbListas = res.data || [];
+  return sbListas;
+}
+
+async function sbAnadirALista(listaId, piezaId) {
+  await sb.from('lista_items').upsert({ lista_id: listaId, pieza_id: piezaId, orden: 0 });
+}
+
+async function sbEliminarLista(listaId) {
+  if (!confirm('\u00bfEliminar esta lista?')) return;
+  await sb.from('listas').delete().eq('id', listaId).eq('user_id', sbUser.id);
+  sbListas = sbListas.filter(function(l){ return l.id !== listaId; });
+  renderMiArchivo();
+}
+
+async function sbCompartirLista(lista) {
+  var url = window.location.origin + window.location.pathname + '?lista=' + lista.share_token;
+  try { await navigator.clipboard.writeText(url); alert('Enlace copiado: ' + url); }
+  catch(e) { prompt('Copia este enlace:', url); }
+}
+
+// ── MI ARCHIVO ───────────────────────────────────────────────────────────────
+async function renderMiArchivo() {
+  var wrap = document.getElementById('miarchivo-wrap');
+  if (!sbUser) { wrap.innerHTML = '<div class="ma-empty">Inicia sesi\u00f3n para ver tu archivo.</div>'; return; }
+  wrap.innerHTML = '<div class="ma-empty">Cargando...</div>';
+
+  await sbCargarFavs();
+  await sbCargarCols();
+  var listas = await sbCargarListas();
+
+  var html = '';
+
+  // Favoritos
+  html += '<div class="ma-section"><div class="ma-section-title">&#9733; Piezas favoritas</div>';
+  var favIds = Object.keys(sbFavs);
+  if (!favIds.length) {
+    html += '<div class="ma-empty">Ninguna pieza guardada a\u00fan. Haz clic en &#9733; sobre cualquier lata.</div>';
+  } else {
+    html += '<div class="ma-grid">';
+    favIds.forEach(function(pid) {
+      var p = DATOS.find(function(d){ return d.id == pid; });
+      var label = p ? (p.titulo || p.codigo || pid) : pid;
+      html += '<div class="ma-tag" onclick="verFicha('+JSON.stringify(pid)+')">'
+            + '<span>' + label.substring(0,40) + '</span>'
+            + '<span class="ma-tag-remove" onclick="event.stopPropagation();sbToggleFavDesde('+JSON.stringify(pid)+',this)">&#10005;</span>'
+            + '</div>';
+    });
+    html += '</div>';
+  }
+  html += '</div>';
+
+  // Colecciones
+  html += '<div class="ma-section"><div class="ma-section-title">&#9782; Colecciones guardadas</div>';
+  var colIds = Object.keys(sbColsGuardadas);
+  if (!colIds.length) {
+    html += '<div class="ma-empty">Ninguna colecci\u00f3n guardada a\u00fan.</div>';
+  } else {
+    html += '<div class="ma-grid">';
+    colIds.forEach(function(cid) {
+      html += '<div class="ma-tag">'
+            + '<span>' + cid.substring(0,40) + '</span>'
+            + '<span class="ma-tag-remove" onclick="event.stopPropagation();sbQuitarColDesde('+JSON.stringify(cid)+',this)">&#10005;</span>'
+            + '</div>';
+    });
+    html += '</div>';
+  }
+  html += '</div>';
+
+  // Listas
+  html += '<div class="ma-section"><div class="ma-section-title" style="display:flex;justify-content:space-between;align-items:center">&#9776; Mis listas <button class="ma-btn" onclick="listaModalOpen(null)">+ Nueva lista</button></div>';
+  if (!listas.length) {
+    html += '<div class="ma-empty">Ninguna lista creada a\u00fan.</div>';
+  } else {
+    listas.forEach(function(l) {
+      var count = (l.lista_items && l.lista_items[0]) ? l.lista_items[0].count : 0;
+      html += '<div class="ma-lista-item">'
+            + '<div><div class="ma-lista-nombre">' + l.nombre + '</div>'
+            + '<div class="ma-lista-meta">' + count + ' piezas &middot; ' + l.created_at.substring(0,10) + '</div></div>'
+            + '<div class="ma-lista-actions">'
+            + '<button class="ma-btn" onclick="sbCompartirLista('+JSON.stringify({id:l.id,share_token:l.share_token})+')" title="Copiar enlace compartible">&#128279;</button>'
+            + '<button class="ma-btn danger" onclick="sbEliminarLista('+JSON.stringify(l.id)+')" title="Eliminar lista">&#10005;</button>'
+            + '</div></div>';
+    });
+  }
+  html += '</div>';
+
+  wrap.innerHTML = html;
+}
+
+async function sbToggleFavDesde(pid, el) {
+  await sb.from('favoritos').delete().eq('user_id', sbUser.id).eq('pieza_id', pid);
+  delete sbFavs[pid];
+  actualizarBotonesFav();
+  el.closest('.ma-tag').remove();
+}
+
+async function sbQuitarColDesde(cid, el) {
+  await sb.from('colecciones_guardadas').delete().eq('user_id', sbUser.id).eq('coleccion_id', cid);
+  delete sbColsGuardadas[cid];
+  el.closest('.ma-tag').remove();
+}
+
+function verFicha(pid) {
+  var pieza = DATOS.find(function(d){ return d.id == pid; });
+  if (pieza) {
+    toggleVista('latas');
+    setTimeout(function(){ mostrarFicha(pieza); }, 100);
+  }
+}
+
 
 fetch('datos.json')
   .then(function(r){return r.json();})
