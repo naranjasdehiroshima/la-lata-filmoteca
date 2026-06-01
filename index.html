@@ -1167,33 +1167,82 @@ function fhGetArte(paso, maxCh) {
   var m = function(t){return '<span style="'+MID+'">'+t+'</span>';};
   var perf='█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░█░';
   var perf16='▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░▓░';
+  var NL = '\n';
+
+  function scrollStrip(str, cls) {
+    var s = (str+str).substring(0, maxCh);
+    return '<div style="overflow:hidden;width:'+maxCh+'ch"><div class="'+cls+'" style="'+DIM+'">'+s+'</div></div>';
+  }
+  function line(s) { return d(s.substring(0, maxCh)); }
 
   if(p.includes('diap')) {
-    var ojos=['( o   o )','( ·   · )','( -   - )','( O   O )','(>     <)','( @   @ )'];
-    var nari=['  \\\\  ▄  /','    ─▄─  ','   ( ▄ ) ','    \\\\▄/ '];
-    var boca=['  ─────  ','  ~~~~~  ','  =====  ','  ─ ─ ─  '];
+    var ojos=['( o   o )','( \xb7   \xb7 )','( -   - )','( O   O )','(>     <)','( @   @ )'];
+    var nari=['  \\\\  \u25c4  /','    \u2500\u25c4\u2500  ','   ( \u25c4 ) ','    \\\\\u25c4/ '];
+    var boca=['  \u2500\u2500\u2500\u2500\u2500  ','  ~~~~~  ','  =====  ','  \u2500 \u2500 \u2500  '];
     var cont=[['·─────·','/       \\\\'],['▓▓▓▓▓▓▓','▓       ▓'],['_______','(       )']];
     var oj=ojos[Math.floor(Math.random()*ojos.length)];
     var na=nari[Math.floor(Math.random()*nari.length)];
     var bo=boca[Math.floor(Math.random()*boca.length)];
     var co=cont[Math.floor(Math.random()*cont.length)];
-    return d('  ░░░░░ ┌─────────────────┐ ░░░░░')+'\n'+
-      d('  ░░░░░ │  ')+m(co[0])+d('  │ ░░░░░')+'\n'+
-      d('  ─────┤ │ ')+m(oj)+d(' │ ├─────')+'\n'+
-      d('  ░░░░░ │')+d(na)+d('│ ░░░░░')+'\n'+
-      d('  ─────┤ │')+m(bo)+d('│ ├─────')+'\n'+
-      d('  ░░░░░ │  ')+m(co[1])+d('  │ ░░░░░')+'\n'+
-      d('  ░░░░░ └─────────────────┘ ░░░░░')+'\n'+
-      d('  <span style="color:#005c17">35mm DIAPOSITIVA — KODACHROME</span>');
+    return d('  \u2591\u2591\u2591\u2591\u2591 \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510 \u2591\u2591\u2591\u2591\u2591')+NL+
+      d('  \u2591\u2591\u2591\u2591\u2591 \u2502  ')+m(co[0])+d('  \u2502 \u2591\u2591\u2591\u2591\u2591')+NL+
+      d('  \u2500\u2500\u2500\u2500\u2500\u2524 \u2502 ')+m(oj)+d(' \u2502 \u251c\u2500\u2500\u2500\u2500\u2500')+NL+
+      d('  \u2591\u2591\u2591\u2591\u2591 \u2502')+d(na)+d('\u2502 \u2591\u2591\u2591\u2591\u2591')+NL+
+      d('  \u2500\u2500\u2500\u2500\u2500\u2524 \u2502')+m(bo)+d('\u2502 \u251c\u2500\u2500\u2500\u2500\u2500')+NL+
+      d('  \u2591\u2591\u2591\u2591\u2591 \u2502  ')+m(co[1])+d('  \u2502 \u2591\u2591\u2591\u2591\u2591')+NL+
+      d('  \u2591\u2591\u2591\u2591\u2591 \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518 \u2591\u2591\u2591\u2591\u2591')+NL+
+      d('  <span style="color:#005c17">35mm DIAPOSITIVA \u2014 KODACHROME</span>');
   }
-  if(p.includes('35')) var pw=(perf+perf).substring(0,maxCh);return '<div style="overflow:hidden;width:'+maxCh+'ch"><div class="lab-scroll-l" style="'+DIM+'">'+pw+'</div></div>\n'+d(('  │  ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐  │').substring(0,maxCh))+'\n'+d(('  │  │  │ │  │ │  │ │  │ │  │ │  │  │').substring(0,maxCh))+'\n'+d(('  │  └──┘ └──┘ └──┘ └──┘ └──┘ └──┘  │').substring(0,maxCh))+'\n'+'<div style="overflow:hidden;width:'+maxCh+'ch"><div class="lab-scroll-r" style="'+DIM+'">'+pw+'</div></div>\n'+d(('  <span style="color:#005c17">        35mm — FORMATO TEATRAL</span>').substring(0,maxCh+42));
-  if(p.includes('16')) var pw16=(perf16+perf16).substring(0,maxCh);return '<div style="overflow:hidden;width:'+maxCh+'ch"><div class="lab-scroll-l" style="'+DIM+'">'+pw16+'</div></div>\n'+d(('  ░ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ░').substring(0,maxCh))+'\n'+d(('  ░ │ │ │ │ │ │ │ │ │ │ │ │ │ │ ░').substring(0,maxCh))+'\n'+d(('  ░ └─┘ └─┘ └─┘ └─┘ └─┘ └─┘ └─┘ ░').substring(0,maxCh))+'\n'+'<div style="overflow:hidden;width:'+maxCh+'ch"><div class="lab-scroll-r" style="'+DIM+'">'+pw16+'</div></div>\n'+d(('  <span style="color:#005c17">     16mm — DOCUMENTAL · TV · ARCHIVO</span>').substring(0,maxCh+42));
-  if(p.includes('super')) var ps8=(perf16+perf16).substring(0,maxCh);return '<div style="overflow:hidden;width:'+maxCh+'ch"><div class="lab-scroll-l" style="'+DIM+'">'+ps8+'</div></div>\n'+d(('  ░  · ┌─┐  · ┌─┐  · ┌─┐  · ┌─┐  · ░').substring(0,maxCh))+'\n'+d(('  ░    │ │    │ │    │ │    │ │      ░').substring(0,maxCh))+'\n'+d(('  ░  · └─┘  · └─┘  · └─┘  · └─┘  · ░').substring(0,maxCh))+'\n'+'<div style="overflow:hidden;width:'+maxCh+'ch"><div class="lab-scroll-r" style="'+DIM+'">'+ps8+'</div></div>\n'+d(('  <span style="color:#005c17">  Super8 — PERFORACIÓN REDUCIDA 1965</span>').substring(0,maxCh+42));
-  if(p.includes('9.5')||p.includes('path')) return d('  ──────────────────────────────────────')+'\n'+d('  │ · ┌──┐ · ┌──┐ · ┌──┐ · ┌──┐ · │')+'\n'+d('  │   │  │   │  │   │  │   │  │   │')+'\n'+d('  │ · └──┘ · └──┘ · └──┘ · └──┘ · │')+'\n'+d('  ──────────────────────────────────────')+'\n'+d('  ···· <span class="lab-blink">○</span> ·· <span class="lab-blink" style="animation-delay:0.3s">○</span> ·· <span class="lab-blink" style="animation-delay:0.6s">○</span> ····')+'\n'+d('  <span style="color:#005c17">9.5mm PATHÉ — PERFORACIÓN CENTRAL 1922</span>');
-  if(p.includes('vhs')||p.includes('video')||p.includes('magn')){var pos=Math.floor(Date.now()/200)%20;var bar='─'.repeat(pos)+'▶'+'─'.repeat(19-pos);return d('  ┌────────────────────────────────┐')+'\n'+d('  │  ▓▓▓▓ VIDEO HOME SYSTEM ▓▓▓▓  │')+'\n'+d('  │   <span style="'+MID+'">'+bar+'</span>    │')+'\n'+d('  │   <span class="lab-blink">◐</span>────────────────────<span class="lab-blink" style="animation-delay:0.4s">◑</span>   │')+'\n'+d('  └────────────────────────────────┘')+'\n'+d('  <span style="color:#005c17">     VHS — VÍDEO ANALÓGICO 1976→</span>');}
-  var p8=(perf+perf).substring(0,maxCh);return '<div style="overflow:hidden;width:'+maxCh+'ch"><div class="lab-scroll-l" style="'+DIM+'">'+p8+'</div></div>\n'+d(('  ░ ┌┐ ┌┐ ┌┐ ┌┐ ┌┐ ┌┐ ┌┐ ┌┐ ┌┐ ┌┐ ░').substring(0,maxCh))+'\n'+d(('  ░ ││ ││ ││ ││ ││ ││ ││ ││ ││ ││ ░').substring(0,maxCh))+'\n'+d(('  ░ └┘ └┘ └┘ └┘ └┘ └┘ └┘ └┘ └┘ └┘ ░').substring(0,maxCh))+'\n'+'<div style="overflow:hidden;width:'+maxCh+'ch"><div class="lab-scroll-r" style="'+DIM+'">'+p8+'</div></div>\n'+d(('  <span style="color:#005c17">    8mm — CINE DOMÉSTICO 1932→</span>').substring(0,maxCh+42));
+  if(p.includes('35')) {
+    return scrollStrip(perf,'lab-scroll-l')+NL+
+      line('  \u2502  \u250c\u2500\u2500\u2510 \u250c\u2500\u2500\u2510 \u250c\u2500\u2500\u2510 \u250c\u2500\u2500\u2510 \u250c\u2500\u2500\u2510 \u250c\u2500\u2500\u2510  \u2502')+NL+
+      line('  \u2502  \u2502  \u2502 \u2502  \u2502 \u2502  \u2502 \u2502  \u2502 \u2502  \u2502 \u2502  \u2502  \u2502')+NL+
+      line('  \u2502  \u2514\u2500\u2500\u2518 \u2514\u2500\u2500\u2518 \u2514\u2500\u2500\u2518 \u2514\u2500\u2500\u2518 \u2514\u2500\u2500\u2518 \u2514\u2500\u2500\u2518  \u2502')+NL+
+      scrollStrip(perf,'lab-scroll-r')+NL+
+      d('  <span style="color:#005c17">        35mm \u2014 FORMATO TEATRAL</span>');
+  }
+  if(p.includes('16')) {
+    return scrollStrip(perf16,'lab-scroll-l')+NL+
+      line('  \u2591 \u250c\u2500\u2510 \u250c\u2500\u2510 \u250c\u2500\u2510 \u250c\u2500\u2510 \u250c\u2500\u2510 \u250c\u2500\u2510 \u250c\u2500\u2510 \u2591')+NL+
+      line('  \u2591 \u2502 \u2502 \u2502 \u2502 \u2502 \u2502 \u2502 \u2502 \u2502 \u2502 \u2502 \u2502 \u2502 \u2502 \u2591')+NL+
+      line('  \u2591 \u2514\u2500\u2518 \u2514\u2500\u2518 \u2514\u2500\u2518 \u2514\u2500\u2518 \u2514\u2500\u2518 \u2514\u2500\u2518 \u2514\u2500\u2518 \u2591')+NL+
+      scrollStrip(perf16,'lab-scroll-r')+NL+
+      d('  <span style="color:#005c17">     16mm \u2014 DOCUMENTAL \xb7 TV \xb7 ARCHIVO</span>');
+  }
+  if(p.includes('super')) {
+    return scrollStrip(perf16,'lab-scroll-l')+NL+
+      line('  \u2591  \xb7 \u250c\u2500\u2510  \xb7 \u250c\u2500\u2510  \xb7 \u250c\u2500\u2510  \xb7 \u250c\u2500\u2510  \xb7 \u2591')+NL+
+      line('  \u2591    \u2502 \u2502    \u2502 \u2502    \u2502 \u2502    \u2502 \u2502      \u2591')+NL+
+      line('  \u2591  \xb7 \u2514\u2500\u2518  \xb7 \u2514\u2500\u2518  \xb7 \u2514\u2500\u2518  \xb7 \u2514\u2500\u2518  \xb7 \u2591')+NL+
+      scrollStrip(perf16,'lab-scroll-r')+NL+
+      d('  <span style="color:#005c17">  Super8 \u2014 PERFORACI\xd3N REDUCIDA 1965</span>');
+  }
+  if(p.includes('9.5')||p.includes('path')) {
+    return line('  \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500')+NL+
+      line('  \u2502 \xb7 \u250c\u2500\u2500\u2510 \xb7 \u250c\u2500\u2500\u2510 \xb7 \u250c\u2500\u2500\u2510 \xb7 \u250c\u2500\u2500\u2510 \xb7 \u2502')+NL+
+      line('  \u2502   \u2502  \u2502   \u2502  \u2502   \u2502  \u2502   \u2502  \u2502   \u2502')+NL+
+      line('  \u2502 \xb7 \u2514\u2500\u2500\u2518 \xb7 \u2514\u2500\u2500\u2518 \xb7 \u2514\u2500\u2500\u2518 \xb7 \u2514\u2500\u2500\u2518 \xb7 \u2502')+NL+
+      line('  \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500')+NL+
+      d('  \xb7\xb7\xb7\xb7 <span class="lab-blink">\u25cb</span> \xb7\xb7 <span class="lab-blink" style="animation-delay:0.3s">\u25cb</span> \xb7\xb7 <span class="lab-blink" style="animation-delay:0.6s">\u25cb</span> \xb7\xb7\xb7\xb7')+NL+
+      d('  <span style="color:#005c17">9.5mm PATH\xc9 \u2014 PERFORACI\xd3N CENTRAL 1922</span>');
+  }
+  if(p.includes('vhs')||p.includes('video')||p.includes('magn')) {
+    var pos=Math.floor(Date.now()/200)%20;
+    var bar='\u2500'.repeat(pos)+'\u25b6'+'\u2500'.repeat(19-pos);
+    return line('  \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510')+NL+
+      line('  \u2502  \u2593\u2593\u2593\u2593 VIDEO HOME SYSTEM \u2593\u2593\u2593\u2593  \u2502')+NL+
+      d('  \u2502   <span style="'+MID+'">'+bar+'</span>    \u2502')+NL+
+      d('  \u2502   <span class="lab-blink">\u25d0</span>\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500<span class="lab-blink" style="animation-delay:0.4s">\u25d1</span>   \u2502')+NL+
+      line('  \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518')+NL+
+      d('  <span style="color:#005c17">     VHS \u2014 V\xcdDEO ANAL\xd3GICO 1976\u2192</span>');
+  }
+  return scrollStrip(perf,'lab-scroll-l')+NL+
+    line('  \u2591 \u250c\u2510 \u250c\u2510 \u250c\u2510 \u250c\u2510 \u250c\u2510 \u250c\u2510 \u250c\u2510 \u250c\u2510 \u250c\u2510 \u250c\u2510 \u2591')+NL+
+    line('  \u2591 \u2502\u2502 \u2502\u2502 \u2502\u2502 \u2502\u2502 \u2502\u2502 \u2502\u2502 \u2502\u2502 \u2502\u2502 \u2502\u2502 \u2502\u2502 \u2591')+NL+
+    line('  \u2591 \u2514\u2518 \u2514\u2518 \u2514\u2518 \u2514\u2518 \u2514\u2518 \u2514\u2518 \u2514\u2518 \u2514\u2518 \u2514\u2518 \u2514\u2518 \u2591')+NL+
+    scrollStrip(perf,'lab-scroll-r')+NL+
+    d('  <span style="color:#005c17">    8mm \u2014 CINE DOM\xc9STICO 1932\u2192</span>');
 }
-
 function fhUpdateArte() {
   var el = document.getElementById('fh-arte');
   if(!el || !fhPieza) return;
@@ -1423,6 +1472,8 @@ function toggleVista(vista) {
     btnLatas.classList.add('activo');
     wrapLatas.style.display = 'flex';
     leyenda.style.display = '';
+    render();
+    actualizarBotonesFav();
   } else {
   }
 }
