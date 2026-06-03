@@ -187,8 +187,6 @@ input[type=text]::placeholder{color:var(--gris-medio)}
 #about-screen .about-link-row a{font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--negro);text-decoration:none;border-bottom:1px solid var(--gris-claro);transition:border-color 0.15s}
 #about-screen .about-link-row a:hover{border-bottom-color:var(--naranja);color:var(--naranja)}
 #about-screen .about-creditos{font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--gris-medio);line-height:1.8}
-#edgecodes-wrap{display:none;padding:2rem 3rem;min-height:500px;}
-#edgecodes-wrap h2.ec-title{font-family:'DM Mono',monospace;font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gris-medio);margin:0 0 1.5rem 0;border-bottom:1px solid var(--gris-claro);padding-bottom:0.75rem;}
 #filmohack-wrap{display:none;background:#000;height:calc(100vh - 140px);min-height:500px;padding:1.5rem;position:relative;overflow:hidden;font-family:'DM Mono',monospace;font-size:clamp(8px,1.8vw,12px);line-height:1.5;color:#00ff41}
 #filmohack-wrap::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(0,255,65,0.025) 0px,rgba(0,255,65,0.025) 1px,transparent 1px,transparent 4px);pointer-events:none;z-index:1}
 #fh-screen{position:relative;z-index:2;height:100%;overflow:hidden;max-width:100%}
@@ -447,6 +445,44 @@ header > *{position:relative;z-index:1;}
   transition:border-color 0.2s;
 }
 .banner-link:hover{border-bottom-color:var(--naranja);}
+/* ── VIDEOTECA ─────────────────────────────────────────────────────────── */
+#videoteca-wrap{display:none;background:var(--crema-oscura);min-height:calc(100vh - 140px)}
+.vt-filtros{background:var(--blanco);border-bottom:1px solid var(--gris-claro);padding:1rem 1.5rem;position:sticky;top:0;z-index:10}
+.vt-filtros-inner{max-width:1400px;margin:0 auto}
+.vt-filtro-grupo{margin-bottom:0.6rem;display:flex;flex-wrap:wrap;align-items:center;gap:0.4rem}
+.vt-filtro-label{font-family:'DM Mono',monospace;font-size:0.55rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gris-medio);min-width:60px;flex-shrink:0}
+.vt-tag{font-family:'DM Mono',monospace;font-size:0.6rem;padding:0.2rem 0.55rem;border:1px solid var(--gris-claro);background:transparent;cursor:pointer;border-radius:2px;letter-spacing:0.05em;color:var(--gris-medio);transition:all 0.12s;white-space:nowrap}
+.vt-tag:hover{border-color:var(--naranja);color:var(--naranja)}
+.vt-tag.activo{background:var(--naranja);color:var(--blanco);border-color:var(--naranja)}
+.vt-tag.activo:hover{background:#c04800}
+.vt-reset{font-family:'DM Mono',monospace;font-size:0.58rem;padding:0.2rem 0.6rem;border:1px solid var(--gris-claro);background:transparent;cursor:pointer;border-radius:2px;color:var(--gris-medio);letter-spacing:0.05em}
+.vt-reset:hover{color:var(--rojo,#c00);border-color:var(--rojo,#c00)}
+.vt-contador{font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--gris-medio);margin-left:auto;align-self:center}
+.vt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;padding:1.5rem;max-width:1400px;margin:0 auto}
+.vt-card{background:var(--blanco);border:1px solid var(--gris-claro);border-radius:3px;overflow:hidden;cursor:pointer;transition:box-shadow 0.15s,transform 0.15s}
+.vt-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.12);transform:translateY(-2px)}
+.vt-thumb{position:relative;padding-top:56.25%;background:var(--negro);overflow:hidden}
+.vt-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.9;transition:opacity 0.2s}
+.vt-card:hover .vt-thumb img{opacity:1}
+.vt-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.3);opacity:0;transition:opacity 0.2s}
+.vt-card:hover .vt-play{opacity:1}
+.vt-play-btn{width:40px;height:40px;background:var(--naranja);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:1rem}
+.vt-info{padding:0.6rem 0.8rem}
+.vt-codigo{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.1em;color:var(--naranja);text-transform:uppercase;margin-bottom:0.2rem}
+.vt-titulo{font-size:0.78rem;color:var(--negro);line-height:1.3;margin-bottom:0.4rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.vt-meta{font-family:'DM Mono',monospace;font-size:0.55rem;color:var(--gris-medio);display:flex;gap:0.5rem;flex-wrap:wrap}
+.vt-empty{padding:4rem 2rem;text-align:center;font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--gris-medio);letter-spacing:0.1em;grid-column:1/-1}
+/* Modal video */
+#vt-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:500;align-items:center;justify-content:center;flex-direction:column;gap:0.8rem}
+#vt-modal.open{display:flex}
+#vt-modal-box{width:min(800px,94vw)}
+#vt-modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem}
+#vt-modal-titulo{font-family:'Georgia',serif;font-size:1rem;color:white;line-height:1.3}
+#vt-modal-close{background:none;border:none;color:#888;cursor:pointer;font-size:1.3rem;line-height:1;padding:0}
+#vt-modal-close:hover{color:white}
+#vt-modal-iframe{width:100%;aspect-ratio:16/9;border:none;display:block}
+#vt-modal-meta{font-family:'DM Mono',monospace;font-size:0.62rem;color:#888;display:flex;gap:1rem;flex-wrap:wrap}
+
 /* ── AUTH ──────────────────────────────────────────────────────────── */
 #auth-btn{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.4rem 0.9rem;border:1px solid var(--naranja);background:transparent;color:var(--naranja);cursor:pointer;border-radius:2px;transition:all 0.15s;white-space:nowrap}
 #auth-btn:hover{background:var(--naranja);color:var(--blanco)}
@@ -538,6 +574,9 @@ header > *{position:relative;z-index:1;}
 
 <!-- Vista Mi Archivo -->
 <div id="miarchivo-wrap"></div>
+<div id="videoteca-wrap"></div>
+<!-- Modal videoteca -->
+<div id="vt-modal"><div id="vt-modal-box"><div id="vt-modal-header"><div id="vt-modal-titulo"></div><button id="vt-modal-close" onclick="vtCerrar()">&#10005;</button></div><iframe id="vt-modal-iframe" src="" allowfullscreen></iframe><div id="vt-modal-meta"></div></div></div>
 
 <header>
   <div>
@@ -580,7 +619,7 @@ header > *{position:relative;z-index:1;}
   </select>
   <div class="ctrl-sep"></div>
   <input type="text" id="busqueda" placeholder="Buscar t&#237;tulo, c&#243;digo...">
-  <div class="vista-btns"><button id="btn-vista-latas" class="btn-vista activo" onclick="toggleVista('latas')">&#9632; Latas</button><button id="btn-vista-colecciones" class="btn-vista" onclick="toggleVista('colecciones')">&#9782; Colecciones</button><button id="btn-vista-about" class="btn-vista" onclick="toggleVista('about')">&#9432; Proyecto</button><button id="btn-vista-tv" class="btn-vista" onclick="toggleVista('tv')">&#128250; TV</button><button id="btn-vista-mapa" class="btn-vista" onclick="toggleVista('mapa')">&#127760; Mapa</button><button id="btn-vista-edgecodes" class="btn-vista" onclick="toggleVista('edgecodes')">&#9688; EdgeCodes</button><button id="btn-vista-fh" class="btn-vista" onclick="toggleVista('fh')">&#9641; FilmoHack</button><a href="https://naranjasdehiroshima.github.io/retroboy/" target="_blank" class="btn-vista" style="text-decoration:none">&#127918; RetroBoy</a><button id="btn-vista-miarchivo" class="btn-vista" onclick="toggleVista('miarchivo')" style="display:none">&#9733; Mi Archivo</button></div><span id="contador"></span><button id="auth-btn" onclick="authBtnClick()">Entrar</button>
+  <div class="vista-btns"><button id="btn-vista-latas" class="btn-vista activo" onclick="toggleVista('latas')">&#9632; Latas</button><button id="btn-vista-colecciones" class="btn-vista" onclick="toggleVista('colecciones')">&#9782; Colecciones</button><button id="btn-vista-about" class="btn-vista" onclick="toggleVista('about')">&#9432; Proyecto</button><button id="btn-vista-tv" class="btn-vista" onclick="toggleVista('tv')">&#128250; TV</button><button id="btn-vista-mapa" class="btn-vista" onclick="toggleVista('mapa')">&#127760; Mapa</button><button id="btn-vista-fh" class="btn-vista" onclick="toggleVista('fh')">&#9641; FilmoHack</button><a href="https://naranjasdehiroshima.github.io/retroboy/" target="_blank" class="btn-vista" style="text-decoration:none">&#127918; RetroBoy</a><button id="btn-vista-vt" class="btn-vista" onclick="toggleVista('vt')">&#9654; Videoteca</button><button id="btn-vista-miarchivo" class="btn-vista" onclick="toggleVista('miarchivo')" style="display:none">&#9733; Mi Archivo</button></div><span id="contador"></span><button id="auth-btn" onclick="authBtnClick()">Entrar</button>
 </div>
 
 <div id="banner-formato"></div>
@@ -1157,7 +1196,6 @@ function seleccionarVideo(btn){
 // ─── FILMOHACK ───────────────────────────────────────────────────────────────
 
 var fhIniciado = false;
-var ecIniciado = false;
 var fhTimer = null;
 var fhArteTimer = null;
 var fhPieza = null;
@@ -1430,14 +1468,14 @@ function toggleVista(vista) {
   wrapTV.style.display    = 'none';
   var wrapFH = document.getElementById('filmohack-wrap');
   if(wrapFH) wrapFH.style.display = 'none';
-  var wrapEC = document.getElementById('edgecodes-wrap');
-  if(wrapEC) wrapEC.style.display = 'none';
-  var btnEC = document.getElementById('btn-vista-edgecodes');
-  if(btnEC) btnEC.classList.remove('activo');
   var wrapAbout = document.getElementById('about-wrap');
   if(wrapAbout) wrapAbout.style.display = 'none';
   var wrapMiArchivo = document.getElementById('miarchivo-wrap');
   if(wrapMiArchivo) wrapMiArchivo.style.display = 'none';
+  var wrapVT = document.getElementById('videoteca-wrap');
+  if(wrapVT) wrapVT.style.display = 'none';
+  var btnVT = document.getElementById('btn-vista-vt');
+  if(btnVT) btnVT.classList.remove('activo');
   var btnAbout = document.getElementById('btn-vista-about');
   var btnMiArchivo = document.getElementById('btn-vista-miarchivo');
   if(btnMiArchivo) btnMiArchivo.classList.remove('activo');
@@ -1463,10 +1501,6 @@ function toggleVista(vista) {
       tvIndice = 0;
     }
     tvCargar(0);
-  } else if (vista === 'edgecodes') {
-    document.getElementById('btn-vista-edgecodes').classList.add('activo');
-    document.getElementById('edgecodes-wrap').style.display = 'block';
-    if (!ecIniciado) ecIniciar();
   } else if (vista === 'fh') {
     document.getElementById('btn-vista-fh').classList.add('activo');
     document.getElementById('filmohack-wrap').style.display = 'block';
@@ -1485,6 +1519,9 @@ function toggleVista(vista) {
     leyenda.style.display = '';
     render();
     actualizarBotonesFav();
+  } else if (vista === 'vt') {
+    if(btnVT) btnVT.classList.add('activo');
+    if(wrapVT) { wrapVT.style.display = 'block'; renderVideoteca(); }
   } else {
   }
 }
@@ -1837,6 +1874,201 @@ function mostrarBannerFormato(fmt){
 }
 
 
+
+// ── VIDEOTECA ────────────────────────────────────────────────────────────────
+var vtFiltros = {}; // { grupo: Set de valores activos }
+var vtIniciada = false;
+
+function vtExtraerTags(d) {
+  var tags = [];
+  // tags_yt
+  var ty = d.tags_yt || [];
+  ty.forEach(function(t){ if(t) tags.push(t.toLowerCase().trim()); });
+  // temas_lista
+  var tl = d.temas_lista || d.temas || '';
+  if (Array.isArray(tl)) tl.forEach(function(t){ if(t) tags.push(t.toLowerCase().trim()); });
+  else if (typeof tl === 'string') tl.split(',').forEach(function(t){ t=t.trim(); if(t) tags.push(t.toLowerCase()); });
+  return [...new Set(tags)].filter(function(t){ return t.length > 1; });
+}
+
+function vtExtraerId(url) {
+  if (!url) return '';
+  var m = url.match(/(?:v=|youtu\.be\/|embed\/)([a-zA-Z0-9_-]{11})/);
+  return m ? m[1] : '';
+}
+
+function vtDecada(fecha) {
+  var y = parseInt(fecha);
+  if (!y || isNaN(y)) return null;
+  return Math.floor(y/10)*10 + 's';
+}
+
+function renderVideoteca() {
+  var wrap = document.getElementById('videoteca-wrap');
+  if (!wrap) return;
+
+  var conYt = DATOS.filter(function(d){ return d.youtube; });
+
+  // Construir grupos de filtros
+  var grupos = {
+    'Paso': {},
+    'Color': {},
+    'Género': {},
+    'País': {},
+    'Década': {},
+    'Etiquetas': {}
+  };
+
+  conYt.forEach(function(d) {
+    if (d.paso) grupos['Paso'][d.paso] = (grupos['Paso'][d.paso]||0)+1;
+    if (d.color) grupos['Color'][d.color] = (grupos['Color'][d.color]||0)+1;
+    if (d.genero) grupos['Género'][d.genero] = (grupos['Género'][d.genero]||0)+1;
+    if (d.pais) grupos['País'][d.pais.trim()] = (grupos['País'][d.pais.trim()]||0)+1;
+    var dec = vtDecada(d.fecha);
+    if (dec) grupos['Década'][dec] = (grupos['Década'][dec]||0)+1;
+    vtExtraerTags(d).forEach(function(t) {
+      grupos['Etiquetas'][t] = (grupos['Etiquetas'][t]||0)+1;
+    });
+  });
+
+  // Tags mínimo 2 ocurrencias, máximo 60, ordenados por frecuencia
+  var tagsOrdenados = Object.entries(grupos['Etiquetas'])
+    .filter(function(e){ return e[1] >= 2; })
+    .sort(function(a,b){ return b[1]-a[1]; })
+    .slice(0,60)
+    .map(function(e){ return e[0]; });
+
+  // Inicializar filtros vacíos
+  if (!vtIniciada) {
+    Object.keys(grupos).forEach(function(g){ vtFiltros[g] = new Set(); });
+    vtIniciada = true;
+  }
+
+  // Construir HTML de filtros
+  var filtrosHtml = '<div class="vt-filtros"><div class="vt-filtros-inner">';
+
+  ['Paso','Color','Género','País','Década'].forEach(function(g) {
+    var vals = Object.entries(grupos[g]).sort(function(a,b){ return b[1]-a[1]; });
+    if (!vals.length) return;
+    filtrosHtml += '<div class="vt-filtro-grupo"><span class="vt-filtro-label">'+g+'</span>';
+    vals.forEach(function(e) {
+      var v = e[0], n = e[1];
+      var activo = vtFiltros[g] && vtFiltros[g].has(v) ? ' activo' : '';
+      filtrosHtml += '<button class="vt-tag'+activo+'" data-g="'+encodeURIComponent(g)+'" data-v="'+encodeURIComponent(v)+'" title="'+n+' videos">'+v+'</button>';
+    });
+    filtrosHtml += '</div>';
+  });
+
+  // Etiquetas
+  filtrosHtml += '<div class="vt-filtro-grupo"><span class="vt-filtro-label">Etiquetas</span>';
+  tagsOrdenados.forEach(function(t) {
+    var activo = vtFiltros['Etiquetas'] && vtFiltros['Etiquetas'].has(t) ? ' activo' : '';
+    filtrosHtml += '<button class="vt-tag'+activo+'" data-g="Etiquetas" data-v="'+encodeURIComponent(t)+'">'+t+'</button>';
+  });
+  filtrosHtml += '</div>';
+
+  filtrosHtml += '<div class="vt-filtro-grupo" style="margin-bottom:0">';
+  filtrosHtml += '<button class="vt-reset">&#10005; Limpiar filtros</button>';
+  filtrosHtml += '<span class="vt-contador" id="vt-contador"></span>';
+  filtrosHtml += '</div>';
+  filtrosHtml += '</div></div>';
+
+  // Filtrar piezas
+  var filtradas = conYt.filter(function(d) {
+    var ok = true;
+    Object.keys(vtFiltros).forEach(function(g) {
+      if (!vtFiltros[g].size) return;
+      var match = false;
+      if (g === 'Paso') match = vtFiltros[g].has(d.paso);
+      else if (g === 'Color') match = vtFiltros[g].has(d.color);
+      else if (g === 'Género') match = vtFiltros[g].has(d.genero);
+      else if (g === 'País') match = vtFiltros[g].has((d.pais||'').trim());
+      else if (g === 'Década') match = vtFiltros[g].has(vtDecada(d.fecha));
+      else if (g === 'Etiquetas') {
+        var tags = vtExtraerTags(d);
+        vtFiltros[g].forEach(function(t){ if(tags.includes(t)) match = true; });
+      }
+      if (!match) ok = false;
+    });
+    return ok;
+  });
+
+  // Grid de cards
+  var gridHtml = '<div class="vt-grid">';
+  if (!filtradas.length) {
+    gridHtml += '<div class="vt-empty">Sin resultados para esta combinación de filtros</div>';
+  } else {
+    filtradas.forEach(function(d) {
+      var ytid = vtExtraerId(d.youtube);
+      var thumb = d.yt_thumb || (ytid ? 'https://img.youtube.com/vi/'+ytid+'/mqdefault.jpg' : '');
+      var meta = [d.paso, d.fecha, d.pais].filter(Boolean).join(' · ');
+      gridHtml += '<div class="vt-card" data-id="'+d.id+'">'
+        + '<div class="vt-thumb">'
+        + (thumb ? '<img src="'+thumb+'" loading="lazy" alt="">' : '')
+        + '<div class="vt-play"><div class="vt-play-btn">&#9654;</div></div>'
+        + '</div>'
+        + '<div class="vt-info">'
+        + '<div class="vt-codigo">'+esc(d.codigo)+'</div>'
+        + '<div class="vt-titulo">'+esc(d.titulo||d.codigo)+'</div>'
+        + '<div class="vt-meta">'+esc(meta)+'</div>'
+        + '</div></div>';
+    });
+  }
+  gridHtml += '</div>';
+
+  wrap.innerHTML = filtrosHtml + gridHtml;
+  var contEl = document.getElementById('vt-contador');
+  if (contEl) contEl.textContent = filtradas.length + ' videos';
+}
+
+function vtToggleFiltro(grupo, valor) {
+  if (!vtFiltros[grupo]) vtFiltros[grupo] = new Set();
+  if (vtFiltros[grupo].has(valor)) vtFiltros[grupo].delete(valor);
+  else vtFiltros[grupo].add(valor);
+  renderVideoteca();
+  // Scroll al grid
+  var grid = document.querySelector('.vt-grid');
+  if (grid) grid.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function vtResetFiltros() {
+  Object.keys(vtFiltros).forEach(function(g){ vtFiltros[g] = new Set(); });
+  renderVideoteca();
+}
+
+function vtVerVideo(piezaId) {
+  var d = DATOS.find(function(x){ return x.id === piezaId; });
+  if (!d) return;
+  var ytid = vtExtraerId(d.youtube);
+  if (!ytid) return;
+  document.getElementById('vt-modal-titulo').textContent = d.titulo || d.codigo;
+  document.getElementById('vt-modal-iframe').src = 'https://www.youtube.com/embed/'+ytid+'?autoplay=1';
+  var meta = [d.codigo, d.paso, d.fecha, d.pais].filter(Boolean).join(' · ');
+  document.getElementById('vt-modal-meta').textContent = meta;
+  document.getElementById('vt-modal').classList.add('open');
+}
+
+function vtCerrar() {
+  document.getElementById('vt-modal').classList.remove('open');
+  document.getElementById('vt-modal-iframe').src = '';
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') vtCerrar();
+});
+document.addEventListener('click', function(e) {
+  if (e.target.id === 'vt-modal') vtCerrar();
+  // Delegación de filtros videoteca
+  if (e.target.classList.contains('vt-tag') && e.target.dataset.g) {
+    vtToggleFiltro(decodeURIComponent(e.target.dataset.g), decodeURIComponent(e.target.dataset.v));
+  }
+  if (e.target.classList.contains('vt-reset')) vtResetFiltros();
+  if (e.target.classList.contains('vt-card') || e.target.closest('.vt-card')) {
+    var card = e.target.classList.contains('vt-card') ? e.target : e.target.closest('.vt-card');
+    if (card && card.dataset.id) vtVerVideo(card.dataset.id);
+  }
+});
+
 // ── SUPABASE ────────────────────────────────────────────────────────────────
 var SUPA_URL = 'https://wpidhgovpsvyxbvqasmf.supabase.co';
 var SUPA_KEY = 'sb_publishable_HqaPm4P-jPJK8Ry6IivDWQ_QJrRRDLJ';
@@ -2171,121 +2403,5 @@ fetch('datos.json')
   .then(function(d){DATOS=d;init();})
   .catch(function(e){console.error('Error:',e);});
 </script>
-
-<!-- ═══════════════════════════════════════ EDGECODES ══ -->
-<div id="edgecodes-wrap">
-  <h2 class="ec-title">Edge Codes · Datación de película fotoquímica</h2>
-  <div id="ec-ui"></div>
-</div>
-
-<script>
-function ecIniciar() {
-  ecIniciado = true;
-  var root = document.getElementById('ec-ui');
-
-  var KODAK = [
-    {years:[1922,1942,1962],code:'●■'},{years:[1923,1943,1963],code:'●▲'},
-    {years:[1924,1944,1964],code:'▲■'},{years:[1925,1945,1965],code:'■●'},
-    {years:[1926,1946,1966],code:'▲●'},{years:[1927,1947,1967],code:'■▲'},
-    {years:[1928,1948,1968],code:'●●● / ++'},{years:[1929,1949,1969],code:'+'},
-    {years:[1930,1950,1970],code:'▲+'},{years:[1931,1951,1971],code:'●▲'},
-    {years:[1932,1952,1972],code:'■+'},{years:[1933,1953,1973],code:'+▲'},
-    {years:[1934,1954,1974],code:'+●'},{years:[1935,1955,1975],code:'+■'},
-    {years:[1936,1956,1976],code:'●'},{years:[1937,1957,1977],code:'■'},
-    {years:[1938,1958,1978],code:'▲'},{years:[1939,1959,1979],code:'●●'},
-    {years:[1940,1960,1980],code:'■■'},{years:[1941,1961,1981],code:'▲▲'},
-    {years:[1982],code:'●■x'},{years:[1983],code:'x▲x'},
-    {years:[1984],code:'▲■▲'},{years:[1985],code:'■●▲'},
-    {years:[1986],code:'▲●▲'},{years:[1987],code:'■▲▲'},
-    {years:[1988],code:'++▲'},{years:[1989],code:'x+▲'},
-    {years:[1990],code:'▲+▲'},{years:[1991],code:'x+x'},
-    {years:[1992],code:'■+▲'},{years:[1993],code:'+▲▲'},
-    {years:[1994],code:'+●▲'},{years:[1995],code:'+■▲'},
-    {years:[1996],code:'x●▲'},{years:[1997],code:'x■▲'},
-    {years:[1998],code:'x▲▲'},{years:[1999],code:'●x▲'},
-    {years:[2000],code:'■■▲'},{years:[2001],code:'▲▲●'}
-  ];
-
-  var DUPONT = [
-    {years:[1956],code:'KL'},{years:[1957],code:'KN'},
-    {years:[1958],code:'KS'},{years:[1959],code:'LN'},
-    {years:[1960],code:'LS'},{years:[1961],code:'NS'},
-    {years:[1962],code:'K'},{years:[1963],code:'L'},
-    {years:[1964],code:'N'},{years:[1965],code:'S'},
-    {years:[1966],code:'KLT'},{years:[1967],code:'KNT'},
-    {years:[1968],code:'KST'},{years:[1969],code:'LNT'},
-    {years:[1970],code:'NST'},{years:[1972],code:'KT'},
-    {years:[1973],code:'LT'},{years:[1974],code:'NT'}
-  ];
-
-  var currentTab = 'kodak';
-
-  root.innerHTML =
-    '<div class="ec-controls">' +
-      '<input type="text" id="ec-search" placeholder="Buscar por año o símbolo..." oninput="ecRender()" />' +
-      '<div class="ec-tabs">' +
-        '<button class="ec-tab ec-tab-activo" id="ec-tab-kodak" onclick="ecSetTab(\'kodak\')">Eastman Kodak</button>' +
-        '<button class="ec-tab" id="ec-tab-dupont" onclick="ecSetTab(\'dupont\')">DuPont</button>' +
-      '</div>' +
-    '</div>' +
-    '<div id="ec-grid" class="ec-grid"></div>';
-
-  var style = document.createElement('style');
-  style.textContent =
-    '.ec-controls{display:flex;gap:1rem;margin-bottom:1.5rem;align-items:center;flex-wrap:wrap;}' +
-    '.ec-controls input{font-family:"DM Mono",monospace;font-size:0.72rem;letter-spacing:0.05em;padding:0.4rem 0.8rem;border:1px solid var(--gris-claro);background:var(--blanco);color:var(--negro);border-radius:2px;flex:1;min-width:180px;}' +
-    '.ec-controls input:focus{outline:none;border-color:var(--naranja);}' +
-    '.ec-tabs{display:flex;gap:0;border:1px solid var(--gris-claro);border-radius:2px;overflow:hidden;}' +
-    '.ec-tab{font-family:"DM Mono",monospace;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.4rem 0.9rem;border:none;background:var(--blanco);color:var(--gris-medio);cursor:pointer;}' +
-    '.ec-tab:hover{background:var(--crema-oscura);color:var(--negro);}' +
-    '.ec-tab.ec-tab-activo{background:var(--naranja);color:var(--blanco);}' +
-    '.ec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:6px;}' +
-    '.ec-card{display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0.9rem;border:1px solid var(--gris-claro);background:var(--blanco);gap:1rem;}' +
-    '.ec-card.ec-hl{border-color:var(--naranja);background:var(--crema);}' +
-    '.ec-years{font-family:"DM Mono",monospace;font-size:0.7rem;color:var(--gris-medio);line-height:1.6;}' +
-    '.ec-years span{display:block;}' +
-    '.ec-code{font-family:"DM Mono",monospace;font-size:1rem;color:var(--negro);white-space:nowrap;letter-spacing:2px;}' +
-    '.ec-empty{font-family:"DM Mono",monospace;font-size:0.72rem;color:var(--gris-medio);padding:2rem 0;}';
-  document.head.appendChild(style);
-
-  window.ecData = {kodak: KODAK, dupont: DUPONT};
-  window.ecCurrentTab = currentTab;
-
-  window.ecSetTab = function(tab) {
-    window.ecCurrentTab = tab;
-    document.getElementById('ec-tab-kodak').classList.toggle('ec-tab-activo', tab === 'kodak');
-    document.getElementById('ec-tab-dupont').classList.toggle('ec-tab-activo', tab === 'dupont');
-    ecRender();
-  };
-
-  window.ecRender = function() {
-    var q = (document.getElementById('ec-search').value || '').trim().toLowerCase();
-    var data = window.ecData[window.ecCurrentTab];
-    var grid = document.getElementById('ec-grid');
-    var filtered = data.filter(function(e) {
-      if (!q) return true;
-      return e.years.some(function(y){ return String(y).indexOf(q) !== -1; }) ||
-             e.code.toLowerCase().indexOf(q) !== -1;
-    });
-    if (!filtered.length) {
-      grid.innerHTML = '<p class="ec-empty">Sin resultados.</p>';
-      return;
-    }
-    grid.innerHTML = filtered.map(function(e) {
-      var exact = q && (e.years.some(function(y){ return String(y) === q; }) ||
-                        e.code.toLowerCase() === q);
-      return '<div class="ec-card' + (exact ? ' ec-hl' : '') + '">' +
-        '<div class="ec-years">' +
-          e.years.map(function(y){ return '<span>' + y + '</span>'; }).join('') +
-        '</div>' +
-        '<div class="ec-code">' + e.code + '</div>' +
-        '</div>';
-    }).join('');
-  };
-
-  ecRender();
-}
-</script>
 </body>
-
 </html>
