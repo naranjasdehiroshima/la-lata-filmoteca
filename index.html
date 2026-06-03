@@ -619,7 +619,7 @@ header > *{position:relative;z-index:1;}
   </select>
   <div class="ctrl-sep"></div>
   <input type="text" id="busqueda" placeholder="Buscar t&#237;tulo, c&#243;digo...">
-  <div class="vista-btns"><button id="btn-vista-latas" class="btn-vista activo" onclick="toggleVista('latas')">&#9632; Latas</button><button id="btn-vista-colecciones" class="btn-vista" onclick="toggleVista('colecciones')">&#9782; Colecciones</button><button id="btn-vista-about" class="btn-vista" onclick="toggleVista('about')">&#9432; Proyecto</button><button id="btn-vista-tv" class="btn-vista" onclick="toggleVista('tv')">&#128250; TV</button><button id="btn-vista-mapa" class="btn-vista" onclick="toggleVista('mapa')">&#127760; Mapa</button><button id="btn-vista-fh" class="btn-vista" onclick="toggleVista('fh')">&#9641; FilmoHack</button><a href="https://naranjasdehiroshima.github.io/retroboy/" target="_blank" class="btn-vista" style="text-decoration:none">&#127918; RetroBoy</a><button id="btn-vista-vt" class="btn-vista" onclick="toggleVista('vt')">&#9654; Videoteca</button><button id="btn-vista-miarchivo" class="btn-vista" onclick="toggleVista('miarchivo')" style="display:none">&#9733; Mi Archivo</button></div><span id="contador"></span><button id="auth-btn" onclick="authBtnClick()">Entrar</button>
+  <div class="vista-btns"><button id="btn-vista-latas" class="btn-vista activo" onclick="toggleVista('latas')">&#9632; Latas</button><button id="btn-vista-colecciones" class="btn-vista" onclick="toggleVista('colecciones')">&#9782; Colecciones</button><button id="btn-vista-about" class="btn-vista" onclick="toggleVista('about')">&#9432; Proyecto</button><button id="btn-vista-vt" class="btn-vista" onclick="toggleVista('vt')">&#9654; Retrovisor</button><button id="btn-vista-tv" class="btn-vista" onclick="toggleVista('tv')">&#128250; TV</button><button id="btn-vista-mapa" class="btn-vista" onclick="toggleVista('mapa')">&#127760; Mapa</button><button id="btn-vista-fh" class="btn-vista" onclick="toggleVista('fh')">&#9641; FilmoHack</button><a href="https://naranjasdehiroshima.github.io/retroboy/" target="_blank" class="btn-vista" style="text-decoration:none">&#127918; RetroBoy</a><button id="btn-vista-miarchivo" class="btn-vista" onclick="toggleVista('miarchivo')" style="display:none">&#9733; Mi Archivo</button></div><span id="contador"></span><button id="auth-btn" onclick="authBtnClick()">Entrar</button>
 </div>
 
 <div id="banner-formato"></div>
@@ -1971,7 +1971,7 @@ function renderVideoteca() {
   filtrosHtml += '<button class="vt-reset">&#10005; Limpiar filtros</button>';
   filtrosHtml += '<span class="vt-contador" id="vt-contador"></span>';
   filtrosHtml += '</div>';
-  filtrosHtml += '</div></div>';
+  filtrosHtml += '<div style="display:flex;justify-content:flex-end;padding:0.4rem 0 0"><button onclick="toggleVista(\'latas\')" style="font-family:\'DM Mono\',monospace;font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.3rem 0.9rem;border:1px solid var(--gris-claro);background:none;color:var(--gris-medio);cursor:pointer;border-radius:2px" title="Cerrar Retrovisor">&#10005; cerrar</button></div></div></div>';
 
   // Filtrar piezas
   var filtradas = conYt.filter(function(d) {
@@ -2011,7 +2011,9 @@ function renderVideoteca() {
         + '<div class="vt-codigo">'+esc(d.codigo)+'</div>'
         + '<div class="vt-titulo">'+esc(d.titulo||d.codigo)+'</div>'
         + '<div class="vt-meta">'+esc(meta)+'</div>'
-        + '</div></div>';
+        + '</div>'
+        + (window.sbUser ? '<button class="fav-btn" style="position:absolute;top:6px;left:6px;opacity:1;z-index:5" onclick="event.stopPropagation();sbToggleFav(String(d.id),event)" title="Favorito">&#9733;</button>' : '')
+        + '</div>';
     });
   }
   gridHtml += '</div>';
