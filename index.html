@@ -1945,7 +1945,7 @@ function renderVideoteca() {
   }
 
   // Construir HTML de filtros
-  var filtrosHtml = '<div class="vt-filtros"><div class="vt-filtros-inner">';
+  var filtrosHtml = '<div class="vt-filtros"><div class="vt-filtros-inner"><div style="display:flex;justify-content:flex-end;margin-bottom:0.5rem"><button onclick="toggleVista("latas")" style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.25rem 0.7rem;border:1px solid var(--gris-claro);background:transparent;cursor:pointer;border-radius:2px;color:var(--gris-medio)">&#10005; Cerrar</button></div>';
 
   ['Paso','Color','Género','País','Década'].forEach(function(g) {
     var vals = Object.entries(grupos[g]).sort(function(a,b){ return b[1]-a[1]; });
