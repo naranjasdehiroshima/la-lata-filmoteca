@@ -456,6 +456,8 @@ header > *{position:relative;z-index:1;}
 .vt-tag.activo{background:var(--naranja);color:var(--blanco);border-color:var(--naranja)}
 .vt-tag.activo:hover{background:#c04800}
 .vt-reset{font-family:'DM Mono',monospace;font-size:0.58rem;padding:0.2rem 0.6rem;border:1px solid var(--gris-claro);background:transparent;cursor:pointer;border-radius:2px;color:var(--gris-medio);letter-spacing:0.05em}
+.vt-cerrar-btn{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.25rem 0.7rem;border:1px solid var(--gris-claro);background:transparent;cursor:pointer;border-radius:2px;color:var(--gris-medio)}
+.vt-cerrar-btn:hover{border-color:var(--naranja);color:var(--naranja)}
 .vt-reset:hover{color:var(--rojo,#c00);border-color:var(--rojo,#c00)}
 .vt-contador{font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--gris-medio);margin-left:auto;align-self:center}
 .vt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;padding:1.5rem;max-width:1400px;margin:0 auto}
@@ -1945,7 +1947,7 @@ function renderVideoteca() {
   }
 
   // Construir HTML de filtros
-  var filtrosHtml = '<div class="vt-filtros"><div class="vt-filtros-inner"><div style="display:flex;justify-content:flex-end;margin-bottom:0.5rem"><button onclick="toggleVista("latas")" style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.25rem 0.7rem;border:1px solid var(--gris-claro);background:transparent;cursor:pointer;border-radius:2px;color:var(--gris-medio)">&#10005; Cerrar</button></div>';
+  var filtrosHtml = '<div class="vt-filtros"><div class="vt-filtros-inner"><div style="display:flex;justify-content:flex-end;margin-bottom:0.5rem"><button class="vt-cerrar-btn">&#10005; Cerrar</button></div>';
 
   ['Paso','Color','Género','País','Década'].forEach(function(g) {
     var vals = Object.entries(grupos[g]).sort(function(a,b){ return b[1]-a[1]; });
@@ -2063,6 +2065,7 @@ document.addEventListener('click', function(e) {
     vtToggleFiltro(decodeURIComponent(e.target.dataset.g), decodeURIComponent(e.target.dataset.v));
   }
   if (e.target.classList.contains('vt-reset')) vtResetFiltros();
+  if (e.target.classList.contains('vt-cerrar-btn')) toggleVista('latas');
   if (e.target.classList.contains('vt-card') || e.target.closest('.vt-card')) {
     var card = e.target.classList.contains('vt-card') ? e.target : e.target.closest('.vt-card');
     if (card && card.dataset.id) vtVerVideo(card.dataset.id);
