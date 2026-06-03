@@ -474,6 +474,10 @@ header > *{position:relative;z-index:1;}
 .vt-titulo{font-size:0.78rem;color:var(--negro);line-height:1.3;margin-bottom:0.4rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .vt-meta{font-family:'DM Mono',monospace;font-size:0.55rem;color:var(--gris-medio);display:flex;gap:0.5rem;flex-wrap:wrap}
 .vt-empty{padding:4rem 2rem;text-align:center;font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--gris-medio);letter-spacing:0.1em;grid-column:1/-1}
+.vt-fav-btn{position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.55);border:none;cursor:pointer;color:#aaa;font-size:0.85rem;width:24px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:2px;opacity:0;transition:opacity 0.15s,color 0.15s;z-index:5;padding:0;line-height:1}
+.vt-card:hover .vt-fav-btn{opacity:1}
+.vt-fav-btn.activo{opacity:1;color:var(--naranja)}
+.vt-fav-btn.activo:hover{color:#c00}
 /* Modal video */
 #vt-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:500;align-items:center;justify-content:center;flex-direction:column;gap:0.8rem}
 #vt-modal.open{display:flex}
@@ -2004,10 +2008,12 @@ function renderVideoteca() {
       var ytid = vtExtraerId(d.youtube);
       var thumb = d.yt_thumb || (ytid ? 'https://img.youtube.com/vi/'+ytid+'/mqdefault.jpg' : '');
       var meta = [d.paso, d.fecha, d.pais].filter(Boolean).join(' · ');
+      var vtFavActivo = sbFavs[d.id] ? ' activo' : '';
       gridHtml += '<div class="vt-card" data-id="'+d.id+'">'
         + '<div class="vt-thumb">'
         + (thumb ? '<img src="'+thumb+'" loading="lazy" alt="">' : '')
         + '<div class="vt-play"><div class="vt-play-btn">&#9654;</div></div>'
+        + '<button class="vt-fav-btn'+vtFavActivo+'" data-fav-id="'+d.id+'" title="Favorito">&#9733;</button>'
         + '</div>'
         + '<div class="vt-info">'
         + '<div class="vt-codigo">'+esc(d.codigo)+'</div>'
@@ -2066,6 +2072,11 @@ document.addEventListener('click', function(e) {
   }
   if (e.target.classList.contains('vt-reset')) vtResetFiltros();
   if (e.target.classList.contains('vt-cerrar-btn')) toggleVista('latas');
+  if (e.target.classList.contains('vt-fav-btn') && e.target.dataset.favId) {
+    e.stopPropagation();
+    sbToggleFav(e.target.dataset.favId, e);
+    e.target.classList.toggle('activo');
+  }
   if (e.target.classList.contains('vt-card') || e.target.closest('.vt-card')) {
     var card = e.target.classList.contains('vt-card') ? e.target : e.target.closest('.vt-card');
     if (card && card.dataset.id) vtVerVideo(card.dataset.id);
