@@ -2518,25 +2518,24 @@ var EC_KODAK = [
   {y:[1936,1956,1976],c:'●'},{y:[1937,1957,1977],c:'■'},
   {y:[1938,1958,1978],c:'▲'},{y:[1939,1959,1979],c:'●●'},
   {y:[1940,1960,1980],c:'■■'},{y:[1941,1961,1981],c:'▲▲'},
-  {y:[1982],c:'●■x'},{y:[1983],c:'x▲x'},
+  {y:[1982],c:'●■ｘ'},{y:[1983],c:'ｘ▲ｘ'},
   {y:[1984],c:'▲■▲'},{y:[1985],c:'■●▲'},
   {y:[1986],c:'▲●▲'},{y:[1987],c:'■▲▲'},
-  {y:[1988],c:'++▲'},{y:[1989],c:'x+▲'},
-  {y:[1990],c:'▲+▲'},{y:[1991],c:'x+x'},
-  {y:[1992],c:'●+x'},{y:[1993],c:'■+x'},
-  {y:[1994],c:'+x●'},{y:[1995],c:'+x■'},
-  {y:[1996],c:'+x▲'},{y:[1997],c:'x● x'},
-  {y:[1998],c:'x■x'},{y:[1999],c:'xx●'},
-  {y:[2000],c:'xx■'},{y:[2001],c:'xx▲'}
+  {y:[1988],c:'++▲'},{y:[1989],c:'ｘ+▲'},
+  {y:[1990],c:'▲+▲'},{y:[1991],c:'ｘ+ｘ'},
+  {y:[1992],c:'■+▲'},{y:[1993],c:'+▲▲'},
+  {y:[1994],c:'+●▲'},{y:[1995],c:'+■▲'},
+  {y:[1996],c:'ｘ●▲'},{y:[1997],c:'ｘ■▲'},
+  {y:[1998],c:'ｘ▲▲'},{y:[1999],c:'●ｘ▲'},
+  {y:[2000],c:'■■▲'},{y:[2001],c:'▲▲●'}
 ];
 var EC_DUPONT = [
-  {y:[1956],c:'I'},{y:[1957],c:'II'},{y:[1958],c:'III'},
-  {y:[1959],c:'IV'},{y:[1960],c:'V'},{y:[1961],c:'VI'},
-  {y:[1962],c:'VII'},{y:[1963],c:'VIII'},{y:[1964],c:'IX'},
-  {y:[1965],c:'X'},{y:[1966],c:'XI'},{y:[1967],c:'XII'},
-  {y:[1968],c:'XIII'},{y:[1969],c:'XIV'},{y:[1970],c:'XV'},
-  {y:[1971],c:'XVI'},{y:[1972],c:'XVII'},{y:[1973],c:'XVIII'},
-  {y:[1974],c:'XIX'}
+  {y:[1956],c:'KL'},{y:[1957],c:'KN'},{y:[1958],c:'KS'},
+  {y:[1959],c:'LN'},{y:[1960],c:'LS'},{y:[1961],c:'NS'},
+  {y:[1962],c:'K'},{y:[1963],c:'L'},{y:[1964],c:'N'},
+  {y:[1965],c:'S'},{y:[1966],c:'KLT'},{y:[1967],c:'KNT'},
+  {y:[1968],c:'KST'},{y:[1969],c:'LNT'},{y:[1970],c:'NST'},
+  {y:[1972],c:'KT'},{y:[1973],c:'LT'},{y:[1974],c:'NT'}
 ];
 function ecSetTab(t){
   ecTab=t;
@@ -2557,7 +2556,7 @@ function ecRender(){
       '<div class="ec-card-years">'+ys.replace(/ \/ /g,'<br>')+'</div>'+
       '<div class="ec-card-code">'+e.c+'</div></div>';
   });
-  document.getElementById('ec-grid').innerHTML=html||'<p style="font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--gris-medio);padding:1rem 0">Sin resultados</p>';
+  document.getElementById('ec-grid').innerHTML=html||'<p style="font-family:DM Mono,monospace;font-size:0.75rem;color:var(--gris-medio);padding:1rem 0">Sin resultados</p>';
 }
 
 // ════ FILMOLENS ════
