@@ -2748,12 +2748,13 @@ async function flAnalizar(){
       .replace(/fuji(film)?/gi, '')
       .replace(/agfa/gi, '')
       .replace(/ilford/gi, '')
-      .replace(/ｘ/g, 'x');
+      .replace(/ｘ/g, 'x')
+      .replace(/\s+/g, ''); // quitar espacios para comparar símbolos juntos
 
     var todosCodes = EC_KODAK.concat(EC_DUPONT);
     todosCodes.forEach(function(e){
       if(e.c.length < 2) return;
-      var cNorm = e.c.replace(/ｘ/g,'x');
+      var cNorm = e.c.replace(/ｘ/g,'x').replace(/\s+/g,''); // normalizar espacios en el código también
       if(textNorm.toLowerCase().includes(cNorm.toLowerCase())){
         if(!mejorMatch || e.c.length > mejorMatch.c.length){
           mejorMatch = e;
