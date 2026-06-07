@@ -2615,6 +2615,7 @@ function flCopiar(){
   var nombre = document.getElementById('fl-nombre').textContent;
   var texto = 'FILMOLENS — Ficha de análisis\n' + nombre + '\n\n';
   var campos = [
+    {k:'tipo_imagen',l:'Tipo de imagen'},
     {k:'polaridad',l:'Polaridad'},
     {k:'formato_aspecto',l:'Formato y aspecto'},
     {k:'soporte_captura',l:'Soporte de captura'},
@@ -2653,6 +2654,7 @@ function flDescargarPDF(){
   if(!flDatosActuales) return;
   var nombre = document.getElementById('fl-nombre').textContent;
   var campos = [
+    {k:'tipo_imagen',l:'Tipo de imagen'},
     {k:'polaridad',l:'Polaridad'},
     {k:'formato_aspecto',l:'Formato y aspecto'},
     {k:'soporte_captura',l:'Soporte de captura'},
@@ -2715,7 +2717,7 @@ async function flAnalizar(){
   document.getElementById('fl-error').style.display='none';
   ficha.classList.remove('visible');
   var prompt='Eres un experto en identificación de película fotoquímica. Analiza esta imagen y devuelve SOLO un objeto JSON válido con estas claves exactas:\n'+
-    '{"polaridad":"IMPORTANTE: una película naranja/ámbar vista por reflectancia (sin luz transmitida) es un POSITIVO de color, no un negativo. Un negativo de color tiene base naranja con imagen invertida. Un negativo B/N tiene imagen invertida con tonos grises. Indica positivo o negativo.","formato_aspecto":"relación de aspecto y formato probable (ej: 1.33:1 / Academy, 1.85:1 / Flat, 2.39:1 / Scope)","soporte_captura":"REGLA CRÍTICA DE IDENTIFICACIÓN POR PERFORACIONES: (1) Si ves UNA sola perforación rectangular situada EXACTAMENTE EN EL CENTRO HORIZONTAL de la tira, entre un fotograma y el siguiente, a mitad de camino entre los dos bordes laterales de la película = es OBLIGATORIAMENTE Pathé Baby 9.5mm, el único formato con perforación central. (2) Si ves perforaciones pequeñas rectangulares redondeadas alineadas en UN SOLO BORDE LATERAL y el fotograma es pequeño = 8mm regular o Super 8. (3) Si ves perforaciones en UN SOLO BORDE LATERAL y el fotograma es más grande = 16mm. (4) Si ves perforaciones en AMBOS BORDES LATERALES = 35mm. (5) Sin perforaciones visibles = video analógico o digital","grano_textura":"descripción del grano, nitidez y textura visual","paleta_cromatica":"paleta dominante y tratamiento cromático (o si es B/N)","epoca_aproximada":"década o período probable por estética visual y tipo de emulsión","iluminacion":"tipo y estilo de iluminación","encuadre_composicion":"estilo de encuadre y composición","texto_visible":"cualquier texto, título, rótulo o número visible, o null","pista_audio":"indica si detectas pista de sonido óptico en el borde de la película; si la hay especifica si es de densidad variable (banda que varía en anchura) o de área variable (banda que varía en transparencia); si no hay pista visible indica null","observaciones":"IMPORTANTE: busca edge codes en el borde de la película. Los edge codes de Kodak son combinaciones de símbolos geométricos: ● (círculo), ▲ (triángulo), ■ (cuadrado), + (cruz), x. Los edge codes de DuPont son combinaciones de letras K, L, N, S, T (ej: KL, KN, NS, KLT). IGNORA las letras del texto SAFETY FILM, KODAK, EASTMAN u otras leyendas impresas — solo reporta los símbolos geométricos y combinaciones DuPont que aparezcan aislados. Describe también cualquier otro dato archivístico relevante"}\nSin explicaciones fuera del JSON.';
+    '{"tipo_imagen":"indica si es un FOTOGRAMA ÚNICO o una TIRA DE FOTOGRAMAS (varios fotogramas en secuencia visibles simultáneamente); si es tira indica cuántos fotogramas aproximadamente","polaridad":"IMPORTANTE: una película naranja/ámbar vista por reflectancia (sin luz transmitida) es un POSITIVO de color, no un negativo. Un negativo de color tiene base naranja con imagen invertida. Un negativo B/N tiene imagen invertida con tonos grises. Indica positivo o negativo.","formato_aspecto":"relación de aspecto y formato probable (ej: 1.33:1 / Academy, 1.85:1 / Flat, 2.39:1 / Scope)","soporte_captura":"REGLA CRÍTICA DE IDENTIFICACIÓN POR PERFORACIONES: (1) Si ves UNA sola perforación rectangular situada EXACTAMENTE EN EL CENTRO HORIZONTAL de la tira, entre un fotograma y el siguiente, a mitad de camino entre los dos bordes laterales de la película = es OBLIGATORIAMENTE Pathé Baby 9.5mm, el único formato con perforación central. (2) Si ves perforaciones pequeñas rectangulares redondeadas en UN SOLO BORDE LATERAL y fotograma pequeño = 8mm regular o Super 8. (3) Si ves perforaciones en UN SOLO BORDE LATERAL y fotograma más grande = 16mm simple perforación. (4) Si ves perforaciones en AMBOS BORDES LATERALES pero son PEQUEÑAS y el fotograma ocupa la mayor parte del ancho = 16mm doble perforación. (5) Si ves perforaciones en AMBOS BORDES LATERALES y son GRANDES (casi tan altas como el fotograma) y el fotograma es muy ancho = 35mm. (6) Sin perforaciones visibles = video analógico o digital","grano_textura":"descripción del grano, nitidez y textura visual","paleta_cromatica":"paleta dominante y tratamiento cromático (o si es B/N)","epoca_aproximada":"década o período probable por estética visual y tipo de emulsión","iluminacion":"tipo y estilo de iluminación","encuadre_composicion":"estilo de encuadre y composición","texto_visible":"cualquier texto, título, rótulo o número visible, o null","pista_audio":"indica si detectas pista de sonido óptico en el borde de la película; si la hay especifica si es de densidad variable (banda que varía en anchura) o de área variable (banda que varía en transparencia); si no hay pista visible indica null","observaciones":"IMPORTANTE: busca edge codes en el borde de la película. Los edge codes de Kodak son combinaciones de símbolos geométricos RELLENOS: ● (círculo relleno), ▲ (triángulo relleno), ■ (cuadrado relleno), + (cruz), x — NO confundas ■ (cuadrado relleno) con □ (cuadrado vacío). Los edge codes de DuPont son combinaciones de letras K, L, N, S, T (ej: KL, KN, NS, KLT). Si hay tira de fotogramas analiza el borde completo para encontrar todos los códigos visibles. IGNORA las letras del texto SAFETY FILM, KODAK, EASTMAN u otras leyendas impresas — solo reporta los símbolos geométricos aislados. Describe también cualquier otro dato archivístico relevante"}\nSin explicaciones fuera del JSON.';
   try{
     var resp=await fetch(FL_WORKER,{
       method:'POST',
@@ -2781,7 +2783,7 @@ async function flAnalizar(){
     flDatosActuales.fecha_estimada_edge = fechaEdge;
 
     var campos=[
-      {k:'polaridad',l:'Polaridad'},{k:'formato_aspecto',l:'Formato y aspecto'},
+      {k:'tipo_imagen',l:'Tipo de imagen'},{k:'polaridad',l:'Polaridad'},{k:'formato_aspecto',l:'Formato y aspecto'},
       {k:'soporte_captura',l:'Soporte de captura'},
       {k:'pista_audio',l:'Pista de audio'},
       {k:'grano_textura',l:'Grano y textura'},
@@ -2825,6 +2827,7 @@ async function flGuardarSupabase(p, fechaEdge){
     await sb.from('filmolens_consultas').insert({
       user_id: userId,
       archivo: archivo,
+      tipo_imagen: p.tipo_imagen || null,
       polaridad: p.polaridad || null,
       formato_aspecto: p.formato_aspecto || null,
       soporte_captura: p.soporte_captura || null,
