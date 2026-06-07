@@ -2714,8 +2714,8 @@ async function flAnalizar(){
   btn.disabled=true;loading.style.display='block';
   document.getElementById('fl-error').style.display='none';
   ficha.classList.remove('visible');
-  var prompt='Analiza este fotograma y devuelve SOLO un objeto JSON válido con estas claves exactas:\n'+
-    '{"polaridad":"positivo o negativo (detecta si la imagen está invertida tonal y cromáticamente como un negativo fotográfico)","formato_aspecto":"relación de aspecto y formato probable (ej: 1.33:1 / Academy, 4:3 video, 1.85:1 / Flat)","soporte_captura":"soporte probable — IMPORTANTE: si detectas una sola perforación centrada entre fotogramas (no en el borde lateral) es Pathé Baby 9.5mm, no 16mm ni 8mm; si hay perforaciones en un solo borde lateral es 16mm o Super 8; si hay perforaciones en ambos bordes es 35mm (ej: 9.5mm Pathé Baby, 16mm, 35mm, Super 8, video, digital)","grano_textura":"descripción del grano, nitidez y textura visual","paleta_cromatica":"paleta dominante y tratamiento (o si es B/N)","epoca_aproximada":"década o período probable por estética visual","iluminacion":"tipo y estilo de iluminación","encuadre_composicion":"estilo de encuadre y composición","texto_visible":"cualquier texto, título o rótulo visible, o null","pista_audio":"indica si detectas pista de sonido óptico en el borde de la película; si la hay especifica si es de densidad variable (la banda varía en anchura, típica del sonido óptico clásico) o de área variable (la banda varía en transparencia/densidad); si no hay pista visible indica null","observaciones":"si detectas símbolos geométricos (círculos, triángulos, cuadrados, cruces) o letras (K, L, N, S, T) en el borde de la película descríbelos exactamente tal como aparecen pues podrían ser edge codes de fabricante; incluye también cualquier otro dato archivístico relevante"}\nSin explicaciones fuera del JSON.';
+  var prompt='Eres un experto en identificación de película fotoquímica. Analiza esta imagen y devuelve SOLO un objeto JSON válido con estas claves exactas:\n'+
+    '{"polaridad":"IMPORTANTE: una película naranja/ámbar vista por reflectancia (sin luz transmitida) es un POSITIVO de color, no un negativo. Un negativo de color tiene base naranja con imagen invertida. Un negativo B/N tiene imagen invertida con tonos grises. Indica positivo o negativo.","formato_aspecto":"relación de aspecto y formato probable (ej: 1.33:1 / Academy, 1.85:1 / Flat, 2.39:1 / Scope)","soporte_captura":"IMPORTANTE para identificar el formato: perforación CENTRAL entre fotogramas = Pathé Baby 9.5mm; perforaciones rectangulares redondeadas en UN solo borde + fotograma pequeño = 8mm regular o Super 8 (Super 8 tiene perforaciones más pequeñas y fotograma más grande); perforaciones en UN solo borde + fotograma más grande = 16mm; perforaciones en AMBOS bordes = 35mm; si no hay perforaciones visibles considera video analógico o digital","grano_textura":"descripción del grano, nitidez y textura visual","paleta_cromatica":"paleta dominante y tratamiento cromático (o si es B/N)","epoca_aproximada":"década o período probable por estética visual y tipo de emulsión","iluminacion":"tipo y estilo de iluminación","encuadre_composicion":"estilo de encuadre y composición","texto_visible":"cualquier texto, título, rótulo o número visible, o null","pista_audio":"indica si detectas pista de sonido óptico en el borde de la película; si la hay especifica si es de densidad variable (banda que varía en anchura) o de área variable (banda que varía en transparencia); si no hay pista visible indica null","observaciones":"IMPORTANTE: describe con precisión cualquier símbolo geométrico (círculo=●, triángulo=▲, cuadrado=■, cruz=+) o combinación de letras (K, L, N, S, T, KL, KN, NS, KLT etc.) que veas en el borde de la película — son edge codes de fabricante que permiten datar el material; describe también cualquier otro dato archivístico relevante"}\nSin explicaciones fuera del JSON.';
   try{
     var resp=await fetch(FL_WORKER,{
       method:'POST',
@@ -2738,19 +2738,25 @@ async function flAnalizar(){
     // ── Cruce Edge Codes ──
     var edgeDetectado = p.observaciones || '';
     var fechaEdge = null;
-    // Solo cruzar si la IA menciona explícitamente edge codes o marcas de borde
-    var mencionaEdge = /edge\s*code|marca.{0,10}borde|borde.{0,10}marca|símbolo.{0,15}película|perforación.{0,10}código/i.test(edgeDetectado);
-    if(mencionaEdge){
-      var todosCodes = EC_KODAK.concat(EC_DUPONT);
-      todosCodes.forEach(function(e){
-        // Buscar código como palabra completa o secuencia de símbolos exacta
-        var escapado = e.c.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        var regex = new RegExp('(^|\\s|[^a-zA-Z])' + escapado + '($|\\s|[^a-zA-Z])', 'i');
-        if(regex.test(edgeDetectado) && e.c.length > 1){
-          fechaEdge = e.y.join(' / ');
+    var mejorMatch = null;
+    var todosCodes = EC_KODAK.concat(EC_DUPONT);
+    // Buscar cualquier código con longitud > 1 directamente en el texto
+    todosCodes.forEach(function(e){
+      if(e.c.length < 2) return;
+      // Normalizar: reemplazar caracteres similares
+      var cNorm = e.c.replace(/ｘ/g,'x');
+      var textNorm = edgeDetectado.replace(/ｘ/g,'x');
+      // Buscar como secuencia exacta en el texto
+      if(textNorm.toLowerCase().includes(cNorm.toLowerCase())){
+        // Preferir el match más largo (más específico)
+        if(!mejorMatch || e.c.length > mejorMatch.c.length){
+          mejorMatch = e;
         }
-      });
-    }
+      }
+    });
+    if(mejorMatch) fechaEdge = mejorMatch.y.join(' / ');
+    flDatosActuales.edge_codes_detectados = edgeDetectado;
+    flDatosActuales.fecha_estimada_edge = fechaEdge;
     flDatosActuales.edge_codes_detectados = edgeDetectado;
     flDatosActuales.fecha_estimada_edge = fechaEdge;
 
