@@ -2460,7 +2460,7 @@ fetch('datos.json')
 .fl-dropzone-icon{font-size:2.5rem;margin-bottom:0.8rem}
 .fl-dropzone-text{font-family:'DM Mono',monospace;font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--gris-medio)}
 .fl-preview-wrap{display:none;gap:2rem;flex-wrap:wrap;margin-bottom:1.5rem;align-items:flex-start}
-.fl-preview-img{max-width:320px;max-height:240px;border:1px solid var(--gris-claro);border-radius:2px;object-fit:contain;background:var(--negro)}
+.fl-preview-img{max-width:640px;max-height:480px;border:1px solid var(--gris-claro);border-radius:2px;object-fit:contain;background:var(--negro)}
 .fl-btn-analizar{font-family:'DM Mono',monospace;font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.6rem 1.5rem;background:var(--naranja);color:var(--blanco);border:none;border-radius:2px;cursor:pointer;transition:background 0.15s}
 .fl-btn-analizar:hover{background:var(--gris)}
 .fl-btn-analizar:disabled{background:var(--gris-claro);color:var(--gris-medio);cursor:not-allowed}
@@ -2489,13 +2489,20 @@ fetch('datos.json')
 </div>
 <input type="file" id="fl-input" accept="image/*" style="display:none" onchange="flCargar(this.files[0])">
 <div class="fl-preview-wrap" id="fl-preview-wrap">
-  <div style="position:relative;display:inline-block">
-    <img id="fl-preview-img" class="fl-preview-img" src="" alt="Fotograma">
-    <button id="fl-btn-invertir" onclick="flInvertir()" style="position:absolute;bottom:0.5rem;right:0.5rem;font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;padding:0.3rem 0.6rem;background:rgba(0,0,0,0.7);color:#fff;border:1px solid rgba(255,255,255,0.3);border-radius:2px;cursor:pointer">&#8645; Invertir</button>
+  <div style="display:flex;gap:1.5rem;flex-wrap:wrap;align-items:flex-start">
+    <div style="position:relative;display:inline-block">
+      <div style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--gris-medio);margin-bottom:0.4rem">Original</div>
+      <img id="fl-preview-img" class="fl-preview-img" src="" alt="Fotograma">
+    </div>
+    <div id="fl-positivo-wrap" style="display:none">
+      <div style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--gris-medio);margin-bottom:0.4rem">Positivo</div>
+      <canvas id="fl-canvas-positivo" style="max-width:320px;max-height:240px;border:1px solid var(--gris-claro);border-radius:2px;display:block"></canvas>
+    </div>
   </div>
   <div>
     <div id="fl-nombre" style="font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--gris-medio);margin-bottom:1rem"></div>
     <button class="fl-btn-analizar" id="fl-btn" onclick="flAnalizar()">&#128247; Analizar fotograma</button>
+    <button id="fl-btn-invertir" onclick="flInvertir()" style="display:block;margin-top:0.6rem;font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;padding:0.3rem 0.8rem;background:none;color:var(--gris-medio);border:1px solid var(--gris-claro);border-radius:2px;cursor:pointer">&#8645; Ver positivo</button>
   </div>
 </div>
 <div class="fl-error" id="fl-error"></div>
@@ -2576,9 +2583,31 @@ var flDatosActuales = null;
 
 function flInvertir(){
   flInvertido = !flInvertido;
-  var img = document.getElementById('fl-preview-img');
-  img.style.filter = flInvertido ? 'invert(1)' : '';
-  document.getElementById('fl-btn-invertir').textContent = flInvertido ? '⇅ Original' : '⇅ Invertir';
+  var wrap = document.getElementById('fl-positivo-wrap');
+  var btn = document.getElementById('fl-btn-invertir');
+  if(flInvertido){
+    var img = document.getElementById('fl-preview-img');
+    var canvas = document.getElementById('fl-canvas-positivo');
+    canvas.width = img.naturalWidth;
+    canvas.height = img.naturalHeight;
+    canvas.style.maxWidth = '640px';
+    canvas.style.maxHeight = '480px';
+    var ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0);
+    var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    var d = imageData.data;
+    for(var i = 0; i < d.length; i += 4){
+      d[i]   = 255 - d[i];
+      d[i+1] = 255 - d[i+1];
+      d[i+2] = 255 - d[i+2];
+    }
+    ctx.putImageData(imageData, 0, 0);
+    wrap.style.display = 'block';
+    btn.textContent = '⇅ Ocultar positivo';
+  } else {
+    wrap.style.display = 'none';
+    btn.textContent = '⇅ Ver positivo';
+  }
 }
 
 function flCopiar(){
@@ -2707,12 +2736,19 @@ async function flAnalizar(){
     // ── Cruce Edge Codes ──
     var edgeDetectado = p.observaciones || '';
     var fechaEdge = null;
-    var todosCodes = EC_KODAK.concat(EC_DUPONT);
-    todosCodes.forEach(function(e){
-      if(edgeDetectado.toLowerCase().includes(e.c.toLowerCase()) && e.c.length > 1){
-        fechaEdge = e.y.join(' / ');
-      }
-    });
+    // Solo cruzar si la IA menciona explícitamente edge codes o marcas de borde
+    var mencionaEdge = /edge\s*code|marca.{0,10}borde|borde.{0,10}marca|símbolo.{0,15}película|perforación.{0,10}código/i.test(edgeDetectado);
+    if(mencionaEdge){
+      var todosCodes = EC_KODAK.concat(EC_DUPONT);
+      todosCodes.forEach(function(e){
+        // Buscar código como palabra completa o secuencia de símbolos exacta
+        var escapado = e.c.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        var regex = new RegExp('(^|\\s|[^a-zA-Z])' + escapado + '($|\\s|[^a-zA-Z])', 'i');
+        if(regex.test(edgeDetectado) && e.c.length > 1){
+          fechaEdge = e.y.join(' / ');
+        }
+      });
+    }
     flDatosActuales.edge_codes_detectados = edgeDetectado;
     flDatosActuales.fecha_estimada_edge = fechaEdge;
 
