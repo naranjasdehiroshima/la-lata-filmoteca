@@ -1517,6 +1517,13 @@ function toggleVista(vista) {
     document.getElementById('miarchivo-wrap').style.display = 'block';
     document.getElementById('btn-vista-miarchivo').classList.add('activo');
     renderMiArchivo();
+  } else if (vista === 'ec') {
+    document.getElementById('btn-vista-ec').classList.add('activo');
+    document.getElementById('ec-wrap').style.display = 'block';
+    ecRender();
+  } else if (vista === 'fl') {
+    document.getElementById('btn-vista-fl').classList.add('activo');
+    document.getElementById('fl-wrap').style.display = 'block';
   } else if (vista === 'about') {
     document.getElementById('btn-vista-about').classList.add('activo');
     document.getElementById('about-wrap').style.display = 'block';
