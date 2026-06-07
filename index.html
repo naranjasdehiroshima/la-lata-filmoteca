@@ -619,7 +619,7 @@ header > *{position:relative;z-index:1;}
   </select>
   <div class="ctrl-sep"></div>
   <input type="text" id="busqueda" placeholder="Buscar t&#237;tulo, c&#243;digo...">
-  <div class="vista-btns"><button id="btn-vista-latas" class="btn-vista activo" onclick="toggleVista('latas')">&#9632; Latas</button><button id="btn-vista-colecciones" class="btn-vista" onclick="toggleVista('colecciones')">&#9782; Colecciones</button><button id="btn-vista-about" class="btn-vista" onclick="toggleVista('about')">&#9432; Proyecto</button><button id="btn-vista-vt" class="btn-vista" onclick="toggleVista('vt')">&#9654; Retrovisor</button><button id="btn-vista-tv" class="btn-vista" onclick="toggleVista('tv')">&#128250; TV</button><button id="btn-vista-mapa" class="btn-vista" onclick="toggleVista('mapa')">&#127760; Mapa</button><button id="btn-vista-fh" class="btn-vista" onclick="toggleVista('fh')">&#9641; CodeArchive</button><a href="https://naranjasdehiroshima.github.io/retroboy/" target="_blank" class="btn-vista" style="text-decoration:none">&#127918; RetroBoy</a><button id="btn-vista-ec" class="btn-vista" onclick="toggleVista('ec')">&#9670; Edge Codes</button><button id="btn-vista-fl" class="btn-vista" onclick="toggleVista('fl')">&#128247; FilmoLens</button><button id="btn-vista-miarchivo" class="btn-vista" onclick="toggleVista('miarchivo')" style="display:none">&#9733; Mi Archivo</button></div><span id="contador"></span><button id="auth-btn" onclick="authBtnClick()">Entrar</button>
+  <div class="vista-btns"><button id="btn-vista-latas" class="btn-vista activo" onclick="toggleVista('latas')">&#9632; Latas</button><button id="btn-vista-colecciones" class="btn-vista" onclick="toggleVista('colecciones')">&#9782; Colecciones</button><button id="btn-vista-about" class="btn-vista" onclick="toggleVista('about')">&#9432; Proyecto</button><button id="btn-vista-vt" class="btn-vista" onclick="toggleVista('vt')">&#9654; Retrovisor</button><button id="btn-vista-fl" class="btn-vista" onclick="toggleVista('fl')">&#128247; FilmoLens</button><button id="btn-vista-ec" class="btn-vista" onclick="toggleVista('ec')">&#9670; Edge Codes</button><button id="btn-vista-tv" class="btn-vista" onclick="toggleVista('tv')">&#128250; TV</button><button id="btn-vista-mapa" class="btn-vista" onclick="toggleVista('mapa')">&#127760; Mapa</button><button id="btn-vista-fh" class="btn-vista" onclick="toggleVista('fh')">&#9641; CodeArchive</button><a href="https://naranjasdehiroshima.github.io/retroboy/" target="_blank" class="btn-vista" style="text-decoration:none">&#127918; RetroBoy</a><button id="btn-vista-miarchivo" class="btn-vista" onclick="toggleVista('miarchivo')" style="display:none">&#9733; Mi Archivo</button></div><span id="contador"></span><button id="auth-btn" onclick="authBtnClick()">Entrar</button>
 </div>
 
 <div id="banner-formato"></div>
@@ -2684,7 +2684,7 @@ async function flAnalizar(){
   document.getElementById('fl-error').style.display='none';
   ficha.classList.remove('visible');
   var prompt='Analiza este fotograma y devuelve SOLO un objeto JSON válido con estas claves exactas:\n'+
-    '{"formato_aspecto":"relación de aspecto y formato probable (ej: 1.33:1 / Academy, 4:3 video, 1.85:1 / Flat)","soporte_captura":"soporte probable (ej: 16mm, 35mm, Super 8, video, digital)","grano_textura":"descripción del grano, nitidez y textura visual","paleta_cromatica":"paleta dominante y tratamiento (o si es B/N)","epoca_aproximada":"década o período probable por estética visual","iluminacion":"tipo y estilo de iluminación","encuadre_composicion":"estilo de encuadre y composición","texto_visible":"cualquier texto, título o rótulo visible, o null","polaridad":"positivo o negativo (detecta si la imagen está invertida tonal y cromáticamente como un negativo fotográfico)","observaciones":"datos adicionales relevantes para identificación archivística"}\nSin explicaciones fuera del JSON.';
+    '{"polaridad":"positivo o negativo (detecta si la imagen está invertida tonal y cromáticamente como un negativo fotográfico)","formato_aspecto":"relación de aspecto y formato probable (ej: 1.33:1 / Academy, 4:3 video, 1.85:1 / Flat)","soporte_captura":"soporte probable (ej: 16mm, 35mm, Super 8, video, digital)","grano_textura":"descripción del grano, nitidez y textura visual","paleta_cromatica":"paleta dominante y tratamiento (o si es B/N)","epoca_aproximada":"década o período probable por estética visual","iluminacion":"tipo y estilo de iluminación","encuadre_composicion":"estilo de encuadre y composición","texto_visible":"cualquier texto, título o rótulo visible, o null","observaciones":"si detectas símbolos geométricos (círculos, triángulos, cuadrados, cruces) o letras (K, L, N, S, T) en el borde de la película descríbelos exactamente tal como aparecen pues podrían ser edge codes de fabricante; incluye también cualquier otro dato archivístico relevante"}\nSin explicaciones fuera del JSON.';
   try{
     var resp=await fetch(FL_WORKER,{
       method:'POST',
@@ -2703,6 +2703,19 @@ async function flAnalizar(){
     var text=data.choices[0].message.content.trim().replace(/^```json\s*/,'').replace(/^```\s*/,'').replace(/```\s*$/,'');
     var p=JSON.parse(text);
     flDatosActuales = p;
+
+    // ── Cruce Edge Codes ──
+    var edgeDetectado = p.observaciones || '';
+    var fechaEdge = null;
+    var todosCodes = EC_KODAK.concat(EC_DUPONT);
+    todosCodes.forEach(function(e){
+      if(edgeDetectado.toLowerCase().includes(e.c.toLowerCase()) && e.c.length > 1){
+        fechaEdge = e.y.join(' / ');
+      }
+    });
+    flDatosActuales.edge_codes_detectados = edgeDetectado;
+    flDatosActuales.fecha_estimada_edge = fechaEdge;
+
     var campos=[
       {k:'polaridad',l:'Polaridad'},{k:'formato_aspecto',l:'Formato y aspecto'},
       {k:'soporte_captura',l:'Soporte de captura'},
@@ -2714,14 +2727,56 @@ async function flAnalizar(){
       {k:'texto_visible',l:'Texto visible'},
       {k:'observaciones',l:'Observaciones'}
     ];
+    if(fechaEdge){
+      campos.push({k:'fecha_estimada_edge',l:'Fecha estimada (Edge Code)'});
+    }
     var html=campos.map(function(c){
       var v=p[c.k];if(!v||v==='null')v='—';
       return '<div class="fl-campo"><div class="fl-campo-label">'+c.l+'</div><div class="fl-campo-valor">'+v+'</div></div>';
     }).join('');
     document.getElementById('fl-ficha-body').innerHTML=html;
     ficha.classList.add('visible');
+
+    // ── Guardar en Supabase ──
+    flGuardarSupabase(p, fechaEdge);
+
   }catch(e){flError('Error al analizar: '+e.message);}
   finally{btn.disabled=false;loading.style.display='none';}
+}
+
+async function flGuardarSupabase(p, fechaEdge){
+  if(!sb) return;
+  try {
+    var session = await sb.auth.getSession();
+    var userId = session.data.session ? session.data.session.user.id : null;
+
+    // Si no hay sesión, crear sesión anónima
+    if(!userId){
+      var anonResp = await sb.auth.signInAnonymously();
+      userId = anonResp.data.user ? anonResp.data.user.id : null;
+    }
+
+    var archivo = document.getElementById('fl-nombre').textContent;
+    await sb.from('filmolens_consultas').insert({
+      user_id: userId,
+      archivo: archivo,
+      polaridad: p.polaridad || null,
+      formato_aspecto: p.formato_aspecto || null,
+      soporte_captura: p.soporte_captura || null,
+      grano_textura: p.grano_textura || null,
+      paleta_cromatica: p.paleta_cromatica || null,
+      epoca_aproximada: p.epoca_aproximada || null,
+      iluminacion: p.iluminacion || null,
+      encuadre_composicion: p.encuadre_composicion || null,
+      texto_visible: p.texto_visible || null,
+      observaciones: p.observaciones || null,
+      edge_codes_detectados: p.edge_codes_detectados || null,
+      fecha_estimada_edge: fechaEdge || null
+    });
+    console.log('FilmoLens: ficha guardada en Supabase');
+  } catch(e) {
+    console.warn('FilmoLens: no se pudo guardar en Supabase', e);
+  }
 }
 </script>
 
