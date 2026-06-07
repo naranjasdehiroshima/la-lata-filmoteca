@@ -619,7 +619,7 @@ header > *{position:relative;z-index:1;}
   </select>
   <div class="ctrl-sep"></div>
   <input type="text" id="busqueda" placeholder="Buscar t&#237;tulo, c&#243;digo...">
-  <div class="vista-btns"><button id="btn-vista-latas" class="btn-vista activo" onclick="toggleVista('latas')">&#9632; Latas</button><button id="btn-vista-colecciones" class="btn-vista" onclick="toggleVista('colecciones')">&#9782; Colecciones</button><button id="btn-vista-about" class="btn-vista" onclick="toggleVista('about')">&#9432; Proyecto</button><button id="btn-vista-vt" class="btn-vista" onclick="toggleVista('vt')">&#9654; Retrovisor</button><button id="btn-vista-tv" class="btn-vista" onclick="toggleVista('tv')">&#128250; TV</button><button id="btn-vista-mapa" class="btn-vista" onclick="toggleVista('mapa')">&#127760; Mapa</button><button id="btn-vista-fh" class="btn-vista" onclick="toggleVista('fh')">&#9641; FilmoHack</button><a href="https://naranjasdehiroshima.github.io/retroboy/" target="_blank" class="btn-vista" style="text-decoration:none">&#127918; RetroBoy</a><button id="btn-vista-ec" class="btn-vista" onclick="toggleVista('ec')">&#9670; Edge Codes</button><button id="btn-vista-fl" class="btn-vista" onclick="toggleVista('fl')">&#128247; CodeArchive</button><button id="btn-vista-miarchivo" class="btn-vista" onclick="toggleVista('miarchivo')" style="display:none">&#9733; Mi Archivo</button></div><span id="contador"></span><button id="auth-btn" onclick="authBtnClick()">Entrar</button>
+  <div class="vista-btns"><button id="btn-vista-latas" class="btn-vista activo" onclick="toggleVista('latas')">&#9632; Latas</button><button id="btn-vista-colecciones" class="btn-vista" onclick="toggleVista('colecciones')">&#9782; Colecciones</button><button id="btn-vista-about" class="btn-vista" onclick="toggleVista('about')">&#9432; Proyecto</button><button id="btn-vista-vt" class="btn-vista" onclick="toggleVista('vt')">&#9654; Retrovisor</button><button id="btn-vista-tv" class="btn-vista" onclick="toggleVista('tv')">&#128250; TV</button><button id="btn-vista-mapa" class="btn-vista" onclick="toggleVista('mapa')">&#127760; Mapa</button><button id="btn-vista-fh" class="btn-vista" onclick="toggleVista('fh')">&#9641; CodeArchive</button><a href="https://naranjasdehiroshima.github.io/retroboy/" target="_blank" class="btn-vista" style="text-decoration:none">&#127918; RetroBoy</a><button id="btn-vista-ec" class="btn-vista" onclick="toggleVista('ec')">&#9670; Edge Codes</button><button id="btn-vista-fl" class="btn-vista" onclick="toggleVista('fl')">&#128247; FilmoLens</button><button id="btn-vista-miarchivo" class="btn-vista" onclick="toggleVista('miarchivo')" style="display:none">&#9733; Mi Archivo</button></div><span id="contador"></span><button id="auth-btn" onclick="authBtnClick()">Entrar</button>
 </div>
 
 <div id="banner-formato"></div>
@@ -2475,7 +2475,7 @@ fetch('datos.json')
 .fl-error{font-family:'DM Mono',monospace;font-size:0.72rem;color:#c0392b;padding:0.8rem 1rem;background:#fdf0ee;border:1px solid #e8c5bf;border-radius:2px;display:none;margin-bottom:1rem}
 .fl-foot{font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--gris-medio);margin-top:2rem;line-height:1.7}
 </style>
-<h2>CodeArchive</h2>
+<h2>FilmoLens</h2>
 <p class="fl-sub">Identificador de fotogramas &middot; An&aacute;lisis visual con IA</p>
 
 <div class="fl-dropzone" id="fl-dropzone"
@@ -2489,7 +2489,10 @@ fetch('datos.json')
 </div>
 <input type="file" id="fl-input" accept="image/*" style="display:none" onchange="flCargar(this.files[0])">
 <div class="fl-preview-wrap" id="fl-preview-wrap">
-  <img id="fl-preview-img" class="fl-preview-img" src="" alt="Fotograma">
+  <div style="position:relative;display:inline-block">
+    <img id="fl-preview-img" class="fl-preview-img" src="" alt="Fotograma">
+    <button id="fl-btn-invertir" onclick="flInvertir()" style="position:absolute;bottom:0.5rem;right:0.5rem;font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;padding:0.3rem 0.6rem;background:rgba(0,0,0,0.7);color:#fff;border:1px solid rgba(255,255,255,0.3);border-radius:2px;cursor:pointer">&#8645; Invertir</button>
+  </div>
   <div>
     <div id="fl-nombre" style="font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--gris-medio);margin-bottom:1rem"></div>
     <button class="fl-btn-analizar" id="fl-btn" onclick="flAnalizar()">&#128247; Analizar fotograma</button>
@@ -2498,7 +2501,14 @@ fetch('datos.json')
 <div class="fl-error" id="fl-error"></div>
 <div class="fl-loading" id="fl-loading">Analizando fotograma…</div>
 <div class="fl-ficha" id="fl-ficha">
-  <div class="fl-ficha-titulo">Ficha de análisis</div>
+  <div class="fl-ficha-titulo" style="display:flex;justify-content:space-between;align-items:center">
+    <span>Ficha de análisis</span>
+    <div style="display:flex;gap:0.5rem">
+      <button onclick="flCopiar()" style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;padding:0.3rem 0.7rem;border:1px solid var(--gris-claro);background:none;color:var(--gris-medio);border-radius:2px;cursor:pointer">&#128203; Copiar</button>
+      <button onclick="flDescargarJSON()" style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;padding:0.3rem 0.7rem;border:1px solid var(--gris-claro);background:none;color:var(--gris-medio);border-radius:2px;cursor:pointer">&#8595; JSON</button>
+      <button onclick="flDescargarPDF()" style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;padding:0.3rem 0.7rem;border:1px solid var(--gris-claro);background:none;color:var(--gris-medio);border-radius:2px;cursor:pointer">&#8595; PDF</button>
+    </div>
+  </div>
   <div id="fl-ficha-body"></div>
 </div>
 <p class="fl-foot">Análisis generado con IA (Llama 4 Scout · Groq). Los resultados son orientativos<br>y no sustituyen la inspección física del material.</p>
@@ -2561,7 +2571,91 @@ function ecRender(){
 
 // ════ FILMOLENS ════
 var FL_WORKER='https://filmolens-proxy.lapequenafilmoteca.workers.dev/';
-var flB64=null,flType=null;
+var flInvertido = false;
+var flDatosActuales = null;
+
+function flInvertir(){
+  flInvertido = !flInvertido;
+  var img = document.getElementById('fl-preview-img');
+  img.style.filter = flInvertido ? 'invert(1)' : '';
+  document.getElementById('fl-btn-invertir').textContent = flInvertido ? '⇅ Original' : '⇅ Invertir';
+}
+
+function flCopiar(){
+  if(!flDatosActuales) return;
+  var nombre = document.getElementById('fl-nombre').textContent;
+  var texto = 'FILMOLENS — Ficha de análisis\n' + nombre + '\n\n';
+  var campos = [
+    {k:'polaridad',l:'Polaridad'},
+    {k:'formato_aspecto',l:'Formato y aspecto'},
+    {k:'soporte_captura',l:'Soporte de captura'},
+    {k:'grano_textura',l:'Grano y textura'},
+    {k:'paleta_cromatica',l:'Paleta cromática'},
+    {k:'epoca_aproximada',l:'Época aproximada'},
+    {k:'iluminacion',l:'Iluminación'},
+    {k:'encuadre_composicion',l:'Encuadre y composición'},
+    {k:'texto_visible',l:'Texto visible'},
+    {k:'observaciones',l:'Observaciones'}
+  ];
+  campos.forEach(function(c){
+    var v = flDatosActuales[c.k];
+    if(!v || v==='null') v='—';
+    texto += c.l + ': ' + v + '\n';
+  });
+  navigator.clipboard.writeText(texto).then(function(){
+    var btn = event.target;
+    btn.textContent = '✓ Copiado';
+    setTimeout(function(){ btn.textContent = '📋 Copiar'; }, 2000);
+  });
+}
+
+function flDescargarJSON(){
+  if(!flDatosActuales) return;
+  var nombre = document.getElementById('fl-nombre').textContent.replace(/\.[^.]+$/, '');
+  var blob = new Blob([JSON.stringify({archivo: nombre, analisis: flDatosActuales}, null, 2)], {type:'application/json'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'filmolens-' + nombre + '.json';
+  a.click();
+}
+
+function flDescargarPDF(){
+  if(!flDatosActuales) return;
+  var nombre = document.getElementById('fl-nombre').textContent;
+  var campos = [
+    {k:'polaridad',l:'Polaridad'},
+    {k:'formato_aspecto',l:'Formato y aspecto'},
+    {k:'soporte_captura',l:'Soporte de captura'},
+    {k:'grano_textura',l:'Grano y textura'},
+    {k:'paleta_cromatica',l:'Paleta cromática'},
+    {k:'epoca_aproximada',l:'Época aproximada'},
+    {k:'iluminacion',l:'Iluminación'},
+    {k:'encuadre_composicion',l:'Encuadre y composición'},
+    {k:'texto_visible',l:'Texto visible'},
+    {k:'observaciones',l:'Observaciones'}
+  ];
+  var filas = campos.map(function(c){
+    var v = flDatosActuales[c.k]; if(!v||v==='null') v='—';
+    return '<tr><td style="font-weight:600;color:#c0392b;padding:6px 12px 6px 0;vertical-align:top;white-space:nowrap;font-size:11px;text-transform:uppercase;letter-spacing:0.08em">'
+      + c.l + '</td><td style="padding:6px 0;font-size:13px;line-height:1.5">' + v + '</td></tr>';
+  }).join('');
+  var imgSrc = document.getElementById('fl-preview-img').src;
+  var win = window.open('', '_blank');
+  win.document.write('<!DOCTYPE html><html><head><meta charset="utf-8"><title>FilmoLens — ' + nombre + '</title>'
+    + '<style>body{font-family:Georgia,serif;margin:2.5cm;color:#1a1a1a}h1{font-size:1.4rem;color:#c0392b;margin-bottom:0.2rem}'
+    + 'h2{font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;color:#888;margin-bottom:1.5rem;font-weight:normal}'
+    + 'table{border-collapse:collapse;width:100%}img{max-width:300px;max-height:200px;object-fit:contain;border:1px solid #ddd}'
+    + 'footer{margin-top:2rem;font-size:10px;color:#aaa;border-top:1px solid #eee;padding-top:0.5rem}</style></head>'
+    + '<body><h1>FilmoLens · Ficha de análisis</h1><h2>' + nombre + '</h2>'
+    + '<img src="' + imgSrc + '" style="margin-bottom:1.5rem"><br>'
+    + '<table>' + filas + '</table>'
+    + '<footer>Generado con FilmoLens · La Pequeña Filmoteca · Naranjas de Hiroshima · naranjasdehiroshima.com</footer>'
+    + '</body></html>');
+  win.document.close();
+  setTimeout(function(){ win.print(); }, 500);
+}
+
+
 function flCargar(file){
   if(!file)return;
   if(file.size>10*1024*1024){flError('El archivo supera los 10MB.');return;}
@@ -2590,7 +2684,7 @@ async function flAnalizar(){
   document.getElementById('fl-error').style.display='none';
   ficha.classList.remove('visible');
   var prompt='Analiza este fotograma y devuelve SOLO un objeto JSON válido con estas claves exactas:\n'+
-    '{"formato_aspecto":"relación de aspecto y formato probable (ej: 1.33:1 / Academy, 4:3 video, 1.85:1 / Flat)","soporte_captura":"soporte probable (ej: 16mm, 35mm, Super 8, video, digital)","grano_textura":"descripción del grano, nitidez y textura visual","paleta_cromatica":"paleta dominante y tratamiento (o si es B/N)","epoca_aproximada":"década o período probable por estética visual","iluminacion":"tipo y estilo de iluminación","encuadre_composicion":"estilo de encuadre y composición","texto_visible":"cualquier texto, título o rótulo visible, o null","observaciones":"datos adicionales relevantes para identificación archivística"}\nSin explicaciones fuera del JSON.';
+    '{"formato_aspecto":"relación de aspecto y formato probable (ej: 1.33:1 / Academy, 4:3 video, 1.85:1 / Flat)","soporte_captura":"soporte probable (ej: 16mm, 35mm, Super 8, video, digital)","grano_textura":"descripción del grano, nitidez y textura visual","paleta_cromatica":"paleta dominante y tratamiento (o si es B/N)","epoca_aproximada":"década o período probable por estética visual","iluminacion":"tipo y estilo de iluminación","encuadre_composicion":"estilo de encuadre y composición","texto_visible":"cualquier texto, título o rótulo visible, o null","polaridad":"positivo o negativo (detecta si la imagen está invertida tonal y cromáticamente como un negativo fotográfico)","observaciones":"datos adicionales relevantes para identificación archivística"}\nSin explicaciones fuera del JSON.';
   try{
     var resp=await fetch(FL_WORKER,{
       method:'POST',
@@ -2608,8 +2702,9 @@ async function flAnalizar(){
     var data=await resp.json();
     var text=data.choices[0].message.content.trim().replace(/^```json\s*/,'').replace(/^```\s*/,'').replace(/```\s*$/,'');
     var p=JSON.parse(text);
+    flDatosActuales = p;
     var campos=[
-      {k:'formato_aspecto',l:'Formato y aspecto'},
+      {k:'polaridad',l:'Polaridad'},{k:'formato_aspecto',l:'Formato y aspecto'},
       {k:'soporte_captura',l:'Soporte de captura'},
       {k:'grano_textura',l:'Grano y textura'},
       {k:'paleta_cromatica',l:'Paleta cromática'},
