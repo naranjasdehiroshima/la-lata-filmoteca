@@ -1309,7 +1309,7 @@ function fhFrame() {
 
   document.getElementById('fh-header').innerHTML =
     sep+'\n'+
-    '<span style="color:#00ff41">  [ FILMOHACK · LA PEQUEÑA FILMOTECA · NdH ]</span>\n'+
+    '<span style="color:#00ff41">  [ CODEARCHIVE · LA PEQUEÑA FILMOTECA · NdH ]</span>\n'+
     d('  ESCÁNER AUTÓNOMO — '+ts)+'\n'+
     sep+'\n';
 
@@ -2684,7 +2684,7 @@ async function flAnalizar(){
   document.getElementById('fl-error').style.display='none';
   ficha.classList.remove('visible');
   var prompt='Analiza este fotograma y devuelve SOLO un objeto JSON válido con estas claves exactas:\n'+
-    '{"polaridad":"positivo o negativo (detecta si la imagen está invertida tonal y cromáticamente como un negativo fotográfico)","formato_aspecto":"relación de aspecto y formato probable (ej: 1.33:1 / Academy, 4:3 video, 1.85:1 / Flat)","soporte_captura":"soporte probable (ej: 16mm, 35mm, Super 8, video, digital)","grano_textura":"descripción del grano, nitidez y textura visual","paleta_cromatica":"paleta dominante y tratamiento (o si es B/N)","epoca_aproximada":"década o período probable por estética visual","iluminacion":"tipo y estilo de iluminación","encuadre_composicion":"estilo de encuadre y composición","texto_visible":"cualquier texto, título o rótulo visible, o null","observaciones":"si detectas símbolos geométricos (círculos, triángulos, cuadrados, cruces) o letras (K, L, N, S, T) en el borde de la película descríbelos exactamente tal como aparecen pues podrían ser edge codes de fabricante; incluye también cualquier otro dato archivístico relevante"}\nSin explicaciones fuera del JSON.';
+    '{"polaridad":"positivo o negativo (detecta si la imagen está invertida tonal y cromáticamente como un negativo fotográfico)","formato_aspecto":"relación de aspecto y formato probable (ej: 1.33:1 / Academy, 4:3 video, 1.85:1 / Flat)","soporte_captura":"soporte probable — IMPORTANTE: si detectas una sola perforación centrada entre fotogramas (no en el borde lateral) es Pathé Baby 9.5mm, no 16mm ni 8mm; si hay perforaciones en un solo borde lateral es 16mm o Super 8; si hay perforaciones en ambos bordes es 35mm (ej: 9.5mm Pathé Baby, 16mm, 35mm, Super 8, video, digital)","grano_textura":"descripción del grano, nitidez y textura visual","paleta_cromatica":"paleta dominante y tratamiento (o si es B/N)","epoca_aproximada":"década o período probable por estética visual","iluminacion":"tipo y estilo de iluminación","encuadre_composicion":"estilo de encuadre y composición","texto_visible":"cualquier texto, título o rótulo visible, o null","observaciones":"si detectas símbolos geométricos (círculos, triángulos, cuadrados, cruces) o letras (K, L, N, S, T) en el borde de la película descríbelos exactamente tal como aparecen pues podrían ser edge codes de fabricante; incluye también cualquier otro dato archivístico relevante"}\nSin explicaciones fuera del JSON.';
   try{
     var resp=await fetch(FL_WORKER,{
       method:'POST',
