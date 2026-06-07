@@ -2762,6 +2762,19 @@ async function flAnalizar(){
       }
     });
     if(mejorMatch) fechaEdge = mejorMatch.y.join(' / ');
+
+    // Si hay varios años posibles, intentar filtrar por época aproximada
+    if(mejorMatch && mejorMatch.y.length > 1 && p.epoca_aproximada){
+      var epocaText = p.epoca_aproximada;
+      var decadas = epocaText.match(/\d{4}/g);
+      if(decadas){
+        var anioRef = parseInt(decadas[0]);
+        var mejorAnio = mejorMatch.y.reduce(function(prev, curr){
+          return Math.abs(curr - anioRef) < Math.abs(prev - anioRef) ? curr : prev;
+        });
+        fechaEdge = mejorAnio + ' (estimado por época: ' + epocaText + ')';
+      }
+    }
     flDatosActuales.edge_codes_detectados = edgeDetectado;
     flDatosActuales.fecha_estimada_edge = fechaEdge;
     flDatosActuales.edge_codes_detectados = edgeDetectado;
