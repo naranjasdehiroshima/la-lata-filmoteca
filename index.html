@@ -2518,6 +2518,7 @@ fetch('datos.json')
   </div>
   <div id="fl-ficha-body"></div>
 </div>
+<div id="fl-edge-selector"></div>
 <p class="fl-foot">Análisis generado con IA (Llama 4 Scout · Groq). Los resultados son orientativos<br>y no sustituyen la inspección física del material.</p>
 </div>
 
@@ -2804,12 +2805,105 @@ async function flAnalizar(){
     document.getElementById('fl-ficha-body').innerHTML=html;
     ficha.classList.add('visible');
 
+    // ── Selector Edge Code ──
+    flRenderEdgeSelector(p.observaciones || '');
+
     // ── Guardar en Supabase ──
     flGuardarSupabase(p, fechaEdge);
 
   }catch(e){flError('Error al analizar: '+e.message);}
   finally{btn.disabled=false;loading.style.display='none';}
 }
+
+function flRenderEdgeSelector(observaciones){
+  var wrap = document.getElementById('fl-edge-selector');
+  if(!wrap) return;
+
+  // Extraer símbolos detectados por la IA
+  var simbolosIA = [];
+  var SIMBOLOS = ['●●● / ++','●●','▲▲','■■','●■','●▲','▲■','■●','▲●','■▲','●+','▲+','■+','+●','+▲','+■','+x●','+x▲','+x■','x●▲','x■▲','x▲▲','●x▲','■■▲','▲▲●','●■x','x▲x','▲■▲','■●▲','▲●▲','■▲▲','++▲','x+▲','▲+▲','x+x','■+▲','+▲▲','+●▲','+■▲','x●▲','x■▲','●','▲','■','+','x'];
+
+  // Detectar cuáles menciona la IA en observaciones
+  var obsNorm = observaciones.replace(/ｘ/g,'x').toLowerCase();
+  SIMBOLOS.forEach(function(s){
+    var sNorm = s.replace(/ｘ/g,'x').replace(/\s/g,'').toLowerCase();
+    if(obsNorm.replace(/\s/g,'').includes(sNorm) && sNorm.length > 0){
+      if(simbolosIA.indexOf(s) === -1) simbolosIA.push(s);
+    }
+  });
+
+  // Teclado de símbolos simples para construir secuencia
+  var TECLAS = ['●','▲','■','+','x','/ ++'];
+  var secuencia = simbolosIA.length > 0 ? simbolosIA[0].split('') : [];
+
+  wrap.innerHTML =
+    '<div style="margin-top:1.5rem;padding:1.2rem 1.5rem;border:1px solid var(--naranja);border-radius:2px;background:var(--crema)">' +
+    '<div style="font-family:\'DM Mono\',monospace;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--naranja);margin-bottom:0.8rem">&#9670; Verificar Edge Code</div>' +
+    (simbolosIA.length > 0 ? '<div style="font-family:\'DM Mono\',monospace;font-size:0.7rem;color:var(--gris-medio);margin-bottom:0.8rem">La IA detectó: <strong style="color:var(--negro)">' + simbolosIA.join(', ') + '</strong> — confirma o corrige:</div>' : '<div style="font-family:\'DM Mono\',monospace;font-size:0.7rem;color:var(--gris-medio);margin-bottom:0.8rem">La IA no detectó edge codes — selecciona manualmente:</div>') +
+    '<div id="fl-ec-secuencia" style="font-family:\'DM Mono\',monospace;font-size:1.4rem;letter-spacing:4px;min-height:2rem;padding:0.4rem 0.8rem;border:1px solid var(--gris-claro);border-radius:2px;background:var(--blanco);margin-bottom:0.8rem;color:var(--negro)">' + (simbolosIA.length > 0 ? simbolosIA[0] : '') + '</div>' +
+    '<div style="display:flex;gap:0.4rem;flex-wrap:wrap;margin-bottom:0.8rem">' +
+    TECLAS.map(function(t){
+      return '<button onclick="flECTecla(\''+t+'\')" style="font-family:\'DM Mono\',monospace;font-size:1.1rem;padding:0.4rem 0.8rem;border:1px solid var(--gris-claro);border-radius:2px;background:var(--blanco);cursor:pointer;transition:background 0.15s" onmouseover="this.style.background=\'var(--naranja-claro)\'" onmouseout="this.style.background=\'var(--blanco)\'">' + t + '</button>';
+    }).join('') +
+    '<button onclick="flECBorrar()" style="font-family:\'DM Mono\',monospace;font-size:0.65rem;letter-spacing:0.08em;text-transform:uppercase;padding:0.4rem 0.8rem;border:1px solid var(--gris-claro);border-radius:2px;background:none;color:var(--gris-medio);cursor:pointer">&#9003; Borrar</button>' +
+    '<button onclick="flECLimpiar()" style="font-family:\'DM Mono\',monospace;font-size:0.65rem;letter-spacing:0.08em;text-transform:uppercase;padding:0.4rem 0.8rem;border:1px solid var(--gris-claro);border-radius:2px;background:none;color:var(--gris-medio);cursor:pointer">&#10005; Limpiar</button>' +
+    '</div>' +
+    '<button onclick="flECConfirmar()" style="font-family:\'DM Mono\',monospace;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.45rem 1.2rem;background:var(--naranja);color:var(--blanco);border:none;border-radius:2px;cursor:pointer">Confirmar y fechar</button>' +
+    '<div id="fl-ec-resultado" style="margin-top:0.8rem;font-family:\'DM Mono\',monospace;font-size:0.8rem"></div>' +
+    '</div>';
+}
+
+function flECTecla(s){
+  var el = document.getElementById('fl-ec-secuencia');
+  if(el) el.textContent += s;
+}
+function flECBorrar(){
+  var el = document.getElementById('fl-ec-secuencia');
+  if(el) el.textContent = el.textContent.slice(0,-1);
+}
+function flECLimpiar(){
+  var el = document.getElementById('fl-ec-secuencia');
+  if(el) el.textContent = '';
+  var res = document.getElementById('fl-ec-resultado');
+  if(res) res.innerHTML = '';
+}
+function flECConfirmar(){
+  var el = document.getElementById('fl-ec-secuencia');
+  if(!el) return;
+  var seq = el.textContent.trim().replace(/\s+/g,'');
+  if(!seq){ 
+    document.getElementById('fl-ec-resultado').innerHTML = '<span style="color:var(--gris-medio)">Introduce una secuencia primero.</span>';
+    return;
+  }
+  var todosCodes = EC_KODAK.concat(EC_DUPONT);
+  var match = null;
+  todosCodes.forEach(function(e){
+    var cNorm = e.c.replace(/ｘ/g,'x').replace(/\s+/g,'');
+    if(cNorm.toLowerCase() === seq.toLowerCase()) match = e;
+  });
+  var res = document.getElementById('fl-ec-resultado');
+  if(match){
+    // Filtrar por época si hay datos
+    var fechaFinal = match.y.join(' / ');
+    if(match.y.length > 1 && flDatosActuales && flDatosActuales.epoca_aproximada){
+      var decadas = flDatosActuales.epoca_aproximada.match(/\d{4}/g);
+      if(decadas){
+        var anioRef = parseInt(decadas[0]);
+        var mejorAnio = match.y.reduce(function(prev,curr){
+          return Math.abs(curr-anioRef) < Math.abs(prev-anioRef) ? curr : prev;
+        });
+        fechaFinal = mejorAnio + ' <span style="color:var(--gris-medio);font-size:0.65rem">(ciclo completo: '+match.y.join(' / ')+')</span>';
+      }
+    }
+    res.innerHTML = '&#10003; <strong>'+seq+'</strong> → '+fechaFinal;
+    res.style.color = 'var(--naranja)';
+    if(flDatosActuales) flDatosActuales.fecha_estimada_edge = seq + ' → ' + match.y.join('/');
+  } else {
+    res.innerHTML = '&#10005; Código <strong>'+seq+'</strong> no encontrado en la tabla. Verifica los símbolos.';
+    res.style.color = '#c0392b';
+  }
+}
+
 
 async function flGuardarSupabase(p, fechaEdge){
   if(!sb) return;
