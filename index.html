@@ -2944,9 +2944,28 @@ async function flGuardarSupabase(p, fechaEdge){
     }
 
     var archivo = document.getElementById('fl-nombre').textContent;
+    var timestamp = new Date().toISOString().replace(/[:.]/g,'-');
+    var nombreBase = archivo.replace(/\.[^.]+$/,'').replace(/[^a-zA-Z0-9_-]/g,'_');
+
+    // Guardar imagen en Storage
+    var imgPath = null;
+    if(flB64 && flType){
+      try {
+        var byteChars = atob(flB64);
+        var byteArr = new Uint8Array(byteChars.length);
+        for(var i=0;i<byteChars.length;i++) byteArr[i]=byteChars.charCodeAt(i);
+        var blob = new Blob([byteArr], {type: flType});
+        var ext = flType.split('/')[1] || 'jpg';
+        imgPath = userId + '/' + timestamp + '_' + nombreBase + '.' + ext;
+        await sb.storage.from('filmolens').upload(imgPath, blob, {contentType: flType});
+        console.log('FilmoLens: imagen guardada en Storage');
+      } catch(se){ console.warn('FilmoLens: no se pudo guardar imagen', se); imgPath = null; }
+    }
+
     await sb.from('filmolens_consultas').insert({
       user_id: userId,
       archivo: archivo,
+      imagen_path: imgPath,
       tipo_imagen: p.tipo_imagen || null,
       polaridad: p.polaridad || null,
       formato_aspecto: p.formato_aspecto || null,
