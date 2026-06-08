@@ -580,6 +580,42 @@ header > *{position:relative;z-index:1;}
 .flc-badge{font-family:'DM Mono',monospace;font-size:0.55rem;letter-spacing:0.08em;text-transform:uppercase;padding:0.15rem 0.4rem;border-radius:2px;background:var(--naranja-claro);color:var(--naranja)}
 .flc-badge.verde{background:#e8f5e9;color:#2e7d32}
 
+/* FilmoLens Analizador */
+#fl-wrap h2{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--naranja);letter-spacing:0.05em;margin-bottom:0.3rem}
+#fl-wrap .fl-sub{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gris-medio);margin-bottom:1.5rem}
+.fl-dropzone{border:2px dashed var(--gris-claro);border-radius:4px;padding:3rem 2rem;text-align:center;cursor:pointer;transition:all 0.2s;background:var(--crema);margin-bottom:1.5rem}
+.fl-dropzone:hover,.fl-dropzone.over{border-color:var(--naranja);background:var(--naranja-claro)}
+.fl-dropzone-icon{font-size:2.5rem;margin-bottom:0.8rem}
+.fl-dropzone-text{font-family:'DM Mono',monospace;font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--gris-medio)}
+.fl-preview-wrap{display:none;gap:2rem;flex-wrap:wrap;margin-bottom:1.5rem;align-items:flex-start}
+.fl-preview-img{max-width:400px;max-height:300px;border:1px solid var(--gris-claro);border-radius:2px;object-fit:contain;background:var(--negro)}
+.fl-btn-analizar{font-family:'DM Mono',monospace;font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.6rem 1.5rem;background:var(--naranja);color:var(--blanco);border:none;border-radius:2px;cursor:pointer;transition:background 0.15s}
+.fl-btn-analizar:hover{background:var(--gris)}
+.fl-btn-analizar:disabled{background:var(--gris-claro);color:var(--gris-medio);cursor:not-allowed}
+.fl-ficha{border:1px solid var(--gris-claro);border-radius:2px;padding:1.5rem 2rem;background:var(--crema);display:none;margin-top:1rem}
+.fl-ficha.visible{display:block}
+.fl-ficha-titulo{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--naranja);letter-spacing:0.05em;margin-bottom:1rem;border-bottom:1px solid var(--gris-claro);padding-bottom:0.5rem}
+.fl-campo{display:grid;grid-template-columns:200px 1fr;gap:0.5rem;padding:0.5rem 0;border-bottom:1px solid var(--gris-claro)}
+.fl-campo:last-child{border-bottom:none}
+.fl-campo-label{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gris-medio);padding-top:0.15rem}
+.fl-campo-valor{font-family:'Libre Baskerville',serif;font-size:0.88rem;color:var(--negro);line-height:1.5}
+.fl-loading{font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--gris-medio);letter-spacing:0.08em;text-transform:uppercase;padding:1rem 0;display:none}
+.fl-error{font-family:'DM Mono',monospace;font-size:0.72rem;color:#c0392b;padding:0.8rem 1rem;background:#fdf0ee;border:1px solid #e8c5bf;border-radius:2px;display:none;margin-bottom:1rem}
+.fl-foot{font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--gris-medio);margin-top:2rem;line-height:1.7}
+
+#ec-wrap .ec-titulo{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gris-medio);margin-bottom:1.5rem}
+.ec-search-row{display:flex;align-items:stretch;gap:0;border:1px solid var(--gris-claro);border-radius:2px;overflow:hidden;margin-bottom:1.5rem}
+#ec-search{font-family:'DM Mono',monospace;font-size:0.8rem;background:var(--blanco);border:none;color:var(--negro);padding:0.55rem 1rem;flex:1;min-width:0}
+#ec-search:focus{outline:none;background:var(--crema)}
+.ec-tabs{display:flex;gap:0;border-left:1px solid var(--gris-claro)}
+.ec-tab{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.5rem 1.2rem;border:none;background:var(--blanco);color:var(--gris-medio);cursor:pointer;transition:all 0.15s;white-space:nowrap}
+.ec-tab.activo{background:var(--naranja);color:var(--blanco)}
+.ec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:0.5rem}
+.ec-card{border:1px solid var(--gris-claro);border-radius:2px;padding:0.9rem 1rem;background:var(--crema);display:flex;justify-content:space-between;align-items:center;transition:border-color 0.15s}
+.ec-card.highlight{border-color:var(--naranja);background:var(--naranja-claro)}
+.ec-card-years{font-family:'DM Mono',monospace;font-size:0.78rem;color:var(--negro);line-height:1.6}
+.ec-card-code{font-family:'DM Mono',monospace;font-size:1.05rem;color:var(--negro);letter-spacing:1px;text-align:right}
+.ec-note{font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--gris-medio);margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--gris-claro);line-height:1.7}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -2468,21 +2504,6 @@ fetch('datos.json')
 
 <!-- ═══════════ EDGE CODES ═══════════ -->
 <div id="ec-wrap" style="display:none;padding:2rem 3rem;background:var(--blanco);min-height:60vh">
-<style>
-#ec-wrap .ec-titulo{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gris-medio);margin-bottom:1.5rem}
-.ec-search-row{display:flex;align-items:stretch;gap:0;border:1px solid var(--gris-claro);border-radius:2px;overflow:hidden;margin-bottom:1.5rem}
-#ec-search{font-family:'DM Mono',monospace;font-size:0.8rem;background:var(--blanco);border:none;color:var(--negro);padding:0.55rem 1rem;flex:1;min-width:0}
-#ec-search:focus{outline:none;background:var(--crema)}
-.ec-tabs{display:flex;gap:0;border-left:1px solid var(--gris-claro)}
-.ec-tab{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.5rem 1.2rem;border:none;background:var(--blanco);color:var(--gris-medio);cursor:pointer;transition:all 0.15s;white-space:nowrap}
-.ec-tab.activo{background:var(--naranja);color:var(--blanco)}
-.ec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:0.5rem}
-.ec-card{border:1px solid var(--gris-claro);border-radius:2px;padding:0.9rem 1rem;background:var(--crema);display:flex;justify-content:space-between;align-items:center;transition:border-color 0.15s}
-.ec-card.highlight{border-color:var(--naranja);background:var(--naranja-claro)}
-.ec-card-years{font-family:'DM Mono',monospace;font-size:0.78rem;color:var(--negro);line-height:1.6}
-.ec-card-code{font-family:'DM Mono',monospace;font-size:1.05rem;color:var(--negro);letter-spacing:1px;text-align:right}
-.ec-note{font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--gris-medio);margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--gris-claro);line-height:1.7}
-</style>
 <p class="ec-titulo">Edge Codes &middot; Dataci&oacute;n de pel&iacute;cula fotoquímica</p>
 <div class="ec-search-row">
   <input type="text" id="ec-search" placeholder="Buscar por año o símbolo..." oninput="ecRender()">
@@ -2503,23 +2524,6 @@ fetch('datos.json')
   <button class="fl-nav-btn solo-auth" id="fl-nav-inspecciones" onclick="flNavegar('inspecciones')">&#128196; Mis Inspecciones</button>
   <button class="fl-nav-btn solo-auth" id="fl-nav-colecciones" onclick="flNavegar('colecciones')">&#9783; Mis Colecciones</button>
 </div>
-.fl-dropzone-text{font-family:'DM Mono',monospace;font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--gris-medio)}
-.fl-preview-wrap{display:none;gap:2rem;flex-wrap:wrap;margin-bottom:1.5rem;align-items:flex-start}
-.fl-preview-img{max-width:480px;max-height:360px;border:1px solid var(--gris-claro);border-radius:2px;object-fit:contain;background:var(--negro)}
-.fl-btn-analizar{font-family:'DM Mono',monospace;font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.6rem 1.5rem;background:var(--naranja);color:var(--blanco);border:none;border-radius:2px;cursor:pointer;transition:background 0.15s}
-.fl-btn-analizar:hover{background:var(--gris)}
-.fl-btn-analizar:disabled{background:var(--gris-claro);color:var(--gris-medio);cursor:not-allowed}
-.fl-ficha{border:1px solid var(--gris-claro);border-radius:2px;padding:1.5rem 2rem;background:var(--crema);display:none;margin-top:1rem}
-.fl-ficha.visible{display:block}
-.fl-ficha-titulo{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--naranja);letter-spacing:0.05em;margin-bottom:1rem;border-bottom:1px solid var(--gris-claro);padding-bottom:0.5rem}
-.fl-campo{display:grid;grid-template-columns:200px 1fr;gap:0.5rem;padding:0.5rem 0;border-bottom:1px solid var(--gris-claro)}
-.fl-campo:last-child{border-bottom:none}
-.fl-campo-label{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gris-medio);padding-top:0.15rem}
-.fl-campo-valor{font-family:'Libre Baskerville',serif;font-size:0.88rem;color:var(--negro);line-height:1.5}
-.fl-loading{font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--gris-medio);letter-spacing:0.08em;text-transform:uppercase;padding:1rem 0;display:none}
-.fl-error{font-family:'DM Mono',monospace;font-size:0.72rem;color:#c0392b;padding:0.8rem 1rem;background:#fdf0ee;border:1px solid #e8c5bf;border-radius:2px;display:none;margin-bottom:1rem}
-.fl-foot{font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--gris-medio);margin-top:2rem;line-height:1.7}
-</style>
 <!-- ── ANALIZADOR ── -->
 <div class="flc-seccion activo" id="fl-sec-analizador">
 <h2>FilmoLens</h2>
