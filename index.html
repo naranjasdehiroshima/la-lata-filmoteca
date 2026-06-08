@@ -2614,6 +2614,13 @@ function flInvertir(){
 function flCopiar(){
   if(!flDatosActuales) return;
   var nombre = document.getElementById('fl-nombre').textContent;
+
+  // Leer resultado confirmado del selector si existe
+  var resEl = document.getElementById('fl-ec-resultado');
+  if(resEl && resEl.textContent.trim()){
+    flDatosActuales.fecha_estimada_edge = resEl.textContent.replace(/[✓✗]/g,'').trim();
+  }
+
   var texto = 'FILMOLENS — Ficha de análisis\n' + nombre + '\n\n';
   var campos = [
     {k:'tipo_imagen',l:'Tipo de imagen'},
@@ -2643,6 +2650,10 @@ function flCopiar(){
 
 function flDescargarJSON(){
   if(!flDatosActuales) return;
+  var resEl = document.getElementById('fl-ec-resultado');
+  if(resEl && resEl.textContent.trim()){
+    flDatosActuales.fecha_estimada_edge = resEl.textContent.replace(/[✓✗]/g,'').trim();
+  }
   var nombre = document.getElementById('fl-nombre').textContent.replace(/\.[^.]+$/, '');
   var blob = new Blob([JSON.stringify({archivo: nombre, analisis: flDatosActuales}, null, 2)], {type:'application/json'});
   var a = document.createElement('a');
@@ -2654,6 +2665,13 @@ function flDescargarJSON(){
 function flDescargarPDF(){
   if(!flDatosActuales) return;
   var nombre = document.getElementById('fl-nombre').textContent;
+
+  // Leer resultado confirmado del selector si existe
+  var resEl = document.getElementById('fl-ec-resultado');
+  if(resEl && resEl.textContent.trim()){
+    flDatosActuales.fecha_estimada_edge = resEl.textContent.replace(/[✓✗]/g,'').trim();
+  }
+
   var campos = [
     {k:'tipo_imagen',l:'Tipo de imagen'},
     {k:'polaridad',l:'Polaridad'},
@@ -2666,7 +2684,8 @@ function flDescargarPDF(){
     {k:'iluminacion',l:'Iluminación'},
     {k:'encuadre_composicion',l:'Encuadre y composición'},
     {k:'texto_visible',l:'Texto visible'},
-    {k:'observaciones',l:'Observaciones'}
+    {k:'observaciones',l:'Observaciones'},
+    {k:'fecha_estimada_edge',l:'Fecha estimada (Edge Code)'}
   ];
   var filas = campos.map(function(c){
     var v = flDatosActuales[c.k]; if(!v||v==='null') v='—';
