@@ -2100,6 +2100,7 @@ function sbInit() {
     sb.auth.onAuthStateChange(function(event, session) {
       sbUser = session ? session.user : null;
       authUIUpdate();
+      flcActualizarNav();
       if (sbUser) {
         sbCargarFavs();
         sbCargarCols();
@@ -2458,6 +2459,52 @@ fetch('datos.json')
 .fl-dropzone{border:2px dashed var(--gris-claro);border-radius:4px;padding:3rem 2rem;text-align:center;cursor:pointer;transition:all 0.2s;background:var(--crema);margin-bottom:1.5rem}
 .fl-dropzone:hover,.fl-dropzone.over{border-color:var(--naranja);background:var(--naranja-claro)}
 .fl-dropzone-icon{font-size:2.5rem;margin-bottom:0.8rem}
+
+/* Nav interna FilmoLens */
+.fl-nav{display:flex;gap:0;border:1px solid var(--gris-claro);border-radius:2px;overflow:hidden;margin-bottom:2rem;width:fit-content}
+.fl-nav-btn{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.45rem 1.1rem;border:none;background:var(--blanco);color:var(--gris-medio);cursor:pointer;transition:all 0.15s;border-right:1px solid var(--gris-claro)}
+.fl-nav-btn:last-child{border-right:none}
+.fl-nav-btn.activo{background:var(--naranja);color:var(--blanco)}
+.fl-nav-btn.solo-auth{display:none}
+.fl-nav-btn.solo-auth.visible{display:block}
+
+/* Catalogador */
+.flc-seccion{display:none}
+.flc-seccion.activo{display:block}
+.flc-titulo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--naranja);letter-spacing:0.05em;margin-bottom:0.3rem}
+.flc-sub{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gris-medio);margin-bottom:1.5rem}
+.flc-btn{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.08em;text-transform:uppercase;padding:0.45rem 1rem;border:1px solid var(--gris-claro);background:none;color:var(--gris-medio);border-radius:2px;cursor:pointer;transition:all 0.15s}
+.flc-btn:hover{background:var(--naranja);color:var(--blanco);border-color:var(--naranja)}
+.flc-btn-primary{background:var(--naranja);color:var(--blanco);border-color:var(--naranja)}
+.flc-btn-primary:hover{background:var(--gris)}
+.flc-card{border:1px solid var(--gris-claro);border-radius:2px;padding:1rem 1.2rem;background:var(--crema);margin-bottom:0.6rem;cursor:pointer;transition:border-color 0.15s}
+.flc-card:hover{border-color:var(--naranja)}
+.flc-card-titulo{font-family:'Libre Baskerville',serif;font-size:0.95rem;color:var(--negro);margin-bottom:0.3rem}
+.flc-card-meta{font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--gris-medio);letter-spacing:0.05em}
+.flc-form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:0.8rem}
+.flc-form-row.triple{grid-template-columns:1fr 1fr 1fr}
+.flc-form-full{margin-bottom:0.8rem}
+.flc-label{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gris-medio);display:block;margin-bottom:0.3rem}
+.flc-label span{color:var(--naranja)}
+.flc-input{font-family:'DM Mono',monospace;font-size:0.8rem;background:var(--blanco);border:1px solid var(--gris-claro);color:var(--negro);padding:0.45rem 0.8rem;border-radius:2px;width:100%;box-sizing:border-box}
+.flc-input:focus{outline:2px solid var(--naranja);outline-offset:1px}
+.flc-select{font-family:'DM Mono',monospace;font-size:0.78rem;background:var(--blanco);border:1px solid var(--gris-claro);color:var(--negro);padding:0.45rem 0.8rem;border-radius:2px;width:100%;box-sizing:border-box;-webkit-appearance:none}
+.flc-textarea{font-family:'DM Mono',monospace;font-size:0.78rem;background:var(--blanco);border:1px solid var(--gris-claro);color:var(--negro);padding:0.45rem 0.8rem;border-radius:2px;width:100%;box-sizing:border-box;min-height:80px;resize:vertical}
+.flc-condicion-btns{display:flex;gap:0.4rem}
+.flc-condicion-btn{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.05em;padding:0.4rem 0.8rem;border:1px solid var(--gris-claro);background:none;color:var(--gris-medio);border-radius:2px;cursor:pointer;transition:all 0.15s}
+.flc-condicion-btn.sel{background:var(--naranja);color:var(--blanco);border-color:var(--naranja)}
+.flc-fiaf-nota{font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--gris-medio);margin-top:0.2rem;line-height:1.5}
+.flc-vacio{font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--gris-medio);padding:2rem;text-align:center;border:1px dashed var(--gris-claro);border-radius:2px}
+.flc-badge{font-family:'DM Mono',monospace;font-size:0.55rem;letter-spacing:0.08em;text-transform:uppercase;padding:0.15rem 0.4rem;border-radius:2px;background:var(--naranja-claro);color:var(--naranja)}
+.flc-badge.verde{background:#e8f5e9;color:#2e7d32}
+</style>
+
+<!-- Nav interna -->
+<div class="fl-nav">
+  <button class="fl-nav-btn activo" id="fl-nav-analizador" onclick="flNavegar('analizador')">&#128247; Analizador</button>
+  <button class="fl-nav-btn solo-auth" id="fl-nav-inspecciones" onclick="flNavegar('inspecciones')">&#128196; Mis Inspecciones</button>
+  <button class="fl-nav-btn solo-auth" id="fl-nav-colecciones" onclick="flNavegar('colecciones')">&#9783; Mis Colecciones</button>
+</div>
 .fl-dropzone-text{font-family:'DM Mono',monospace;font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--gris-medio)}
 .fl-preview-wrap{display:none;gap:2rem;flex-wrap:wrap;margin-bottom:1.5rem;align-items:flex-start}
 .fl-preview-img{max-width:640px;max-height:480px;border:1px solid var(--gris-claro);border-radius:2px;object-fit:contain;background:var(--negro)}
@@ -2475,8 +2522,11 @@ fetch('datos.json')
 .fl-error{font-family:'DM Mono',monospace;font-size:0.72rem;color:#c0392b;padding:0.8rem 1rem;background:#fdf0ee;border:1px solid #e8c5bf;border-radius:2px;display:none;margin-bottom:1rem}
 .fl-foot{font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--gris-medio);margin-top:2rem;line-height:1.7}
 </style>
+<!-- ── ANALIZADOR ── -->
+<div class="flc-seccion activo" id="fl-sec-analizador">
 <h2>FilmoLens</h2>
-<p class="fl-sub">Identificador de fotogramas &middot; An&aacute;lisis visual con IA</p>
+<p class="fl-sub">Identificador de fotogramas &middot; An&aacute;lisis visual con IA &middot; <span style="color:var(--naranja)">FIAF Moving Image Cataloguing Manual 2016</span></p>
+
 
 <div class="fl-dropzone" id="fl-dropzone"
   onclick="document.getElementById('fl-input').click()"
@@ -2519,11 +2569,516 @@ fetch('datos.json')
   <div id="fl-ficha-body"></div>
 </div>
 <div id="fl-edge-selector"></div>
+</div><!-- /fl-sec-analizador -->
+
+<!-- ── MIS INSPECCIONES ── -->
+<div class="flc-seccion" id="fl-sec-inspecciones">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.5rem">
+  <div>
+    <div class="flc-titulo">Mis Inspecciones</div>
+    <div class="flc-sub">Registro de inspecciones físicas &middot; Nivel Item EN 15907</div>
+  </div>
+  <div style="display:flex;gap:0.5rem">
+    <button class="flc-btn" onclick="flcExportarExcel()">&#8595; Exportar Excel</button>
+    <button class="flc-btn flc-btn-primary" onclick="flcNuevaInspeccion()">+ Nueva inspección</button>
+  </div>
+</div>
+<div id="flc-insp-lista"></div>
+</div><!-- /fl-sec-inspecciones -->
+
+<!-- ── MIS COLECCIONES ── -->
+<div class="flc-seccion" id="fl-sec-colecciones">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.5rem">
+  <div>
+    <div class="flc-titulo">Mis Colecciones</div>
+    <div class="flc-sub">Colecciones del archivo &middot; Nivel Collection EN 15907</div>
+  </div>
+  <button class="flc-btn flc-btn-primary" onclick="flcNuevaColeccion()">+ Nueva colección</button>
+</div>
+<div id="flc-col-lista"></div>
+</div><!-- /fl-sec-colecciones -->
+
+<!-- ── MODAL NUEVA INSPECCIÓN ── -->
+<div id="flc-modal-insp" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;overflow-y:auto">
+<div style="background:var(--blanco);max-width:700px;margin:2rem auto;border-radius:4px;padding:2rem;position:relative">
+  <button onclick="flcCerrarModal('flc-modal-insp')" style="position:absolute;top:1rem;right:1rem;font-family:'DM Mono',monospace;font-size:0.7rem;background:none;border:none;cursor:pointer;color:var(--gris-medio)">&#10005; cerrar</button>
+  <div class="flc-titulo" id="flc-modal-insp-titulo">Nueva Inspección</div>
+  <div class="flc-sub">Campos basados en FIAF Moving Image Cataloguing Manual 2016 · EN 15907 Item level</div>
+
+  <div class="flc-form-row">
+    <div>
+      <label class="flc-label">Título provisional</label>
+      <input class="flc-input" id="flci-titulo" placeholder="Título o descripción provisional">
+    </div>
+    <div>
+      <label class="flc-label">Código de acceso / N° rollo</label>
+      <input class="flc-input" id="flci-codigo" placeholder="ej. C.PBR001-R3">
+    </div>
+  </div>
+
+  <div class="flc-form-row">
+    <div>
+      <label class="flc-label">Colección</label>
+      <select class="flc-select" id="flci-coleccion">
+        <option value="">Sin colección</option>
+      </select>
+    </div>
+    <div>
+      <label class="flc-label">Fecha de inspección</label>
+      <input class="flc-input" id="flci-fecha" type="date">
+    </div>
+  </div>
+
+  <div style="border-top:1px solid var(--gris-claro);margin:1rem 0;padding-top:1rem">
+    <div style="font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--naranja);margin-bottom:0.8rem">Soporte físico</div>
+    <div class="flc-form-row triple">
+      <div>
+        <label class="flc-label">Formato / Soporte <span>*</span></label>
+        <select class="flc-select" id="flci-soporte">
+          <option value="">Seleccionar</option>
+          <option>8mm regular</option>
+          <option>Super 8</option>
+          <option>9.5mm Pathé Baby</option>
+          <option>16mm simple perf.</option>
+          <option>16mm doble perf.</option>
+          <option>35mm</option>
+          <option>70mm</option>
+          <option>VHS</option>
+          <option>Betamax</option>
+          <option>U-matic</option>
+          <option>Video 2000</option>
+          <option>Otro</option>
+        </select>
+      </div>
+      <div>
+        <label class="flc-label">Base</label>
+        <select class="flc-select" id="flci-base">
+          <option value="">Sin determinar</option>
+          <option>Safety / Triacetato</option>
+          <option>Acetato de celulosa</option>
+          <option>Poliéster</option>
+          <option>Nitrato</option>
+        </select>
+      </div>
+      <div>
+        <label class="flc-label">Generación</label>
+        <select class="flc-select" id="flci-generacion">
+          <option value="">Sin determinar</option>
+          <option>Original / Negativo cámara</option>
+          <option>Internegativo</option>
+          <option>Interpositivo</option>
+          <option>Copia de distribución</option>
+          <option>Duplicado negativo</option>
+          <option>Copia de preservación</option>
+        </select>
+      </div>
+    </div>
+    <div class="flc-form-row">
+      <div>
+        <label class="flc-label">Longitud (metros)</label>
+        <input class="flc-input" id="flci-longitud" type="number" placeholder="ej. 120">
+      </div>
+      <div>
+        <label class="flc-label">Número de latas / rollos</label>
+        <input class="flc-input" id="flci-latas" type="number" placeholder="ej. 3">
+      </div>
+    </div>
+  </div>
+
+  <div style="border-top:1px solid var(--gris-claro);margin:1rem 0;padding-top:1rem">
+    <div style="font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--naranja);margin-bottom:0.8rem">Sistema de imagen y sonido</div>
+    <div class="flc-form-row triple">
+      <div>
+        <label class="flc-label">Sistema de color</label>
+        <select class="flc-select" id="flci-color">
+          <option value="">Sin determinar</option>
+          <option>B/N</option>
+          <option>Color</option>
+          <option>Virado</option>
+          <option>Tintado</option>
+          <option>B/N virado</option>
+          <option>Technicolor</option>
+        </select>
+      </div>
+      <div>
+        <label class="flc-label">Polaridad</label>
+        <select class="flc-select" id="flci-polaridad">
+          <option value="">Sin determinar</option>
+          <option>Positivo</option>
+          <option>Negativo</option>
+          <option>Reversible</option>
+        </select>
+      </div>
+      <div>
+        <label class="flc-label">Relación de aspecto</label>
+        <select class="flc-select" id="flci-aspecto">
+          <option value="">Sin determinar</option>
+          <option>1.33:1 / Academy</option>
+          <option>1.37:1 / Academy</option>
+          <option>1.66:1</option>
+          <option>1.85:1 / Flat</option>
+          <option>2.39:1 / Scope</option>
+          <option>2.55:1 / CinemaScope</option>
+          <option>4:3 video</option>
+          <option>16:9 video</option>
+        </select>
+      </div>
+    </div>
+    <div class="flc-form-full">
+      <label class="flc-label">Sistema de sonido</label>
+      <select class="flc-select" id="flci-sonido">
+        <option value="">Sin determinar</option>
+        <option>Mudo</option>
+        <option>Óptico — densidad variable</option>
+        <option>Óptico — área variable</option>
+        <option>Magnético — pista lateral</option>
+        <option>Magnético — pistas múltiples</option>
+        <option>Digital (DTS / Dolby / SDDS)</option>
+        <option>Sin pista visible</option>
+      </select>
+    </div>
+  </div>
+
+  <div style="border-top:1px solid var(--gris-claro);margin:1rem 0;padding-top:1rem">
+    <div style="font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--naranja);margin-bottom:0.8rem">Estado de conservación · Escala FIAF</div>
+    <div class="flc-condicion-btns" id="flci-condicion-btns">
+      <button class="flc-condicion-btn" onclick="flcSelCondicion(1)">1 — Excelente</button>
+      <button class="flc-condicion-btn" onclick="flcSelCondicion(2)">2 — Bueno</button>
+      <button class="flc-condicion-btn" onclick="flcSelCondicion(3)">3 — Regular</button>
+      <button class="flc-condicion-btn" onclick="flcSelCondicion(4)">4 — Malo</button>
+    </div>
+    <p class="flc-fiaf-nota">1: Sin deterioro visible · 2: Deterioro leve, proyectable · 3: Deterioro moderado, requiere intervención · 4: Deterioro grave, no proyectable</p>
+    <input type="hidden" id="flci-condicion" value="">
+  </div>
+
+  <div style="border-top:1px solid var(--gris-claro);margin:1rem 0;padding-top:1rem">
+    <div style="font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--naranja);margin-bottom:0.8rem">Edge Code</div>
+    <div class="flc-form-row">
+      <div>
+        <label class="flc-label">Código detectado</label>
+        <input class="flc-input" id="flci-edgecode" placeholder="ej. ■▲">
+      </div>
+      <div>
+        <label class="flc-label">Fecha estimada</label>
+        <input class="flc-input" id="flci-fechaedge" placeholder="ej. 1961">
+      </div>
+    </div>
+  </div>
+
+  <div style="border-top:1px solid var(--gris-claro);margin:1rem 0;padding-top:1rem">
+    <div class="flc-form-row">
+      <div>
+        <label class="flc-label">Procedencia</label>
+        <input class="flc-input" id="flci-procedencia" placeholder="Origen del material">
+      </div>
+      <div>
+        <label class="flc-label">Inspector</label>
+        <input class="flc-input" id="flci-inspector" placeholder="Nombre del catalogador">
+      </div>
+    </div>
+    <div class="flc-form-full">
+      <label class="flc-label">Notas de conservación</label>
+      <textarea class="flc-textarea" id="flci-obs-conservacion" placeholder="Observaciones sobre el estado físico del material..."></textarea>
+    </div>
+    <div class="flc-form-full">
+      <label class="flc-label">Notas generales</label>
+      <textarea class="flc-textarea" id="flci-notas" placeholder="Notas adicionales..."></textarea>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:0.8rem;justify-content:flex-end;margin-top:1rem">
+    <button class="flc-btn" onclick="flcCerrarModal('flc-modal-insp')">Cancelar</button>
+    <button class="flc-btn flc-btn-primary" onclick="flcGuardarInspeccion()">Guardar inspección</button>
+  </div>
+  <div id="flc-insp-msg" style="font-family:'DM Mono',monospace;font-size:0.7rem;margin-top:0.8rem;text-align:right"></div>
+</div>
+</div>
+
+<!-- ── MODAL NUEVA COLECCIÓN ── -->
+<div id="flc-modal-col" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;overflow-y:auto">
+<div style="background:var(--blanco);max-width:500px;margin:3rem auto;border-radius:4px;padding:2rem;position:relative">
+  <button onclick="flcCerrarModal('flc-modal-col')" style="position:absolute;top:1rem;right:1rem;font-family:'DM Mono',monospace;font-size:0.7rem;background:none;border:none;cursor:pointer;color:var(--gris-medio)">&#10005; cerrar</button>
+  <div class="flc-titulo">Nueva Colección</div>
+  <div class="flc-sub">Nivel Collection · EN 15907</div>
+  <div class="flc-form-full">
+    <label class="flc-label">Nombre <span>*</span></label>
+    <input class="flc-input" id="flcc-nombre" placeholder="Nombre de la colección">
+  </div>
+  <div class="flc-form-full">
+    <label class="flc-label">Descripción</label>
+    <textarea class="flc-textarea" id="flcc-desc" placeholder="Descripción de la colección..."></textarea>
+  </div>
+  <div class="flc-form-row">
+    <div>
+      <label class="flc-label">Institución / Archivo</label>
+      <input class="flc-input" id="flcc-inst" placeholder="ej. La Pequeña Filmoteca">
+    </div>
+    <div>
+      <label class="flc-label">País</label>
+      <input class="flc-input" id="flcc-pais" placeholder="ej. México">
+    </div>
+  </div>
+  <div class="flc-form-full">
+    <label class="flc-label">Fecha de creación</label>
+    <input class="flc-input" id="flcc-fecha" type="date">
+  </div>
+  <div class="flc-form-full">
+    <label class="flc-label">Notas</label>
+    <textarea class="flc-textarea" id="flcc-notas" placeholder="Notas adicionales..."></textarea>
+  </div>
+  <div style="display:flex;gap:0.8rem;justify-content:flex-end;margin-top:1rem">
+    <button class="flc-btn" onclick="flcCerrarModal('flc-modal-col')">Cancelar</button>
+    <button class="flc-btn flc-btn-primary" onclick="flcGuardarColeccion()">Guardar colección</button>
+  </div>
+  <div id="flc-col-msg" style="font-family:'DM Mono',monospace;font-size:0.7rem;margin-top:0.8rem;text-align:right"></div>
+</div>
+</div>
 <p class="fl-foot">Análisis generado con IA (Llama 4 Scout · Groq). Los resultados son orientativos<br>y no sustituyen la inspección física del material.</p>
 </div>
 
 <script>
-// ════ EDGE CODES ════
+// ════ FILMOLENS CATALOGADOR ════
+var flcCondicionSel = null;
+var flcInspEditId = null;
+var flcColecciones = [];
+
+function flNavegar(sec){
+  ['analizador','inspecciones','colecciones'].forEach(function(s){
+    document.getElementById('fl-sec-'+s).classList.toggle('activo', s===sec);
+    document.getElementById('fl-nav-'+s).classList.toggle('activo', s===sec);
+  });
+  if(sec==='inspecciones') flcCargarInspecciones();
+  if(sec==='colecciones') flcCargarColecciones();
+}
+
+function flcActualizarNav(){
+  var authed = sbUser && !sbUser.is_anonymous;
+  document.querySelectorAll('.fl-nav-btn.solo-auth').forEach(function(b){
+    b.classList.toggle('visible', !!sbUser);
+  });
+}
+
+function flcCerrarModal(id){
+  document.getElementById(id).style.display='none';
+}
+
+function flcSelCondicion(n){
+  flcCondicionSel = n;
+  document.getElementById('flci-condicion').value = n;
+  document.querySelectorAll('.flc-condicion-btn').forEach(function(b,i){
+    b.classList.toggle('sel', i+1===n);
+  });
+}
+
+// ── COLECCIONES ──
+async function flcCargarColecciones(){
+  if(!sb||!sbUser) return;
+  var lista = document.getElementById('flc-col-lista');
+  lista.innerHTML = '<div class="flc-vacio">Cargando...</div>';
+  var res = await sb.from('fl_colecciones').select('*').order('created_at',{ascending:false});
+  flcColecciones = res.data || [];
+  if(!flcColecciones.length){
+    lista.innerHTML = '<div class="flc-vacio">No hay colecciones. Crea una para empezar.</div>';
+    return;
+  }
+  lista.innerHTML = flcColecciones.map(function(c){
+    return '<div class="flc-card" onclick="flcVerColeccion(\''+c.id+'\')">'+
+      '<div class="flc-card-titulo">'+c.nombre+'</div>'+
+      '<div class="flc-card-meta">'+(c.institucion||'')+(c.pais?' · '+c.pais:'')+(c.fecha_creacion?' · '+c.fecha_creacion:'')+
+      (c.descripcion?'<br>'+c.descripcion:'')+'</div></div>';
+  }).join('');
+}
+
+function flcNuevaColeccion(){
+  ['flcc-nombre','flcc-desc','flcc-inst','flcc-pais','flcc-notas'].forEach(function(id){ var el=document.getElementById(id); if(el) el.value=''; });
+  document.getElementById('flcc-fecha').value = new Date().toISOString().split('T')[0];
+  document.getElementById('flc-col-msg').textContent='';
+  document.getElementById('flc-modal-col').style.display='block';
+}
+
+async function flcGuardarColeccion(){
+  if(!sb||!sbUser) return;
+  var nombre = document.getElementById('flcc-nombre').value.trim();
+  if(!nombre){ document.getElementById('flc-col-msg').textContent='El nombre es obligatorio.'; return; }
+  var res = await sb.from('fl_colecciones').insert({
+    user_id: sbUser.id,
+    nombre: nombre,
+    descripcion: document.getElementById('flcc-desc').value||null,
+    institucion: document.getElementById('flcc-inst').value||null,
+    pais: document.getElementById('flcc-pais').value||null,
+    fecha_creacion: document.getElementById('flcc-fecha').value||null,
+    notas: document.getElementById('flcc-notas').value||null
+  });
+  if(res.error){ document.getElementById('flc-col-msg').textContent='Error: '+res.error.message; return; }
+  flcCerrarModal('flc-modal-col');
+  flcCargarColecciones();
+}
+
+function flcVerColeccion(id){
+  flNavegar('inspecciones');
+  // Filtrar inspecciones de esa colección en el futuro
+}
+
+// ── INSPECCIONES ──
+async function flcCargarInspecciones(){
+  if(!sb||!sbUser) return;
+  var lista = document.getElementById('flc-insp-lista');
+  lista.innerHTML = '<div class="flc-vacio">Cargando...</div>';
+  // Cargar colecciones para el select
+  if(!flcColecciones.length){
+    var rc = await sb.from('fl_colecciones').select('*').order('nombre');
+    flcColecciones = rc.data || [];
+  }
+  var res = await sb.from('fl_inspecciones').select('*, fl_colecciones(nombre)').order('created_at',{ascending:false});
+  var items = res.data || [];
+  if(!items.length){
+    lista.innerHTML = '<div class="flc-vacio">No hay inspecciones. Crea una nueva para empezar a catalogar.</div>';
+    return;
+  }
+  lista.innerHTML = items.map(function(i){
+    var cond = i.condicion ? ['','1 — Excelente','2 — Bueno','3 — Regular','4 — Malo'][i.condicion] : '—';
+    var condColor = i.condicion<=2 ? 'verde' : '';
+    return '<div class="flc-card">'+
+      '<div style="display:flex;justify-content:space-between;align-items:flex-start">'+
+      '<div class="flc-card-titulo">'+(i.titulo_provisional||'Sin título')+'</div>'+
+      '<div style="display:flex;gap:0.4rem;align-items:center">'+
+      (i.condicion?'<span class="flc-badge '+condColor+'">'+cond+'</span>':'')+
+      '<button onclick="flcEditarInspeccion(\''+i.id+'\')" style="font-family:\'DM Mono\',monospace;font-size:0.55rem;padding:0.2rem 0.5rem;border:1px solid var(--gris-claro);background:none;cursor:pointer;border-radius:2px;color:var(--gris-medio)">editar</button>'+
+      '</div></div>'+
+      '<div class="flc-card-meta">'+
+      (i.codigo_acceso?i.codigo_acceso+' · ':'')+
+      (i.soporte||'')+(i.base?' · '+i.base:'')+
+      (i.fl_colecciones?' · '+i.fl_colecciones.nombre:'')+
+      (i.fecha_inspeccion?' · '+i.fecha_inspeccion:'')+
+      (i.edge_code?' · Edge: '+i.edge_code:'')+
+      '</div></div>';
+  }).join('');
+}
+
+function flcNuevaInspeccion(){
+  flcInspEditId = null;
+  document.getElementById('flc-modal-insp-titulo').textContent = 'Nueva Inspección';
+  ['flci-titulo','flci-codigo','flci-longitud','flci-latas','flci-edgecode','flci-fechaedge','flci-procedencia','flci-inspector','flci-obs-conservacion','flci-notas'].forEach(function(id){
+    var el=document.getElementById(id); if(el) el.value='';
+  });
+  ['flci-soporte','flci-base','flci-generacion','flci-color','flci-polaridad','flci-aspecto','flci-sonido'].forEach(function(id){
+    var el=document.getElementById(id); if(el) el.value='';
+  });
+  flcCondicionSel=null;
+  document.querySelectorAll('.flc-condicion-btn').forEach(function(b){ b.classList.remove('sel'); });
+  document.getElementById('flci-fecha').value = new Date().toISOString().split('T')[0];
+  // Cargar colecciones en el select
+  var sel = document.getElementById('flci-coleccion');
+  sel.innerHTML = '<option value="">Sin colección</option>' +
+    flcColecciones.map(function(c){ return '<option value="'+c.id+'">'+c.nombre+'</option>'; }).join('');
+  document.getElementById('flc-insp-msg').textContent='';
+  document.getElementById('flc-modal-insp').style.display='block';
+}
+
+async function flcEditarInspeccion(id){
+  var res = await sb.from('fl_inspecciones').select('*').eq('id',id).single();
+  var i = res.data;
+  if(!i) return;
+  flcInspEditId = id;
+  document.getElementById('flc-modal-insp-titulo').textContent = 'Editar Inspección';
+  document.getElementById('flci-titulo').value = i.titulo_provisional||'';
+  document.getElementById('flci-codigo').value = i.codigo_acceso||'';
+  document.getElementById('flci-fecha').value = i.fecha_inspeccion||'';
+  document.getElementById('flci-soporte').value = i.soporte||'';
+  document.getElementById('flci-base').value = i.base||'';
+  document.getElementById('flci-generacion').value = i.generacion||'';
+  document.getElementById('flci-longitud').value = i.longitud_metros||'';
+  document.getElementById('flci-latas').value = i.numero_latas||'';
+  document.getElementById('flci-color').value = i.color||'';
+  document.getElementById('flci-polaridad').value = i.polaridad||'';
+  document.getElementById('flci-aspecto').value = i.aspecto||'';
+  document.getElementById('flci-sonido').value = i.sonido||'';
+  document.getElementById('flci-edgecode').value = i.edge_code||'';
+  document.getElementById('flci-fechaedge').value = i.fecha_estimada_edge||'';
+  document.getElementById('flci-procedencia').value = i.procedencia||'';
+  document.getElementById('flci-inspector').value = i.inspector||'';
+  document.getElementById('flci-obs-conservacion').value = i.observaciones_conservacion||'';
+  document.getElementById('flci-notas').value = i.notas||'';
+  if(i.condicion) flcSelCondicion(i.condicion);
+  var sel = document.getElementById('flci-coleccion');
+  sel.innerHTML = '<option value="">Sin colección</option>' +
+    flcColecciones.map(function(c){ return '<option value="'+c.id+'"'+(c.id===i.coleccion_id?' selected':'')+'>'+c.nombre+'</option>'; }).join('');
+  document.getElementById('flc-insp-msg').textContent='';
+  document.getElementById('flc-modal-insp').style.display='block';
+}
+
+async function flcGuardarInspeccion(){
+  if(!sb||!sbUser) return;
+  var datos = {
+    user_id: sbUser.id,
+    coleccion_id: document.getElementById('flci-coleccion').value||null,
+    titulo_provisional: document.getElementById('flci-titulo').value||null,
+    codigo_acceso: document.getElementById('flci-codigo').value||null,
+    fecha_inspeccion: document.getElementById('flci-fecha').value||null,
+    soporte: document.getElementById('flci-soporte').value||null,
+    base: document.getElementById('flci-base').value||null,
+    generacion: document.getElementById('flci-generacion').value||null,
+    longitud_metros: parseFloat(document.getElementById('flci-longitud').value)||null,
+    numero_latas: parseInt(document.getElementById('flci-latas').value)||null,
+    color: document.getElementById('flci-color').value||null,
+    polaridad: document.getElementById('flci-polaridad').value||null,
+    aspecto: document.getElementById('flci-aspecto').value||null,
+    sonido: document.getElementById('flci-sonido').value||null,
+    condicion: flcCondicionSel||null,
+    edge_code: document.getElementById('flci-edgecode').value||null,
+    fecha_estimada_edge: document.getElementById('flci-fechaedge').value||null,
+    procedencia: document.getElementById('flci-procedencia').value||null,
+    inspector: document.getElementById('flci-inspector').value||null,
+    observaciones_conservacion: document.getElementById('flci-obs-conservacion').value||null,
+    notas: document.getElementById('flci-notas').value||null
+  };
+  var res;
+  if(flcInspEditId){
+    res = await sb.from('fl_inspecciones').update(datos).eq('id',flcInspEditId);
+  } else {
+    res = await sb.from('fl_inspecciones').insert(datos);
+  }
+  if(res.error){ document.getElementById('flc-insp-msg').textContent='Error: '+res.error.message; return; }
+  flcCerrarModal('flc-modal-insp');
+  flcCargarInspecciones();
+}
+
+// ── EXPORTAR EXCEL ──
+async function flcExportarExcel(){
+  if(!sb||!sbUser) return;
+  var res = await sb.from('fl_inspecciones').select('*, fl_colecciones(nombre)').order('created_at',{ascending:false});
+  var items = res.data || [];
+  if(!items.length){ alert('No hay inspecciones para exportar.'); return; }
+
+  var condLabels = ['','Excelente','Bueno','Regular','Malo'];
+  var headers = ['Código acceso','Título provisional','Colección','Fecha inspección','Soporte','Base','Generación','Longitud (m)','N° latas','Color','Polaridad','Aspecto','Sonido','Condición FIAF','Edge Code','Fecha estimada','Procedencia','Inspector','Notas conservación','Notas'];
+  var rows = items.map(function(i){
+    return [
+      i.codigo_acceso||'',i.titulo_provisional||'',
+      i.fl_colecciones?i.fl_colecciones.nombre:'',
+      i.fecha_inspeccion||'',i.soporte||'',i.base||'',i.generacion||'',
+      i.longitud_metros||'',i.numero_latas||'',
+      i.color||'',i.polaridad||'',i.aspecto||'',i.sonido||'',
+      i.condicion?condLabels[i.condicion]:'',
+      i.edge_code||'',i.fecha_estimada_edge||'',
+      i.procedencia||'',i.inspector||'',
+      i.observaciones_conservacion||'',i.notas||''
+    ];
+  });
+
+  var csv = [headers].concat(rows).map(function(r){
+    return r.map(function(v){ return '"'+String(v).replace(/"/g,'""')+'"'; }).join(',');
+  }).join('\n');
+
+  var bom = '\uFEFF';
+  var blob = new Blob([bom+csv],{type:'text/csv;charset=utf-8'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'filmolens-inspecciones-'+new Date().toISOString().split('T')[0]+'.csv';
+  a.click();
+}
+
+
 var ecTab = 'kodak';
 var EC_KODAK = [
   {y:[1922,1942,1962],c:'●■'},{y:[1923,1943,1963],c:'●▲'},
