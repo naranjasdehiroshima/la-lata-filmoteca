@@ -2627,6 +2627,7 @@ function flCopiar(){
     {k:'polaridad',l:'Polaridad'},
     {k:'formato_aspecto',l:'Formato y aspecto'},
     {k:'soporte_captura',l:'Soporte de captura'},
+    {k:'confianza_formato',l:'Confianza del formato'},
     {k:'pista_audio',l:'Pista de audio'},
     {k:'grano_textura',l:'Grano y textura'},
     {k:'paleta_cromatica',l:'Paleta cromática'},
@@ -2677,6 +2678,7 @@ function flDescargarPDF(){
     {k:'polaridad',l:'Polaridad'},
     {k:'formato_aspecto',l:'Formato y aspecto'},
     {k:'soporte_captura',l:'Soporte de captura'},
+    {k:'confianza_formato',l:'Confianza del formato'},
     {k:'pista_audio',l:'Pista de audio'},
     {k:'grano_textura',l:'Grano y textura'},
     {k:'paleta_cromatica',l:'Paleta cromática'},
@@ -2737,7 +2739,7 @@ async function flAnalizar(){
   document.getElementById('fl-error').style.display='none';
   ficha.classList.remove('visible');
   var prompt='Eres un experto en identificación de película fotoquímica. Analiza esta imagen y devuelve SOLO un objeto JSON válido con estas claves exactas:\n'+
-    '{"tipo_imagen":"indica si es un FOTOGRAMA ÚNICO o una TIRA DE FOTOGRAMAS (varios fotogramas en secuencia visibles simultáneamente); si es tira indica cuántos fotogramas aproximadamente","polaridad":"IMPORTANTE: una película naranja/ámbar vista por reflectancia (sin luz transmitida) es un POSITIVO de color, no un negativo. Un negativo de color tiene base naranja con imagen invertida. Un negativo B/N tiene imagen invertida con tonos grises. Indica positivo o negativo.","formato_aspecto":"relación de aspecto y formato probable (ej: 1.33:1 / Academy, 1.85:1 / Flat, 2.39:1 / Scope)","soporte_captura":"REGLA CRÍTICA DE IDENTIFICACIÓN POR PERFORACIONES: (1) Si ves UNA sola perforación rectangular situada EXACTAMENTE EN EL CENTRO HORIZONTAL de la tira, entre un fotograma y el siguiente, a mitad de camino entre los dos bordes laterales de la película = es OBLIGATORIAMENTE Pathé Baby 9.5mm, el único formato con perforación central. (2) Si ves perforaciones pequeñas rectangulares redondeadas en UN SOLO BORDE LATERAL y fotograma pequeño = 8mm regular o Super 8. (3) Si ves perforaciones en UN SOLO BORDE LATERAL y fotograma más grande = 16mm simple perforación. (4) Si ves perforaciones en AMBOS BORDES LATERALES pero son PEQUEÑAS y el fotograma ocupa la mayor parte del ancho = 16mm doble perforación. (5) Si ves perforaciones en AMBOS BORDES LATERALES y son GRANDES (casi tan altas como el fotograma) y el fotograma es muy ancho = 35mm. (6) Sin perforaciones visibles = video analógico o digital","grano_textura":"descripción del grano, nitidez y textura visual","paleta_cromatica":"paleta dominante y tratamiento cromático (o si es B/N)","epoca_aproximada":"década o período probable por estética visual y tipo de emulsión","iluminacion":"tipo y estilo de iluminación","encuadre_composicion":"estilo de encuadre y composición","texto_visible":"cualquier texto, título, rótulo o número visible, o null","pista_audio":"indica si detectas pista de sonido óptico en el borde de la película; si la hay especifica si es de densidad variable (banda que varía en anchura) o de área variable (banda que varía en transparencia); si no hay pista visible indica null","observaciones":"IMPORTANTE: busca edge codes en el borde de la película. Los edge codes de Kodak son combinaciones de símbolos geométricos RELLENOS: ● (círculo relleno), ▲ (triángulo relleno), ■ (cuadrado relleno), + (cruz), x — NO confundas ■ (cuadrado relleno) con □ (cuadrado vacío). Los edge codes de DuPont son combinaciones de letras K, L, N, S, T (ej: KL, KN, NS, KLT). Si hay tira de fotogramas analiza el borde completo para encontrar todos los códigos visibles. IGNORA las letras del texto SAFETY FILM, KODAK, EASTMAN u otras leyendas impresas — solo reporta los símbolos geométricos aislados. Describe también cualquier otro dato archivístico relevante"}\nSin explicaciones fuera del JSON.';
+    '{"tipo_imagen":"indica si es un FOTOGRAMA ÚNICO o una TIRA DE FOTOGRAMAS (varios fotogramas en secuencia visibles simultáneamente); si es tira indica cuántos fotogramas aproximadamente","polaridad":"REGLA CRÍTICA: si ves colores naturales reconocibles (cielo azul, piel, ropa de colores reales, vegetación verde) = POSITIVO. Si ves colores invertidos o imagen en tonos grises con luces y sombras invertidas = NEGATIVO. Si ves imagen con base naranja y detalles en colores complementarios = NEGATIVO COLOR. Una película naranja/ámbar vista por reflectancia SIN imagen visible = base de película positivo de color sin iluminar. Indica positivo o negativo.","formato_aspecto":"relación de aspecto y formato probable (ej: 1.33:1 / Academy, 1.85:1 / Flat, 2.39:1 / Scope)","soporte_captura":"REGLA CRÍTICA DE IDENTIFICACIÓN POR PERFORACIONES — lee con atención: (1) Perforación ÚNICA CENTRAL entre fotogramas (en medio del ancho de la tira) = Pathé Baby 9.5mm exclusivamente. (2) Perforaciones en UN SOLO BORDE con esquinas MUY REDONDEADAS y fotograma casi CUADRADO muy pequeño donde la perforación es casi tan alta como el fotograma = 8mm regular. (3) Perforaciones en UN SOLO BORDE con esquinas redondeadas y fotograma más rectangular pero pequeño = Super 8. (4) Perforaciones en UN SOLO BORDE y fotograma claramente más grande y rectangular = 16mm simple perforación. (5) Perforaciones en AMBOS BORDES pequeñas y fotograma que ocupa la mayor parte del ancho = 16mm doble perforación. (6) Perforaciones en AMBOS BORDES GRANDES casi tan altas como el fotograma y tira muy ancha = 35mm. CLAVE: si las perforaciones son muy grandes en proporción al fotograma y tienen esquinas redondeadas = 8mm, no 16mm","grano_textura":"descripción del grano, nitidez y textura visual","paleta_cromatica":"paleta dominante y tratamiento cromático (o si es B/N)","epoca_aproximada":"década o período probable por estética visual y tipo de emulsión","iluminacion":"tipo y estilo de iluminación","encuadre_composicion":"estilo de encuadre y composición","texto_visible":"cualquier texto, título, rótulo o número visible, o null","pista_audio":"indica si detectas pista de sonido óptico en el borde de la película; si la hay especifica si es de densidad variable (banda que varía en anchura) o de área variable (banda que varía en transparencia); si no hay pista visible indica null","confianza_formato":"indica tu nivel de confianza en la identificación del formato (alta/media/baja) y explica brevemente el motivo de la duda si la hay","observaciones":"IMPORTANTE: reporta cualquier número, letra o marca impresa en el borde de la película que no sea parte de SAFETY FILM o KODAK (puede ser número de rollo, lote, etc.). Para edge codes busca símbolos geométricos RELLENOS: ● (círculo relleno), ▲ (triángulo relleno), ■ (cuadrado relleno), + (cruz), x — NO confundas ■ con □. Los edge codes DuPont son combinaciones de letras K, L, N, S, T. Si hay tira analiza solo el primer fotograma para edge codes. IGNORA SAFETY FILM, KODAK, EASTMAN"}\nSin explicaciones fuera del JSON.';
   try{
     var resp=await fetch(FL_WORKER,{
       method:'POST',
@@ -2805,6 +2807,7 @@ async function flAnalizar(){
     var campos=[
       {k:'tipo_imagen',l:'Tipo de imagen'},{k:'polaridad',l:'Polaridad'},{k:'formato_aspecto',l:'Formato y aspecto'},
       {k:'soporte_captura',l:'Soporte de captura'},
+      {k:'confianza_formato',l:'Confianza del formato'},
       {k:'pista_audio',l:'Pista de audio'},
       {k:'grano_textura',l:'Grano y textura'},
       {k:'paleta_cromatica',l:'Paleta cromática'},
@@ -2944,6 +2947,7 @@ async function flGuardarSupabase(p, fechaEdge){
       polaridad: p.polaridad || null,
       formato_aspecto: p.formato_aspecto || null,
       soporte_captura: p.soporte_captura || null,
+      confianza_formato: p.confianza_formato || null,
       pista_audio: p.pista_audio || null,
       grano_textura: p.grano_textura || null,
       paleta_cromatica: p.paleta_cromatica || null,
