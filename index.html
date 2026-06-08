@@ -2505,7 +2505,7 @@ fetch('datos.json')
 </div>
 .fl-dropzone-text{font-family:'DM Mono',monospace;font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--gris-medio)}
 .fl-preview-wrap{display:none;gap:2rem;flex-wrap:wrap;margin-bottom:1.5rem;align-items:flex-start}
-.fl-preview-img{max-width:640px;max-height:480px;border:1px solid var(--gris-claro);border-radius:2px;object-fit:contain;background:var(--negro)}
+.fl-preview-img{max-width:480px;max-height:360px;border:1px solid var(--gris-claro);border-radius:2px;object-fit:contain;background:var(--negro)}
 .fl-btn-analizar{font-family:'DM Mono',monospace;font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.6rem 1.5rem;background:var(--naranja);color:var(--blanco);border:none;border-radius:2px;cursor:pointer;transition:background 0.15s}
 .fl-btn-analizar:hover{background:var(--gris)}
 .fl-btn-analizar:disabled{background:var(--gris-claro);color:var(--gris-medio);cursor:not-allowed}
@@ -3144,8 +3144,8 @@ function flInvertir(){
     var canvas = document.getElementById('fl-canvas-positivo');
     canvas.width = img.naturalWidth;
     canvas.height = img.naturalHeight;
-    canvas.style.maxWidth = '640px';
-    canvas.style.maxHeight = '480px';
+    canvas.style.maxWidth = '480px';
+    canvas.style.maxHeight = '360px';
     var ctx = canvas.getContext('2d');
     ctx.drawImage(img, 0, 0);
     var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
