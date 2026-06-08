@@ -536,6 +536,50 @@ header > *{position:relative;z-index:1;}
 #lista-crear-btn{width:100%;padding:0.5rem;background:var(--naranja);color:var(--blanco);border:none;font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;border-radius:2px}
 #lista-cancel-btn{display:block;width:100%;text-align:center;margin-top:0.6rem;font-size:0.6rem;color:var(--gris-medio);cursor:pointer;background:none;border:none;font-family:'DM Mono',monospace}
 
+#fl-wrap h2{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--naranja);letter-spacing:0.05em;margin-bottom:0.3rem}
+#fl-wrap .fl-sub{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gris-medio);margin-bottom:1.5rem}
+.fl-dropzone{border:2px dashed var(--gris-claro);border-radius:4px;padding:3rem 2rem;text-align:center;cursor:pointer;transition:all 0.2s;background:var(--crema);margin-bottom:1.5rem}
+.fl-dropzone:hover,.fl-dropzone.over{border-color:var(--naranja);background:var(--naranja-claro)}
+.fl-dropzone-icon{font-size:2.5rem;margin-bottom:0.8rem}
+
+/* Nav interna FilmoLens */
+.fl-nav{display:flex;gap:0;border:1px solid var(--gris-claro);border-radius:2px;overflow:hidden;margin-bottom:2rem;width:fit-content}
+.fl-nav-btn{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.45rem 1.1rem;border:none;background:var(--blanco);color:var(--gris-medio);cursor:pointer;transition:all 0.15s;border-right:1px solid var(--gris-claro)}
+.fl-nav-btn:last-child{border-right:none}
+.fl-nav-btn.activo{background:var(--naranja);color:var(--blanco)}
+.fl-nav-btn.solo-auth{display:none}
+.fl-nav-btn.solo-auth.visible{display:block}
+
+/* Catalogador */
+.flc-seccion{display:none}
+.flc-seccion.activo{display:block}
+.flc-titulo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--naranja);letter-spacing:0.05em;margin-bottom:0.3rem}
+.flc-sub{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gris-medio);margin-bottom:1.5rem}
+.flc-btn{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.08em;text-transform:uppercase;padding:0.45rem 1rem;border:1px solid var(--gris-claro);background:none;color:var(--gris-medio);border-radius:2px;cursor:pointer;transition:all 0.15s}
+.flc-btn:hover{background:var(--naranja);color:var(--blanco);border-color:var(--naranja)}
+.flc-btn-primary{background:var(--naranja);color:var(--blanco);border-color:var(--naranja)}
+.flc-btn-primary:hover{background:var(--gris)}
+.flc-card{border:1px solid var(--gris-claro);border-radius:2px;padding:1rem 1.2rem;background:var(--crema);margin-bottom:0.6rem;cursor:pointer;transition:border-color 0.15s}
+.flc-card:hover{border-color:var(--naranja)}
+.flc-card-titulo{font-family:'Libre Baskerville',serif;font-size:0.95rem;color:var(--negro);margin-bottom:0.3rem}
+.flc-card-meta{font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--gris-medio);letter-spacing:0.05em}
+.flc-form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:0.8rem}
+.flc-form-row.triple{grid-template-columns:1fr 1fr 1fr}
+.flc-form-full{margin-bottom:0.8rem}
+.flc-label{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gris-medio);display:block;margin-bottom:0.3rem}
+.flc-label span{color:var(--naranja)}
+.flc-input{font-family:'DM Mono',monospace;font-size:0.8rem;background:var(--blanco);border:1px solid var(--gris-claro);color:var(--negro);padding:0.45rem 0.8rem;border-radius:2px;width:100%;box-sizing:border-box}
+.flc-input:focus{outline:2px solid var(--naranja);outline-offset:1px}
+.flc-select{font-family:'DM Mono',monospace;font-size:0.78rem;background:var(--blanco);border:1px solid var(--gris-claro);color:var(--negro);padding:0.45rem 0.8rem;border-radius:2px;width:100%;box-sizing:border-box;-webkit-appearance:none}
+.flc-textarea{font-family:'DM Mono',monospace;font-size:0.78rem;background:var(--blanco);border:1px solid var(--gris-claro);color:var(--negro);padding:0.45rem 0.8rem;border-radius:2px;width:100%;box-sizing:border-box;min-height:80px;resize:vertical}
+.flc-condicion-btns{display:flex;gap:0.4rem}
+.flc-condicion-btn{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.05em;padding:0.4rem 0.8rem;border:1px solid var(--gris-claro);background:none;color:var(--gris-medio);border-radius:2px;cursor:pointer;transition:all 0.15s}
+.flc-condicion-btn.sel{background:var(--naranja);color:var(--blanco);border-color:var(--naranja)}
+.flc-fiaf-nota{font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--gris-medio);margin-top:0.2rem;line-height:1.5}
+.flc-vacio{font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--gris-medio);padding:2rem;text-align:center;border:1px dashed var(--gris-claro);border-radius:2px}
+.flc-badge{font-family:'DM Mono',monospace;font-size:0.55rem;letter-spacing:0.08em;text-transform:uppercase;padding:0.15rem 0.4rem;border-radius:2px;background:var(--naranja-claro);color:var(--naranja)}
+.flc-badge.verde{background:#e8f5e9;color:#2e7d32}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -2453,52 +2497,6 @@ fetch('datos.json')
 
 <!-- ═══════════ FILMOLENS ═══════════ -->
 <div id="fl-wrap" style="display:none;padding:2rem 3rem;background:var(--blanco);min-height:60vh">
-<style>
-#fl-wrap h2{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--naranja);letter-spacing:0.05em;margin-bottom:0.3rem}
-#fl-wrap .fl-sub{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gris-medio);margin-bottom:1.5rem}
-.fl-dropzone{border:2px dashed var(--gris-claro);border-radius:4px;padding:3rem 2rem;text-align:center;cursor:pointer;transition:all 0.2s;background:var(--crema);margin-bottom:1.5rem}
-.fl-dropzone:hover,.fl-dropzone.over{border-color:var(--naranja);background:var(--naranja-claro)}
-.fl-dropzone-icon{font-size:2.5rem;margin-bottom:0.8rem}
-
-/* Nav interna FilmoLens */
-.fl-nav{display:flex;gap:0;border:1px solid var(--gris-claro);border-radius:2px;overflow:hidden;margin-bottom:2rem;width:fit-content}
-.fl-nav-btn{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.45rem 1.1rem;border:none;background:var(--blanco);color:var(--gris-medio);cursor:pointer;transition:all 0.15s;border-right:1px solid var(--gris-claro)}
-.fl-nav-btn:last-child{border-right:none}
-.fl-nav-btn.activo{background:var(--naranja);color:var(--blanco)}
-.fl-nav-btn.solo-auth{display:none}
-.fl-nav-btn.solo-auth.visible{display:block}
-
-/* Catalogador */
-.flc-seccion{display:none}
-.flc-seccion.activo{display:block}
-.flc-titulo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--naranja);letter-spacing:0.05em;margin-bottom:0.3rem}
-.flc-sub{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gris-medio);margin-bottom:1.5rem}
-.flc-btn{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.08em;text-transform:uppercase;padding:0.45rem 1rem;border:1px solid var(--gris-claro);background:none;color:var(--gris-medio);border-radius:2px;cursor:pointer;transition:all 0.15s}
-.flc-btn:hover{background:var(--naranja);color:var(--blanco);border-color:var(--naranja)}
-.flc-btn-primary{background:var(--naranja);color:var(--blanco);border-color:var(--naranja)}
-.flc-btn-primary:hover{background:var(--gris)}
-.flc-card{border:1px solid var(--gris-claro);border-radius:2px;padding:1rem 1.2rem;background:var(--crema);margin-bottom:0.6rem;cursor:pointer;transition:border-color 0.15s}
-.flc-card:hover{border-color:var(--naranja)}
-.flc-card-titulo{font-family:'Libre Baskerville',serif;font-size:0.95rem;color:var(--negro);margin-bottom:0.3rem}
-.flc-card-meta{font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--gris-medio);letter-spacing:0.05em}
-.flc-form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:0.8rem}
-.flc-form-row.triple{grid-template-columns:1fr 1fr 1fr}
-.flc-form-full{margin-bottom:0.8rem}
-.flc-label{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gris-medio);display:block;margin-bottom:0.3rem}
-.flc-label span{color:var(--naranja)}
-.flc-input{font-family:'DM Mono',monospace;font-size:0.8rem;background:var(--blanco);border:1px solid var(--gris-claro);color:var(--negro);padding:0.45rem 0.8rem;border-radius:2px;width:100%;box-sizing:border-box}
-.flc-input:focus{outline:2px solid var(--naranja);outline-offset:1px}
-.flc-select{font-family:'DM Mono',monospace;font-size:0.78rem;background:var(--blanco);border:1px solid var(--gris-claro);color:var(--negro);padding:0.45rem 0.8rem;border-radius:2px;width:100%;box-sizing:border-box;-webkit-appearance:none}
-.flc-textarea{font-family:'DM Mono',monospace;font-size:0.78rem;background:var(--blanco);border:1px solid var(--gris-claro);color:var(--negro);padding:0.45rem 0.8rem;border-radius:2px;width:100%;box-sizing:border-box;min-height:80px;resize:vertical}
-.flc-condicion-btns{display:flex;gap:0.4rem}
-.flc-condicion-btn{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.05em;padding:0.4rem 0.8rem;border:1px solid var(--gris-claro);background:none;color:var(--gris-medio);border-radius:2px;cursor:pointer;transition:all 0.15s}
-.flc-condicion-btn.sel{background:var(--naranja);color:var(--blanco);border-color:var(--naranja)}
-.flc-fiaf-nota{font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--gris-medio);margin-top:0.2rem;line-height:1.5}
-.flc-vacio{font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--gris-medio);padding:2rem;text-align:center;border:1px dashed var(--gris-claro);border-radius:2px}
-.flc-badge{font-family:'DM Mono',monospace;font-size:0.55rem;letter-spacing:0.08em;text-transform:uppercase;padding:0.15rem 0.4rem;border-radius:2px;background:var(--naranja-claro);color:var(--naranja)}
-.flc-badge.verde{background:#e8f5e9;color:#2e7d32}
-</style>
-
 <!-- Nav interna -->
 <div class="fl-nav">
   <button class="fl-nav-btn activo" id="fl-nav-analizador" onclick="flNavegar('analizador')">&#128247; Analizador</button>
