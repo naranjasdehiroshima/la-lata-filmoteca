@@ -2579,6 +2579,7 @@ fetch('datos.json')
   <div id="fl-ficha-body"></div>
 </div>
 <div id="fl-edge-selector"></div>
+<div id="fl-audio-selector"></div>
 </div><!-- /fl-sec-analizador -->
 
 <!-- ── MIS INSPECCIONES ── -->
@@ -3417,6 +3418,7 @@ async function flAnalizar(){
 
     // ── Selector Edge Code ──
     flRenderEdgeSelector(p.observaciones || '');
+    flRenderAudioSelector(p.pista_audio || '');
 
     // ── Guardar en Supabase ──
     flGuardarSupabase(p, fechaEdge);
@@ -3425,7 +3427,88 @@ async function flAnalizar(){
   finally{btn.disabled=false;loading.style.display='none';}
 }
 
-function flRenderEdgeSelector(observaciones){
+function flRenderAudioSelector(pistaDetectada){
+  var wrap = document.getElementById('fl-audio-selector');
+  if(!wrap) return;
+
+  var detectado = (pistaDetectada || '').toLowerCase();
+  var presel = '';
+  if(detectado.includes('área variable') || detectado.includes('area variable')) presel = 'area';
+  else if(detectado.includes('densidad variable')) presel = 'densidad';
+  else if(detectado.includes('magn')) presel = 'magnetico';
+  else if(detectado.includes('mudo') || detectado === '—' || detectado === 'null' || detectado === '') presel = 'mudo';
+
+  var tipos = [
+    {
+      id: 'area',
+      label: 'Óptico · Área variable',
+      desc: 'Ondas que varían en anchura',
+      svg: '<svg viewBox="0 0 80 40" width="80" height="40" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="40" fill="#f5f0e8"/><path d="M5,20 Q10,8 15,20 Q20,32 25,20 Q30,5 35,20 Q40,35 45,20 Q50,10 55,20 Q60,30 65,20 Q70,12 75,20" stroke="#1a1a1a" stroke-width="2.5" fill="none"/></svg>'
+    },
+    {
+      id: 'densidad',
+      label: 'Óptico · Densidad variable',
+      desc: 'Líneas de diferente grosor',
+      svg: '<svg viewBox="0 0 80 40" width="80" height="40" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="40" fill="#f5f0e8"/><line x1="5" y1="20" x2="75" y2="20" stroke="#1a1a1a" stroke-width="0.5"/><line x1="5" y1="16" x2="75" y2="16" stroke="#1a1a1a" stroke-width="1"/><line x1="5" y1="12" x2="75" y2="12" stroke="#1a1a1a" stroke-width="2"/><line x1="5" y1="24" x2="75" y2="24" stroke="#1a1a1a" stroke-width="1.5"/><line x1="5" y1="28" x2="75" y2="28" stroke="#1a1a1a" stroke-width="0.5"/><line x1="5" y1="8" x2="75" y2="8" stroke="#1a1a1a" stroke-width="3"/><line x1="5" y1="32" x2="75" y2="32" stroke="#1a1a1a" stroke-width="1"/></svg>'
+    },
+    {
+      id: 'magnetico',
+      label: 'Magnético · Super 8',
+      desc: 'Banda marrón/dorada',
+      svg: '<svg viewBox="0 0 80 40" width="80" height="40" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="40" fill="#f5f0e8"/><rect x="30" y="8" width="20" height="24" rx="1" fill="#8B4513" opacity="0.7"/><rect x="32" y="10" width="16" height="20" rx="1" fill="#A0522D" opacity="0.5"/></svg>'
+    },
+    {
+      id: 'mudo',
+      label: 'Sin pista · Mudo',
+      desc: 'No hay pista visible',
+      svg: '<svg viewBox="0 0 80 40" width="80" height="40" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="40" fill="#f5f0e8"/><line x1="15" y1="20" x2="65" y2="20" stroke="#ccc" stroke-width="1" stroke-dasharray="4,3"/><line x1="20" y1="15" x2="60" y2="25" stroke="#ccc" stroke-width="1.5"/></svg>'
+    }
+  ];
+
+  var html = '<div style="margin-top:1.2rem;padding:1.2rem 1.5rem;border:1px solid var(--gris-claro);border-radius:2px;background:var(--crema)">' +
+    '<div style="font-family:\'DM Mono\',monospace;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gris-medio);margin-bottom:0.8rem">&#9836; Verificar pista de audio</div>' +
+    (pistaDetectada && pistaDetectada !== '—' && pistaDetectada !== 'null' ?
+      '<div style="font-family:\'DM Mono\',monospace;font-size:0.7rem;color:var(--gris-medio);margin-bottom:0.8rem">La IA detectó: <strong style="color:var(--negro)">' + pistaDetectada + '</strong> — confirma o corrige:</div>' :
+      '<div style="font-family:\'DM Mono\',monospace;font-size:0.7rem;color:var(--gris-medio);margin-bottom:0.8rem">La IA no detectó pista — selecciona el tipo manualmente:</div>') +
+    '<div style="display:flex;gap:0.8rem;flex-wrap:wrap">' +
+    tipos.map(function(t){
+      var sel = presel === t.id;
+      return '<div id="fl-audio-btn-'+t.id+'" onclick="flAudioSel(\''+t.id+'\')" style="cursor:pointer;border:2px solid '+(sel?'var(--naranja)':'var(--gris-claro)')+';border-radius:4px;padding:0.6rem;background:'+(sel?'var(--naranja-claro)':'var(--blanco)')+';text-align:center;min-width:100px;transition:all 0.15s">' +
+        t.svg +
+        '<div style="font-family:\'DM Mono\',monospace;font-size:0.6rem;letter-spacing:0.05em;color:var(--negro);margin-top:0.4rem;line-height:1.4">' + t.label + '</div>' +
+        '<div style="font-family:\'DM Mono\',monospace;font-size:0.55rem;color:var(--gris-medio);margin-top:0.2rem">' + t.desc + '</div>' +
+        '</div>';
+    }).join('') +
+    '</div>' +
+    '<div id="fl-audio-resultado" style="margin-top:0.8rem;font-family:\'DM Mono\',monospace;font-size:0.75rem;color:var(--naranja)"></div>' +
+    '</div>';
+
+  wrap.innerHTML = html;
+  if(presel) flAudioSel(presel, true);
+}
+
+var flAudioSeleccionado = null;
+function flAudioSel(id, silencioso){
+  flAudioSeleccionado = id;
+  var labels = {
+    'area': 'Óptico — área variable',
+    'densidad': 'Óptico — densidad variable',
+    'magnetico': 'Magnético (Super 8)',
+    'mudo': 'Mudo / Sin pista'
+  };
+  ['area','densidad','magnetico','mudo'].forEach(function(t){
+    var el = document.getElementById('fl-audio-btn-'+t);
+    if(!el) return;
+    el.style.borderColor = t===id ? 'var(--naranja)' : 'var(--gris-claro)';
+    el.style.background = t===id ? 'var(--naranja-claro)' : 'var(--blanco)';
+  });
+  if(flDatosActuales) flDatosActuales.pista_audio = labels[id];
+  if(!silencioso){
+    var res = document.getElementById('fl-audio-resultado');
+    if(res) res.textContent = '✓ ' + labels[id];
+  }
+}
+
   var wrap = document.getElementById('fl-edge-selector');
   if(!wrap) return;
 
