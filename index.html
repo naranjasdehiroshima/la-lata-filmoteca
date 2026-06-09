@@ -2529,15 +2529,15 @@ fetch('datos.json')
 <h2>FilmoLens</h2>
 <p class="fl-sub">Identificador de fotogramas &middot; An&aacute;lisis visual con IA &middot; <span style="color:var(--naranja)">FIAF Moving Image Cataloguing Manual 2016</span></p>
 
-<div style="max-width:680px;margin-bottom:2rem;padding:1.2rem 1.5rem;border-left:3px solid var(--naranja);background:var(--crema)">
-<p style="font-family:'Libre Baskerville',serif;font-size:0.88rem;line-height:1.7;color:var(--negro);margin:0 0 0.8rem 0"><strong>FilmoLens</strong> analiza fotogramas de película fotoquímica usando inteligencia artificial y devuelve una ficha técnica con información visual del material.</p>
-<p style="font-family:'Libre Baskerville',serif;font-size:0.88rem;line-height:1.7;color:var(--negro);margin:0 0 0.8rem 0">Sube una foto de un fotograma o una tira — puede ser una captura del escáner, una foto con el móvil sobre un negatoscopio o cualquier imagen que muestre el material con claridad.</p>
-<p style="font-family:'Libre Baskerville',serif;font-size:0.88rem;line-height:1.7;color:var(--negro);margin:0 0 0.8rem 0">La ficha incluye: formato y soporte probable (8mm, 16mm, 35mm, Pathé Baby...), polaridad, sistema de color y sonido, época aproximada, descripción del contenido y tipo de producción. Si hay pista de sonido óptico o edge codes visibles en el borde, también intenta identificarlos.</p>
-<p style="font-family:'Libre Baskerville',serif;font-size:0.88rem;line-height:1.7;color:var(--negro);margin:0 0 0.8rem 0">Una vez generada la ficha puedes <strong>ver el positivo</strong> de un negativo, <strong>verificar o corregir el edge code</strong> manualmente para obtener una fecha de fabricación más precisa, y <strong>exportar</strong> la ficha en PDF, JSON o copiarla al portapapeles.</p>
-<p style="font-family:'DM Mono',monospace;font-size:0.68rem;line-height:1.6;color:var(--gris-medio);margin:0">Si est&aacute;s registrado, cada an&aacute;lisis se guarda autom&aacute;ticamente en tu historial y tienes acceso al <strong style="color:var(--negro)">Catalogador FIAF</strong> — un sistema de inspecciones y colecciones basado en el <em>FIAF Moving Image Cataloguing Manual</em> (2016) y el est&aacute;ndar EN 15907.</p>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-bottom:1.5rem;align-items:start">
+<div style="padding:1.2rem 1.5rem;border-left:3px solid var(--naranja);background:var(--crema)">
+<p style="font-family:'Libre Baskerville',serif;font-size:0.85rem;line-height:1.7;color:var(--negro);margin:0 0 0.7rem 0"><strong>FilmoLens</strong> analiza fotogramas de película fotoquímica usando inteligencia artificial y devuelve una ficha técnica con información visual del material.</p>
+<p style="font-family:'Libre Baskerville',serif;font-size:0.85rem;line-height:1.7;color:var(--negro);margin:0 0 0.7rem 0">Sube una foto de un fotograma o una tira — captura del escáner, foto con el móvil sobre un negatoscopio o cualquier imagen que muestre el material con claridad.</p>
+<p style="font-family:'Libre Baskerville',serif;font-size:0.85rem;line-height:1.7;color:var(--negro);margin:0 0 0.7rem 0">La ficha incluye: formato y soporte probable (8mm, 16mm, 35mm, Pathé Baby...), polaridad, sistema de color y sonido, época aproximada, descripción del contenido y tipo de producción. Si hay edge codes o pista de sonido visibles, también intenta identificarlos.</p>
+<p style="font-family:'Libre Baskerville',serif;font-size:0.85rem;line-height:1.7;color:var(--negro);margin:0 0 0.7rem 0">Una vez generada la ficha puedes <strong>ver el positivo</strong>, <strong>verificar el edge code</strong> y la <strong>pista de audio</strong> manualmente, y <strong>exportar</strong> en PDF, JSON o portapapeles.</p>
+<p style="font-family:'DM Mono',monospace;font-size:0.65rem;line-height:1.6;color:var(--gris-medio);margin:0">Si estás registrado, cada análisis se guarda automáticamente y tienes acceso al <strong style="color:var(--negro)">Catalogador FIAF</strong> — basado en el <em>FIAF Moving Image Cataloguing Manual</em> (2016) y EN 15907.</p>
 </div>
-
-
+<div>
 <div class="fl-dropzone" id="fl-dropzone"
   onclick="document.getElementById('fl-input').click()"
   ondragover="event.preventDefault();this.classList.add('over')"
@@ -2545,9 +2545,11 @@ fetch('datos.json')
   ondrop="event.preventDefault();this.classList.remove('over');flCargar(event.dataTransfer.files[0])">
   <div class="fl-dropzone-icon">&#127916;</div>
   <div class="fl-dropzone-text">Arrastra un fotograma aquí o haz clic para seleccionar</div>
-  <div class="fl-dropzone-text" style="margin-top:0.4rem;font-size:0.65rem;opacity:0.7">JPG · PNG · TIFF · Máximo 10MB</div>
+  <div class="fl-dropzone-text" style="margin-top:0.4rem;font-size:0.65rem;opacity:0.7">JPG · PNG · TIFF · Máximo 20MB</div>
 </div>
 <input type="file" id="fl-input" accept="image/*" style="display:none" onchange="flCargar(this.files[0])">
+</div>
+</div>
 <div class="fl-preview-wrap" id="fl-preview-wrap">
   <div style="display:flex;gap:1.5rem;flex-wrap:wrap;align-items:flex-start">
     <div style="position:relative;display:inline-block">
@@ -3509,6 +3511,7 @@ function flAudioSel(id, silencioso){
   }
 }
 
+function flRenderEdgeSelector(observaciones){
   var wrap = document.getElementById('fl-edge-selector');
   if(!wrap) return;
 
