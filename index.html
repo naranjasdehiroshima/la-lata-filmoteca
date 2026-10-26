@@ -702,6 +702,12 @@ header > *{position:relative;z-index:1;}
   <span style="display:inline-flex;align-items:center;gap:0.75rem;white-space:nowrap"><span class="ctrl-label">A&#241;o</span>
   <select id="filtro-anio"><option value="">Todos</option></select></span>
   <div class="ctrl-sep"></div>
+  <span style="display:inline-flex;align-items:center;gap:0.75rem;white-space:nowrap"><span class="ctrl-label">Lugar</span>
+  <select id="filtro-lugar"><option value="">Todos</option></select></span>
+  <div class="ctrl-sep"></div>
+  <span style="display:inline-flex;align-items:center;gap:0.75rem;white-space:nowrap"><span class="ctrl-label">G&#233;nero</span>
+  <select id="filtro-genero"><option value="">Todos</option></select></span>
+  <div class="ctrl-sep"></div>
   <input type="text" id="busqueda" placeholder="Buscar t&#237;tulo, c&#243;digo, a&#241;o...">
   <div class="vista-btns"><button id="btn-vista-latas" class="btn-vista activo" onclick="toggleVista('latas')">&#9632; Latas</button><button id="btn-vista-colecciones" class="btn-vista" onclick="toggleVista('colecciones')">&#9782; Colecciones</button><button id="btn-vista-about" class="btn-vista" onclick="toggleVista('about')">&#9432; Proyecto</button><button id="btn-vista-vt" class="btn-vista" onclick="toggleVista('vt')">&#9654; Retrovisor</button><button id="btn-vista-fl" class="btn-vista" onclick="toggleVista('fl')">&#128247; FilmoLens</button><button id="btn-vista-ec" class="btn-vista" onclick="toggleVista('ec')">&#9670; Edge Codes</button><button id="btn-vista-tv" class="btn-vista" onclick="toggleVista('tv')">&#128250; TV</button><button id="btn-vista-mapa" class="btn-vista" onclick="toggleVista('mapa')">&#127760; Mapa</button><button id="btn-vista-fh" class="btn-vista" onclick="toggleVista('fh')">&#9641; CodeArchive</button><a href="https://naranjasdehiroshima.github.io/retroboy/" target="_blank" class="btn-vista" style="text-decoration:none">&#127918; RetroBoy</a><button id="btn-vista-miarchivo" class="btn-vista" onclick="toggleVista('miarchivo')" style="display:none">&#9733; Mi Archivo</button></div><span id="contador"></span><button id="auth-btn" onclick="authBtnClick()">Entrar</button>
 </div>
@@ -867,7 +873,75 @@ function poblarColecciones(){
   });
 }
 
-var filtroFmt = 'todos', filtroCol = '', filtroDig = '', filtroBusq = '', filtroAnio = '';
+var filtroFmt = 'todos', filtroCol = '', filtroDig = '', filtroBusq = '', filtroAnio = '', filtroLugar = '', filtroGenero = '';
+
+// País: normaliza variantes y separa coproducciones ("Francia, Italia," / "Francia / E.E.U.U.").
+var PAIS_ALIAS = {'e.e.u.u.':'Estados Unidos','eeuu':'Estados Unidos','ee.uu.':'Estados Unidos','usa':'Estados Unidos','desconocido':''};
+function paisesDe(p){
+  return String(p.pais||'').split(/[,\/]/).map(function(x){
+    x = x.trim(); var k = x.toLowerCase();
+    return PAIS_ALIAS.hasOwnProperty(k) ? PAIS_ALIAS[k] : x;
+  }).filter(Boolean);
+}
+// Ciudad: se usa en cuanto las fichas tengan un campo "ciudad" (admite varias separadas por coma).
+// Ciudades: p.ciudades = [[ciudad, país], ...] (del Excel). También admite un campo "ciudad" de texto.
+function ciudadesPar(p){
+  if(Array.isArray(p.ciudades)) return p.ciudades;
+  var ps = paisesDe(p);
+  return String(p.ciudad||'').split(',').map(function(x){ return [x.trim(), ps[0]||'']; }).filter(function(x){ return x[0]; });
+}
+function ciudadesDe(p){ return ciudadesPar(p).map(function(x){ return x[0]; }); }
+function generoDe(p){ return String(p.genero||'').trim(); }
+
+function llenarSelect(id, grupos, sinLabel, sinN){
+  var sel = document.getElementById(id);
+  grupos.forEach(function(g){
+    var parent = sel;
+    if(g.label){ parent = document.createElement('optgroup'); parent.label = g.label; sel.appendChild(parent); }
+    g.opciones.forEach(function(o){
+      var op = document.createElement('option');
+      op.value = o.v; op.textContent = o.t + ' (' + o.n + ')';
+      parent.appendChild(op);
+    });
+  });
+  if(sinN){ var os = document.createElement('option'); os.value = 'sin'; os.textContent = sinLabel + ' (' + sinN + ')'; sel.appendChild(os); }
+}
+function porConteo(obj){ return Object.keys(obj).sort(function(a,b){ return obj[b]-obj[a] || a.localeCompare(b,'es'); }); }
+
+function llenarFiltrosLugarGenero(){
+  var paises = {}, ciudades = {}, sinPais = 0, generos = {}, sinGen = 0;
+  DATOS.forEach(function(p){
+    var ps = paisesDe(p);
+    if(!ps.length) sinPais++;
+    ps.forEach(function(x){ paises[x] = (paises[x]||0) + 1; });
+    ciudadesPar(p).forEach(function(c){
+      var k = (c[1]||'') + '|' + c[0]; ciudades[k] = (ciudades[k]||0) + 1;
+    });
+    var g = generoDe(p);
+    if(g) generos[g] = (generos[g]||0) + 1; else sinGen++;
+  });
+  var grupos = [{label:'', opciones: porConteo(paises).map(function(x){ return {v:'p|'+x, t:x, n:paises[x]}; })}];
+  var conCiudad = porConteo(ciudades);
+  if(conCiudad.length){
+    var porPais = {};
+    conCiudad.forEach(function(k){ var pc = k.split('|'); (porPais[pc[0]||'Otros'] = porPais[pc[0]||'Otros'] || []).push({v:'c|'+pc[1], t:pc[1], n:ciudades[k]}); });
+    Object.keys(porPais).forEach(function(pa){ grupos.push({label:'Ciudades · ' + pa, opciones: porPais[pa]}); });
+  }
+  llenarSelect('filtro-lugar', grupos, 'Sin país', sinPais);
+  llenarSelect('filtro-genero', [{label:'', opciones: porConteo(generos).map(function(x){ return {v:x, t:x, n:generos[x]}; })}], 'Sin género', sinGen);
+}
+function pasaLugar(p, f){
+  if(!f) return true;
+  if(f === 'sin') return !paisesDe(p).length;
+  var v = f.slice(2);
+  if(f[0] === 'p') return paisesDe(p).indexOf(v) !== -1;
+  return ciudadesDe(p).indexOf(v) !== -1;
+}
+function pasaGenero(p, f){
+  if(!f) return true;
+  if(f === 'sin') return !generoDe(p);
+  return generoDe(p) === f;
+}
 
 // Convierte la fecha libre del catálogo ("1978", "1960s", "1955-1959", "c.1930s", "1958 y 1960")
 // en un rango [desde, hasta]. Devuelve null si no hay año.
@@ -948,11 +1022,13 @@ function render(){
     if(filtroDig === 'si' && !p.digitalizada && !p.youtube) return false;
     if(filtroDig === 'no' && (p.digitalizada || p.youtube)) return false;
     if(!pasaAnio(p, filtroAnio)) return false;
+    if(!pasaLugar(p, filtroLugar)) return false;
+    if(!pasaGenero(p, filtroGenero)) return false;
     if(bq){
       if(/^\d{4}$/.test(bq.trim())){
         if(pasaAnio(p, 'a' + bq.trim())) return true;
       }
-      var h = normalizar([p.titulo,p.codigo,p.coleccion,p.nombre_col,p.fecha,p.genero,p.temas,p.direccion,p.pais,p.obs].join(' '));
+      var h = normalizar([p.titulo,p.codigo,p.coleccion,p.nombre_col,p.fecha,p.genero,p.temas,p.direccion,p.pais,p.ciudad,p.loc,ciudadesDe(p).join(' '),p.obs].join(' '));
       if(h.indexOf(bq) === -1) return false;
     }
     return true;
@@ -1143,6 +1219,7 @@ function abrirFicha(p){
     ['Dirección', p.direccion],
     ['País de producción', p.pais],
     ['Fecha', p.fecha],
+    ['Lugar', (p.loc || p.ciudad) ? (p.loc || p.ciudad) + (p.coord_aprox ? ' (ubicación aproximada)' : '') : ''],
     ['Género', p.genero],
     ['Temáticas', p.temas],
     ['Paso', p.paso],
@@ -1266,6 +1343,8 @@ document.querySelectorAll('.btn-formato').forEach(function(btn){
 document.getElementById('filtro-col').addEventListener('change', function(e){ filtroCol=e.target.value; render(); });
 document.getElementById('filtro-dig').addEventListener('change', function(e){ filtroDig=e.target.value; render(); });
 document.getElementById('filtro-anio').addEventListener('change', function(e){ filtroAnio=e.target.value; render(); });
+document.getElementById('filtro-lugar').addEventListener('change', function(e){ filtroLugar=e.target.value; render(); });
+document.getElementById('filtro-genero').addEventListener('change', function(e){ filtroGenero=e.target.value; render(); });
 var debounce;
 document.getElementById('busqueda').addEventListener('input', function(e){
   clearTimeout(debounce);
@@ -1965,20 +2044,30 @@ function iniciarMapa() {
   // Añadir pins
   var pinData = DATOS.filter(function(p){ return p.lat !== null && p.lat !== undefined; });
 
+  // Varias piezas comparten el mismo punto (p. ej. la misma casa): se reparten en espiral
+  // muy cerrada (~20-80 m) para que todas se puedan abrir al acercar el mapa.
+  var vistos = {};
   pinData.forEach(function(p) {
     var color = fmtColor(p.formato);
+    var clave = (+p.lat).toFixed(5) + ',' + (+p.lng).toFixed(5);
+    var n = vistos[clave] = (vistos[clave] || 0) + 1;
+    var lat = +p.lat, lng = +p.lng;
+    if(n > 1){ var a = n * 2.399, r = 0.00018 * Math.sqrt(n); lat += r * Math.sin(a); lng += r * Math.cos(a); }
     var icon = L.divIcon({
       className: '',
-      html: '<div style="width:12px;height:12px;border-radius:50%;background:'+color+';border:2px solid rgba(255,255,255,0.8);box-shadow:0 1px 4px rgba(0,0,0,0.4)"></div>',
+      // Pin hueco = ubicación aproximada, inferida de la descripción (no viene del Excel)
+      html: p.coord_aprox
+        ? '<div title="Ubicación aproximada" style="width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,0.9);border:3px solid '+color+';box-shadow:0 1px 4px rgba(0,0,0,0.4);box-sizing:border-box"></div>'
+        : '<div style="width:12px;height:12px;border-radius:50%;background:'+color+';border:2px solid rgba(255,255,255,0.8);box-shadow:0 1px 4px rgba(0,0,0,0.4)"></div>',
       iconSize: [12, 12],
       iconAnchor: [6, 6]
     });
-    var marker = L.marker([p.lat, p.lng], {icon: icon});
+    var marker = L.marker([lat, lng], {icon: icon});
     marker.bindPopup(
       '<div style="font-family:DM Mono,monospace;min-width:200px">'
       + '<div style="font-size:0.65rem;color:#D4521A;margin-bottom:4px">'+esc(p.codigo)+' &middot; '+esc(p.id)+'</div>'
       + '<div style="font-size:0.85rem;font-weight:bold;font-family:serif;margin-bottom:6px">'+esc(p.titulo)+'</div>'
-      + (p.loc ? '<div style="font-size:0.65rem;color:#7A6A5A;margin-bottom:6px">&#128205; '+esc(p.loc)+'</div>' : '')
+      + (p.loc ? '<div style="font-size:0.65rem;color:#7A6A5A;margin-bottom:6px">&#128205; '+esc(p.loc)+(p.coord_aprox ? ' <i>(ubicaci&oacute;n aproximada)</i>' : '')+'</div>' : '')
       + '<div style="display:flex;gap:4px;margin-bottom:8px">'
       + '<span style="background:'+color+';color:#fff;padding:2px 6px;border-radius:2px;font-size:0.55rem;text-transform:uppercase">'+(FMT_NOMBRES[p.formato]||p.formato)+'</span>'
       + (p.youtube ? '<span style="background:#2D5A2D;color:#A8D8A8;padding:2px 6px;border-radius:2px;font-size:0.55rem">&#9654; En l&iacute;nea</span>' : '')
@@ -2001,7 +2090,7 @@ function abrirFichaDesdeId(id) {
   }
 }
 
-function init(){ poblarColecciones(); llenarFiltroAnio(); construirNube(); actualizarStats(); mostrarBannerFormato("todos"); render(); sbInit(); }
+function init(){ poblarColecciones(); llenarFiltroAnio(); llenarFiltrosLugarGenero(); construirNube(); actualizarStats(); mostrarBannerFormato("todos"); render(); sbInit(); }
 
 var FORMATOS_BANNER = {"todos": {"titulo": "La Pequeña Filmoteca de Naranjas de Hiroshima", "anyo": "", "img": "https://naranjasdehiroshima.github.io/la-lata-filmoteca/img/formatos/portada.jpg", "ficha": [], "desc": "Un archivo audiovisual independiente dedicado a la preservación y difusión del patrimonio fílmico en formatos físicos. Más de 470 piezas catalogadas — películas domésticas, noticieros, cortometrajes y registros sin clasificar — en soportes que van del Pathé Baby 9.5mm de los años 20 al VHS de los 90. Un proyecto nacido de la autoformación. Sin talleres ni instituciones que enseñen preservación de cine en formatos físicos, la colección creció pieza a pieza — en mercados, tianguis y colecciones privadas — con una intención sencilla: poder ver, analizar y estudiar cada formato en primera persona. Cada rollo conseguido fue una aventura. Cada familia retratada en celuloide, un descubrimiento.", "url": "https://www.naranjasdehiroshima.com"}, "8mm": {"titulo": "8mm / Super 8", "anyo": "1932–actualidad", "img": "https://naranjasdehiroshima.github.io/la-lata-filmoteca/img/formatos/8mm.jpg", "ficha": [["Inventor", "Kodak"], ["Uso", "Doméstico / Amateur"], ["Ancho", "8 mm"], ["Perforación", "Lateral"]], "desc": "El formato doméstico por excelencia del siglo XX. Introducido por Kodak en 1932, el 8mm se convirtió en la herramienta de memoria familiar de millones de hogares. Su versión mejorada, el Super 8, llegó en 1965 con cartuchos más fáciles de cargar y una imagen más estable. La mayoría de las películas familiares, bodas, viajes y fiestas del archivo están registradas en este formato."}, "16mm": {"titulo": "16mm", "anyo": "1923–actualidad", "img": "https://naranjasdehiroshima.github.io/la-lata-filmoteca/img/formatos/16mm.jpg", "ficha": [["Inventor", "Kodak"], ["Uso", "Semi-profesional / Documental"], ["Ancho", "16 mm"], ["Perforación", "Lateral"]], "desc": "Creado por Kodak en 1923 como alternativa económica al 35mm profesional, el 16mm fue adoptado rápidamente por documentalistas, cineastas independientes y televisiones. Su mayor versatilidad técnica respecto al 8mm lo convierte en el formato preferido para producciones con intención cinematográfica. En el archivo conviven rollos domésticos y producciones semi-profesionales en este paso."}, "pathe": {"titulo": "Pathé Baby 9.5mm", "anyo": "1922–1975", "img": "https://naranjasdehiroshima.github.io/la-lata-filmoteca/img/formatos/pathe.jpg", "ficha": [["Inventor", "Pathé"], ["Uso", "Doméstico"], ["Ancho", "9.5 mm"], ["Perforación", "Central"]], "desc": "El más antiguo y singular del archivo. Lanzado por Pathé en 1922, el 9.5mm se distingue por su perforación central en lugar de los laterales habituales. Fue el primer formato verdaderamente doméstico de la historia del cine. Las piezas en 9.5mm del archivo datan de los años 1920 y son testimonio de una época en que el cine llegaba por primera vez a los hogares."}, "35mm": {"titulo": "35mm", "anyo": "1889–actualidad", "img": "https://naranjasdehiroshima.github.io/la-lata-filmoteca/img/formatos/35mm.jpg", "ficha": [["Inventor", "Edison / Dickson"], ["Uso", "Cine profesional / Fotografía"], ["Ancho", "35 mm"], ["Perforación", "Lateral"]], "desc": "El estándar del cine profesional desde 1889 y el soporte de la fotografía fija durante todo el siglo XX. En La Pequeña Filmoteca las piezas en 35mm son principalmente fotografías y diapositivas — imágenes fijas que documentan el mismo mundo que las películas en movimiento del archivo, y que comparten soporte físico con el cine más antiguo de la historia."}, "nitrato": {"titulo": "Nitrato de celulosa", "anyo": "1889–1951", "img": "https://naranjasdehiroshima.github.io/la-lata-filmoteca/img/formatos/nitrato.jpg", "ficha": [["Material", "Nitrato de celulosa"], ["Uso", "Cine profesional"], ["Riesgo", "Altamente inflamable"], ["Conservación", "Condiciones especiales"]], "desc": "Más que un formato, el nitrato es un material — el celuloide de nitrato de celulosa, base de todas las películas hasta principios de los años 50. Altamente inflamable y químicamente inestable, su conservación requiere condiciones especiales. Las piezas en nitrato del archivo son las más antiguas y delicadas, y representan una ventana directa a la primera mitad del siglo XX."}, "video": {"titulo": "Video análogo", "anyo": "1956–2000s", "img": "https://naranjasdehiroshima.github.io/la-lata-filmoteca/img/formatos/video.jpg", "ficha": [["Formatos", "VHS · Betamax · U-matic"], ["Uso", "Doméstico / Broadcast"], ["Soporte", "Cinta magnética"], ["Riesgo", "Degradación progresiva"]], "desc": "VHS, Betamax, U-matic: los formatos magnéticos que democratizaron la imagen en movimiento en los años 70 y 80. Aunque técnicamente muy distintos al celuloide, el video análogo es ya patrimonio en riesgo — las cintas se degradan y los reproductores desaparecen. El archivo recoge piezas en estos formatos como testimonio de una transición tecnológica irrepetible."}};
 
