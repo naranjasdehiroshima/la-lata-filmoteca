@@ -299,6 +299,7 @@ input[type=text]::placeholder{color:var(--gris-medio)}
 #col-overlay{display:none}
 @media(max-width:600px){#col-panel-body{padding:1.5rem}}
 #mapa-leaflet{height:100%;width:100%}
+.tiles-claros{filter:grayscale(1) brightness(1.08) contrast(0.9)}
 .leaflet-popup-content-wrapper{border-radius:3px;box-shadow:0 4px 16px rgba(0,0,0,0.25)}
 .leaflet-popup-content{margin:12px 14px}
 .ficha-lata-mini-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:50%;opacity:0.9}
@@ -1953,8 +1954,11 @@ function iniciarMapa() {
     preferCanvas: true
   });
 
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
+  // CARTO basemaps ahora exige API key (devuelve "API KEY REQUIRED"); usamos OSM sin clave,
+  // con filtro gris (ver .tiles-claros) para mantener el aspecto claro.
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    className: 'tiles-claros',
     maxZoom: 19
   }).addTo(mapaObj);
 
